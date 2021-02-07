@@ -1,5 +1,8 @@
 # Changelog
 
+## [Unreleased]
+-
+
 ## [0.3.2] - 2021-02-07
 - Fixed problem with backspace in vscode terminal.
 - Fixed error handling when there are problems importing from a URL.

@@ -1,6 +1,7 @@
 # cmdmanager.py
 import os
 import curses
+import _curses
 import subprocess
 import urllib.request
 from .dbitem import DBItem
@@ -268,8 +269,8 @@ class CmdManager():
                 item = item.pretty(indent, self.show_labels)
                 try:
                     self.win.addstr(i, 0, item, attrib)
-                except:
-                    pass  # Odd terminal problem
+                except _curses.error as ex:
+                    pass
                 self.win.clrtoeol()
 
         if self.mode == CmdManager.MODE_NORMAL:
