@@ -229,6 +229,10 @@ class CmdManager():
 
     # Update our window output
     def redraw(self):
+
+        # Get the latest window size
+        self.win_height, self.win_width = self.win.getmaxyx()
+
         # Top search line
         editprefix = 'Edit Label: '
         if self.mode == CmdManager.MODE_NORMAL:
@@ -247,6 +251,12 @@ class CmdManager():
 
         # Search results
         for i in range(1, self.win_height):
+            # Get the latest window size
+            self.win_height, self.win_width = self.win.getmaxyx()
+            # Don't draw off the bottom of the terminal
+            if i >= self.win_height:
+                break
+
             attrib = curses.A_NORMAL
             if i == self.selected_row:
                 attrib = curses.A_REVERSE
@@ -256,7 +266,10 @@ class CmdManager():
             else:
                 item = self.results[i-1]
                 item = item.pretty(indent, self.show_labels)
-                self.win.addstr(i, 0, item, attrib)
+                try:
+                    self.win.addstr(i, 0, item, attrib)
+                except:
+                    pass  # Odd terminal problem
                 self.win.clrtoeol()
 
         if self.mode == CmdManager.MODE_NORMAL:
