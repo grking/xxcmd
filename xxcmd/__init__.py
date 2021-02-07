@@ -3,6 +3,7 @@ import argparse
 import os
 from .cmdmanager import CmdManager
 from .dbitem import DBItem
+__all__ = ('DBItem', 'CmdManager')
 
 
 __version__ = "0.3.3"
