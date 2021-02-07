@@ -57,7 +57,10 @@ class CmdManager():
         if value == CmdManager.MODE_EDIT_LABEL:
             if not self.selected_item:
                 return
+            self.prefix = 'Edit Label: '
             self.edit = self.selected_item.label
+        elif value == CmdManager.MODE_NORMAL:
+            self.prefix = 'Search: '
 
         self._mode = value
 
@@ -88,6 +91,8 @@ class CmdManager():
         self._mode = CmdManager.MODE_NORMAL
         # Current edit value
         self.edit = ''
+        # Our edit line prefix
+        self.prefix = 'Search: '
 
     # Get contents of file, return a list of lines
     def get_file_contents(self, filename):
@@ -234,12 +239,13 @@ class CmdManager():
         # Get the latest window size
         self.win_height, self.win_width = self.win.getmaxyx()
 
-        # Top search line
-        editprefix = 'Edit Label: '
+        # Top line
         if self.mode == CmdManager.MODE_NORMAL:
-            self.win.addstr(0, 0, self.search)
+            topline = self.search
         elif self.mode == CmdManager.MODE_EDIT_LABEL:
-            self.win.addstr(0, 0, "{0}{1}".format(editprefix, self.edit))
+            topline = self.edit
+
+        self.win.addstr(0, 0, "{0}{1}".format(self.prefix, topline))
         self.win.clrtoeol()
 
         # Determine max label length for indenting
@@ -270,13 +276,12 @@ class CmdManager():
                 try:
                     self.win.addstr(i, 0, item, attrib)
                 except _curses.error:
+                    # Likely terminal too small or resized
                     pass
                 self.win.clrtoeol()
 
-        if self.mode == CmdManager.MODE_NORMAL:
-            self.win.move(0, len(self.search))
-        elif self.mode == CmdManager.MODE_EDIT_LABEL:
-            self.win.move(0, len(self.edit) + len(editprefix))
+        # Move cursor
+        self.win.move(0, len(topline) + len(self.prefix))
 
         self.win.refresh()
 
