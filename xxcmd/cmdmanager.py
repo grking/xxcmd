@@ -232,7 +232,7 @@ class CmdManager():
         except KeyboardInterrupt:
             exit(0)
 
-        if key == 'KEY_BACKSPACE':
+        if key == '\x08' or key == 'KEY_BACKSPACE':
             self.search = self.search[:-1]
         elif key == 'KEY_DOWN':
             self.selection += 1
