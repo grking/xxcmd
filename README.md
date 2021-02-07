@@ -113,6 +113,8 @@ optional arguments:
                         the given URL. Merge into existing
                         database.
   -l, --list            Print all commands in the database
+  -n, --no-echo         Don't echo the command to the terminal
+                        prior to execution.
   -t, --no-labels       Don't display command labels.
   -v, --version         Display program version.
 ```

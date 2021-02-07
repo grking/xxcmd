@@ -6,7 +6,7 @@ from .dbitem import DBItem
 __all__ = ('DBItem', 'CmdManager')
 
 
-__version__ = "0.3.3"
+__version__ = "0.4.0"
 
 
 def main():
@@ -34,6 +34,10 @@ def main():
         help="Print all commands in the database")
 
     parser.add_argument(
+        '-n', '--no-echo', action='store_true',
+        help="Don't echo the command to the terminal prior to execution.")
+
+    parser.add_argument(
         '-t', '--no-labels', action='store_true',
         help="Don't display command labels.")
 
@@ -57,6 +61,7 @@ def main():
     # Create our SSH Manager
     manager = CmdManager()
     manager.show_labels = not args.no_labels
+    manager.no_echo = args.no_echo
     manager.load_database()
 
     if args.import_url:

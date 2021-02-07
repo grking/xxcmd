@@ -1,7 +1,7 @@
 # Changelog
 
-## [Unreleased]
--
+## [0.4.0] - Unreleased
+- Added option to not echo commands when executed (-n, --no-echo)
 
 ## [0.3.2] - 2021-02-07
 - Fixed problem with backspace in vscode terminal.

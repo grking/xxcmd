@@ -93,6 +93,8 @@ class CmdManager():
         self.edit = ''
         # Our edit line prefix
         self.prefix = 'Search: '
+        # Disable command echoing prior to execution
+        self.no_echo = False
 
     # Get contents of file, return a list of lines
     def get_file_contents(self, filename):
@@ -341,7 +343,8 @@ class CmdManager():
         # We support not replacing the current process just for testing
         params = [os.path.basename(self.shell), '-c'] + [dbitem.cmd]
         if replace_process:
-            print(dbitem.cmd)
+            if not self.no_echo:
+                print(dbitem.cmd)
             os.execv(self.shell, params)
         else:
             result = subprocess.check_output(['echo', 'foo'])
