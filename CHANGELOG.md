@@ -1,5 +1,8 @@
 # Changelog
 
+## [Unreleased]
+-
+
 ## [0.2.3] - 2021-02-07
 - Fixed detection of shell for command execution.
 

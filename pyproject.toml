@@ -10,7 +10,11 @@ requires-python = ">=3.6"
 home-page = "https://github.com/grking/xxcmd"
 license = "MIT License"
 classifiers=[
-    "License :: OSI Approved :: MIT License"
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 4 - Beta",
+    "Environment :: Console :: Curses",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3.6"
 ]
 description-file = "README.md"
 requires = [
