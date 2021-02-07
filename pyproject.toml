@@ -1,0 +1,21 @@
+[build-system]
+requires = ["flit_core >=2,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "xxcmd"
+author = "Graham R King"
+author-email = "grking.email@gmail.com"
+requires-python = ">=3.6"
+home-page = "https://github.com/grking/xxcmd"
+license = "MIT License"
+classifiers=[
+    "License :: OSI Approved :: MIT License"
+]
+description-file = "README.md"
+requires = [
+]
+
+[tool.flit.entrypoints."console_scripts"]
+xx = "xxcmd:main"
+xxcmd = "xxcmd:main"

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+rm -rf dist
+
+coverage run --source=. -m unittest discover
+python -m coverage report
+#python -m coverage html
+
+flit build
+
+sudo pip uninstall xxcmd -y
+sudo pip install dist/xxcmd-*.whl

@@ -1,0 +1,2 @@
+[My Command] ls -al
+clear && ls -l [Your command]

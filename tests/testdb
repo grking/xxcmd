@@ -1,0 +1,2 @@
+ssh -i ~/.ssh/key.pem me@myhost.com [SSH Home]
+du --max-depth-1 -h . []
