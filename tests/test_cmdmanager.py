@@ -80,6 +80,7 @@ class CmdManagerTests(unittest.TestCase):
         xx.filename = tempfile.mktemp()
         xx.save_database()
         data = xx.get_file_contents(xx.filename)
+        os.unlink(xx.filename)
         self.assertEqual(6, len(data))
         self.assertEqual(
             data[5],
@@ -88,7 +89,6 @@ class CmdManagerTests(unittest.TestCase):
     def test_add_and_delete(self):
         xx = self.get_xx()
         xx.load_database()
-        xx.filename = tempfile.mktemp()
         items = len(xx.database)
 
         # Add new entry with no save
