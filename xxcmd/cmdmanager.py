@@ -10,7 +10,10 @@ from .dbitem import DBItem
 DEFAULT_DATABASE_FILE = "~/.xxcmd"
 
 # What shell do we use to execute commands?
-DEFAULT_SHELL = '/usr/bin/bash'
+if 'SHELL' in os.environ:
+    DEFAULT_SHELL = os.environ['SHELL']
+else:
+    DEFAULT_SHELL = '/bin/sh'
 
 
 class CmdManager():
