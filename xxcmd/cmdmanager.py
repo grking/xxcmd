@@ -154,7 +154,6 @@ class CmdManager():
 
     # Initialise our display
     def initialise_display(self):
-        curses.set_escdelay(1)
         self.win = curses.initscr()
         curses.noecho()
         self.win.keypad(True)

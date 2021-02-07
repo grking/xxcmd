@@ -1,10 +1,11 @@
 """A helper for remembering useful shell commands."""
 import argparse
+import os
 from .dbitem import DBItem
 from .cmdmanager import CmdManager
 
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 
 def main():
@@ -48,6 +49,8 @@ def main():
     if args.version:
         print(f"xx (xxcmd) {__version__}")
         exit(0)
+
+    os.environ.setdefault('ESCDELAY', '1')
 
     # Create our SSH Manager
     manager = CmdManager()
