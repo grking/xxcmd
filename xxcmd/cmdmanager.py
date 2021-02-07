@@ -1,7 +1,6 @@
 # cmdmanager.py
 import os
 import curses
-from curses import ascii as asc
 import subprocess
 import urllib3
 from .dbitem import DBItem
@@ -243,17 +242,17 @@ class CmdManager():
         except KeyboardInterrupt:
             exit(0)
 
-        if key in [asc.BS, 'KEY_BACKSPACE']:
+        if key == '\x08' or key == 'KEY_BACKSPACE':
             self.search = self.search[:-1]
         elif key == 'KEY_DOWN':
             self.selected_row += 1
         elif key == 'KEY_UP':
             self.selected_row -= 1
-        elif key in [asc.ESC, 'KEY_ESCAPE', ]:
+        elif key == '\x1b':
             exit(0)
-        elif key in ['KEY_DC', asc.DEL]:
+        elif key == 'KEY_DC':
             self.delete_database_entry(self.selected_item)
-        elif key == asc.LF:
+        elif key == "\n":
             self.execute_command(self.selected_item)
         elif len(key) > 1:
             pass
