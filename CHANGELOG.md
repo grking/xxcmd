@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.3.1] - 2021-02-07
+- Fixed older Python 3 version compatability.
+
 ## [0.3.0] - 2021-02-07
 - Added support for older versions of Python (3.1)
 - Added label editing with F1 or CTRL+E

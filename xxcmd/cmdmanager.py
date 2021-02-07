@@ -2,7 +2,7 @@
 import os
 import curses
 import subprocess
-import urllib3
+import urllib.request
 from .dbitem import DBItem
 
 
@@ -106,21 +106,18 @@ class CmdManager():
 
         if url.startswith('file://'):
             # fake it for testing
-            resp = type('', (), {})()
-            resp.status = 200
-            resp.data = "\n".join(
+            resp = "\n".join(
                 self.get_file_contents(url[7:])).encode('utf-8')
         else:
             # Load data from an actual URL
-            http = urllib3.PoolManager()
-            resp = http.request('GET', url)
-
-        if not resp.status == 200:
-            print("Could not retrieve url ({0})".format(resp.status))
-            return False
+            try:
+                resp = urllib.request.urlopen(url).read()
+            except urllib.error.HTTPError:
+                print("Could not retrieve url ({0})".format(resp.status))
+                return False
 
         # Get data
-        lines = resp.data.decode('utf-8')
+        lines = resp.decode('utf-8')
         if '\r\n' in lines:
             lines = lines.split("\r\n")
         elif '\n\r' in lines:
