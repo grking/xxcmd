@@ -178,7 +178,7 @@ class CmdManager():
     # Print all commands
     def print_commands(self):
         for item in self.database:
-            print(item.pretty(0, self.show_labels))
+            print("[{0}] {1}".format(item.label, item.cmd))
 
     # Add an item to our DB
     def add_database_entry(self, entry, disable_save=False):
