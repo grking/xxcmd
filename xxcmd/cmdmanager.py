@@ -26,6 +26,7 @@ class CmdManager():
     @property
     def selected_row(self):
         return self._selected_row
+
     @selected_row.setter
     def selected_row(self, value):
         self._selected_row = value
@@ -45,6 +46,7 @@ class CmdManager():
     @property
     def mode(self):
         return self._mode
+
     @mode.setter
     def mode(self, value):
         # Sanity

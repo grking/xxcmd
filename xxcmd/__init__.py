@@ -1,7 +1,6 @@
 """A helper for remembering useful shell commands."""
 import argparse
 import os
-from .dbitem import DBItem
 from .cmdmanager import CmdManager
 
 
