@@ -1,7 +1,7 @@
 # Changelog
 
-## [Unreleased]
--
+## [0.3.0] - 2021-02-07
+- Added label editing with F1 or CTRL+E
 
 ## [0.2.3] - 2021-02-07
 - Fixed detection of shell for command execution.

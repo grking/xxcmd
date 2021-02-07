@@ -18,6 +18,10 @@ else:
 
 class CmdManager():
 
+    # Possible modes
+    MODE_NORMAL = 1
+    MODE_EDIT_LABEL = 2
+
     # selected_row - row index of highlight item
     @property
     def selected_row(self):
@@ -36,6 +40,23 @@ class CmdManager():
         idx = self.selected_row - 1
         if self.results and idx >= 0 and idx < len(self.results):
             return self.results[idx]
+
+    # mode - control application mode
+    @property
+    def mode(self):
+        return self._mode
+    @mode.setter
+    def mode(self, value):
+        # Sanity
+        if value == self._mode:
+            return
+        # Do stuff, depending on which mode we are entering
+        if value == CmdManager.MODE_EDIT_LABEL:
+            if not self.selected_item:
+                return
+            self.edit = self.selected_item.label
+
+        self._mode = value
 
     def __init__(self):
         # Our cmd database
@@ -60,6 +81,10 @@ class CmdManager():
         self.filename = DEFAULT_DATABASE_FILE
         # The shell we'll use to execute commands
         self.shell = DEFAULT_SHELL
+        # Current application mode
+        self._mode = CmdManager.MODE_NORMAL
+        # Current edit value
+        self.edit = ''
 
     # Get contents of file, return a list of lines
     def get_file_contents(self, filename):
@@ -206,7 +231,11 @@ class CmdManager():
     # Update our window output
     def redraw(self):
         # Top search line
-        self.win.addstr(0, 0, f"{self.search}")
+        editprefix = 'Edit Label: '
+        if self.mode == CmdManager.MODE_NORMAL:
+            self.win.addstr(0, 0, f"{self.search}")
+        elif self.mode == CmdManager.MODE_EDIT_LABEL:
+            self.win.addstr(0, 0, f"{editprefix}{self.edit}")
         self.win.clrtoeol()
 
         # Determine max label length for indenting
@@ -231,7 +260,11 @@ class CmdManager():
                 self.win.addstr(i, 0, f"{item}", attrib)
                 self.win.clrtoeol()
 
-        self.win.move(0, len(self.search))
+        if self.mode == CmdManager.MODE_NORMAL:
+            self.win.move(0, len(self.search))
+        elif self.mode == CmdManager.MODE_EDIT_LABEL:
+            self.win.move(0, len(self.edit) + len(editprefix))
+
         self.win.refresh()
 
     # Get input
@@ -242,22 +275,43 @@ class CmdManager():
         except KeyboardInterrupt:
             exit(0)
 
-        if key == '\x08' or key == 'KEY_BACKSPACE':
-            self.search = self.search[:-1]
-        elif key == 'KEY_DOWN':
-            self.selected_row += 1
-        elif key == 'KEY_UP':
-            self.selected_row -= 1
-        elif key == '\x1b':
-            exit(0)
-        elif key == 'KEY_DC':
-            self.delete_database_entry(self.selected_item)
-        elif key == "\n":
-            self.execute_command(self.selected_item)
-        elif len(key) > 1:
-            pass
-        else:
-            self.search += key
+        # Key response depends on application mode
+
+        if self.mode == CmdManager.MODE_NORMAL:
+
+            if key == '\x08' or key == 'KEY_BACKSPACE':
+                self.search = self.search[:-1]
+            elif key == 'KEY_DOWN':
+                self.selected_row += 1
+            elif key == 'KEY_UP':
+                self.selected_row -= 1
+            elif key == '\x1b':
+                exit(0)
+            elif key == 'KEY_F(1)' or key == '\x05':
+                self.mode = CmdManager.MODE_EDIT_LABEL
+            elif key == 'KEY_DC':
+                self.delete_database_entry(self.selected_item)
+            elif key == "\n":
+                self.execute_command(self.selected_item)
+            elif len(key) > 1:
+                pass
+            else:
+                self.search += key
+
+        elif self.mode == CmdManager.MODE_EDIT_LABEL:
+
+            if key == '\x08' or key == 'KEY_BACKSPACE':
+                self.edit = self.edit[:-1]
+            elif key == '\x1b':
+                self.mode = CmdManager.MODE_NORMAL
+            elif key == "\n":
+                self.selected_item.label = self.edit
+                self.mode = CmdManager.MODE_NORMAL
+                self.save_database()
+            elif len(key) > 1:
+                pass
+            else:
+                self.edit += key
 
     # Shell execute a command
     def execute_command(self, dbitem, replace_process=True):

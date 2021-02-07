@@ -90,6 +90,7 @@ Keys:
 * DELETE - remove the currently selected command
 * RETURN - execute the currently selected command
 * ESCAPE - exit
+* F1 or CTRL+E - Edit the label of the currently selected item
 * Any other key press is added to the interactive search to filter the command list.
 
 # Further Usage

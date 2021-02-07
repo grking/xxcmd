@@ -5,7 +5,7 @@ from .dbitem import DBItem
 from .cmdmanager import CmdManager
 
 
-__version__ = "0.2.4"
+__version__ = "0.3.0"
 
 
 def main():
@@ -15,7 +15,8 @@ def main():
         prog='xx', description="A helper for remembering useful shell "
         "commands. Type to interactively search, use UP and DOWN "
         "arrows to select, RETURN to launch the selected command. "
-        "Use DELETE to remove the currently selected row.")
+        "Use DELETE to remove the currently selected row. F1 or "
+        "CTRL+E to edit the label of the selected item.")
 
     parser.add_argument(
         '-a', '--add', nargs=argparse.REMAINDER,
