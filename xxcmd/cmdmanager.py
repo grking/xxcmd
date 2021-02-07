@@ -269,7 +269,7 @@ class CmdManager():
                 item = item.pretty(indent, self.show_labels)
                 try:
                     self.win.addstr(i, 0, item, attrib)
-                except _curses.error as ex:
+                except _curses.error:
                     pass
                 self.win.clrtoeol()
 
