@@ -2,7 +2,6 @@
 import os
 import curses
 import subprocess
-import re
 import urllib3
 from .dbitem import DBItem
 
@@ -60,7 +59,8 @@ class CmdManager():
             # fake it for testing
             resp = type('', (), {})()
             resp.status = 200
-            resp.data = "\n".join(self.get_file_contents(url[7:])).encode('utf-8')
+            resp.data = "\n".join(
+                self.get_file_contents(url[7:])).encode('utf-8')
         else:
             # Load data from an actual URL
             http = urllib3.PoolManager()
@@ -200,8 +200,9 @@ class CmdManager():
                 self.win.addstr(i, 0, "", attrib)
                 self.win.clrtoeol()
             else:
-                self.win.addstr(
-                    i, 0, f"{self.results[i-1].pretty(indent, self.show_labels)}", attrib)
+                item = self.results[i-1]
+                item = item.pretty(indent, self.show_labels)
+                self.win.addstr(i, 0, f"{item}", attrib)
                 self.win.clrtoeol()
 
         self.win.move(0, len(self.search))

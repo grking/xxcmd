@@ -3,25 +3,28 @@ import argparse
 from .dbitem import DBItem
 from .cmdmanager import CmdManager
 
+
 __version__ = "0.2.0"
+
 
 def main():
 
     # Create the parser and add arguments
     parser = argparse.ArgumentParser(
-        prog='xx', description="A helper for remembering useful shell commands. "
-            "Type to interactively search, use UP and DOWN arrows to select, "
-            "RETURN to launch the selected command. Use DELETE to remove the "
-            "currently selected row.")
+        prog='xx', description="A helper for remembering useful shell "
+        "commands. Type to interactively search, use UP and DOWN "
+        "arrows to select, RETURN to launch the selected command. "
+        "Use DELETE to remove the currently selected row.")
 
     parser.add_argument(
         '-a', '--add', nargs=argparse.REMAINDER,
-        help='Add the given command to the database. Command may begin with a '
-            'label enclosed in square brackets [label] <cmd>')
+        help='Add the given command to the database. Command may begin '
+        'with a label enclosed in square brackets [label] <cmd>')
 
     parser.add_argument(
         '-i', '--import-url', nargs=1, metavar='URL',
-        help="Import a command database from the given URL. Merge into existing database.")
+        help="Import a command database from the given URL. Merge "
+        "into existing database.")
 
     parser.add_argument(
         '-l', '--list', action='store_true',

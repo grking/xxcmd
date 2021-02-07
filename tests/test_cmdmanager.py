@@ -11,7 +11,8 @@ class CmdManagerTests(unittest.TestCase):
         self.assertIsInstance(xx, CmdManager)
 
     def testfile(self):
-        return os.path.join(os.path.dirname(os.path.realpath(__file__)), 'testdb')
+        return os.path.join(
+            os.path.dirname(os.path.realpath(__file__)), 'testdb')
 
     def get_xx(self):
         xx = CmdManager()
@@ -54,7 +55,8 @@ class CmdManagerTests(unittest.TestCase):
         self.assertTrue(xx.load_database())
         # Should have two lines
         self.assertEqual(len(xx.database), 2)
-        self.assertEqual(xx.database[0].cmd, 'ssh -i ~/.ssh/key.pem me@myhost.com')
+        self.assertEqual(
+            xx.database[0].cmd, 'ssh -i ~/.ssh/key.pem me@myhost.com')
 
         # Test merge
         xx.filename = self.testfile() + '2'
@@ -79,7 +81,9 @@ class CmdManagerTests(unittest.TestCase):
         xx.save_database()
         data = xx.get_file_contents(xx.filename)
         self.assertEqual(6, len(data))
-        self.assertEqual(data[5], 'cat /proc/cpuinfo | grep "model name" | sort | uniq -c [CPUs]')
+        self.assertEqual(
+            data[5],
+            'cat /proc/cpuinfo | grep "model name" | sort | uniq -c [CPUs]')
 
     def test_add_and_delete(self):
         xx = self.get_xx()
@@ -95,7 +99,9 @@ class CmdManagerTests(unittest.TestCase):
         # Remove entry
         xx.delete_database_entry(xx.database[len(xx.database)-1], True)
         self.assertEqual(len(xx.database), items)
-        self.assertEqual(xx.database[len(xx.database)-1].cmd, 'du --max-depth-1 -h .')
+        self.assertEqual(
+            xx.database[len(xx.database)-1].cmd,
+            'du --max-depth-1 -h .')
 
     def test_curses_start_stop(self):
         xx = self.get_xx()
