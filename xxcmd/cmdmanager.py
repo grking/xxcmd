@@ -112,8 +112,8 @@ class CmdManager():
             # Load data from an actual URL
             try:
                 resp = urllib.request.urlopen(url).read()
-            except urllib.error.HTTPError:
-                print("Could not retrieve url ({0})".format(resp.status))
+            except Exception as ex:
+                print("Could not retrieve url: {0}".format(ex))
                 return False
 
         # Get data

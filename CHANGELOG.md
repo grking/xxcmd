@@ -1,5 +1,8 @@
 # Changelog
 
+## [Unreleased] - 2021-02-07
+- Fixed error handling when there are problems importing from a URL.
+
 ## [0.3.1] - 2021-02-07
 - Fixed older Python 3 version compatability.
 
