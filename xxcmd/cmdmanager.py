@@ -291,7 +291,7 @@ class CmdManager():
 
         if self.mode == CmdManager.MODE_NORMAL:
 
-            if key == '\x08' or key == 'KEY_BACKSPACE':
+            if key == '\x08' or key == 'KEY_BACKSPACE' or key == '\x7f':
                 self.search = self.search[:-1]
             elif key == 'KEY_DOWN':
                 self.selected_row += 1
