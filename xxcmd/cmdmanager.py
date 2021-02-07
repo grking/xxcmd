@@ -18,6 +18,25 @@ else:
 
 class CmdManager():
 
+    # selected_row - row index of highlight item
+    @property
+    def selected_row(self):
+        return self._selected_row
+    @selected_row.setter
+    def selected_row(self, value):
+        self._selected_row = value
+        if self._selected_row < 1:
+            self._selected_row = 1
+        if self._selected_row > len(self.results):
+            self._selected_row = len(self.results)
+
+    # selected_item - dbitem instance at selected row
+    @property
+    def selected_item(self):
+        idx = self.selected_row - 1
+        if self.results and idx >= 0 and idx < len(self.results):
+            return self.results[idx]
+
     def __init__(self):
         # Our cmd database
         self.database = []
@@ -31,7 +50,7 @@ class CmdManager():
         # Our current search results
         self.results = []
         # Our current selection row
-        self.selection = 1
+        self._selected_row = 1
         # Auto run command if only one search result
         self.autorun = False
         # Display options
@@ -181,7 +200,8 @@ class CmdManager():
         for item in self.database:
             if self.search.lower() in item.search_key():
                 self.results.append(item)
-        self.constrain_selection()
+        # Refresh selection
+        self.selected_row = self.selected_row
 
     # Update our window output
     def redraw(self):
@@ -200,7 +220,7 @@ class CmdManager():
         # Search results
         for i in range(1, self.win_height):
             attrib = curses.A_NORMAL
-            if i == self.selection:
+            if i == self.selected_row:
                 attrib = curses.A_REVERSE
             if i > len(self.results):
                 self.win.addstr(i, 0, "", attrib)
@@ -214,19 +234,6 @@ class CmdManager():
         self.win.move(0, len(self.search))
         self.win.refresh()
 
-    # Get the selected line
-    def get_selection(self):
-        idx = self.selection - 1
-        if self.results and idx >= 0 and idx < len(self.results):
-            return self.results[idx]
-
-    # Ensure the selection is in bounds
-    def constrain_selection(self):
-        if self.selection < 1:
-            self.selection = 1
-        if self.selection > len(self.results):
-            self.selection = len(self.results)
-
     # Get input
     def get_input(self):
 
@@ -238,17 +245,15 @@ class CmdManager():
         if key == '\x08' or key == 'KEY_BACKSPACE':
             self.search = self.search[:-1]
         elif key == 'KEY_DOWN':
-            self.selection += 1
-            self.constrain_selection()
+            self.selected_row += 1
         elif key == 'KEY_UP':
-            self.selection -= 1
-            self.constrain_selection()
+            self.selected_row -= 1
         elif key == '\x1b':
             exit(0)
         elif key == 'KEY_DC':
-            self.delete_database_entry(self.get_selection())
+            self.delete_database_entry(self.selected_item)
         elif key == "\n":
-            self.execute_command(self.get_selection())
+            self.execute_command(self.selected_item)
         elif len(key) > 1:
             pass
         else:
@@ -274,7 +279,7 @@ class CmdManager():
     def do_autorun(self):
         # Auto run?
         if self.autorun and len(self.results) == 1:
-            self.execute_command(self.get_selection())
+            self.execute_command(self.selected_item)
         # Only one try at this
         self.autorun = False
 
