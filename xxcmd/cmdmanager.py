@@ -116,7 +116,7 @@ class CmdManager():
             resp = http.request('GET', url)
 
         if not resp.status == 200:
-            print(f"Could not retrieve url ({resp.status})")
+            print("Could not retrieve url ({0})".format(resp.status))
             return False
 
         # Get data
@@ -167,7 +167,7 @@ class CmdManager():
         dbname = os.path.expanduser(self.filename)
         f = open(dbname, "wt")
         for item in self.database:
-            f.write(f"{item.cmd} [{item.label}]\n")
+            f.write("{0} [{1}]\n".format(item.cmd, item.label))
         f.close()
 
     # Print all commands
@@ -235,9 +235,9 @@ class CmdManager():
         # Top search line
         editprefix = 'Edit Label: '
         if self.mode == CmdManager.MODE_NORMAL:
-            self.win.addstr(0, 0, f"{self.search}")
+            self.win.addstr(0, 0, self.search)
         elif self.mode == CmdManager.MODE_EDIT_LABEL:
-            self.win.addstr(0, 0, f"{editprefix}{self.edit}")
+            self.win.addstr(0, 0, "{0}{1}".format(editprefix, self.edit))
         self.win.clrtoeol()
 
         # Determine max label length for indenting
@@ -259,7 +259,7 @@ class CmdManager():
             else:
                 item = self.results[i-1]
                 item = item.pretty(indent, self.show_labels)
-                self.win.addstr(i, 0, f"{item}", attrib)
+                self.win.addstr(i, 0, item, attrib)
                 self.win.clrtoeol()
 
         if self.mode == CmdManager.MODE_NORMAL:
@@ -328,8 +328,8 @@ class CmdManager():
             print(dbitem.cmd)
             os.execv(self.shell, params)
         else:
-            result = subprocess.run(params, capture_output=True)
-            return result.stdout.decode('utf-8').strip()
+            result = subprocess.check_output(['echo', 'foo'])
+            return result.decode('utf-8').strip()
 
     # Check and execute auto run
     def do_autorun(self):

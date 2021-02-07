@@ -2,6 +2,7 @@
 import argparse
 import os
 from .cmdmanager import CmdManager
+from .dbitem import DBItem
 
 
 __version__ = "0.3.0"
@@ -47,7 +48,7 @@ def main():
     args = parser.parse_args()
 
     if args.version:
-        print(f"xx (xxcmd) {__version__}")
+        print("xx (xxcmd) {0}".format(__version__))
         exit(0)
 
     os.environ.setdefault('ESCDELAY', '1')
