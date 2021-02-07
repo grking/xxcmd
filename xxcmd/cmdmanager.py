@@ -145,6 +145,10 @@ class CmdManager():
 
     # Delete a database entry
     def delete_database_entry(self, dbitem, disable_save=False):
+        # Sanity check
+        if not dbitem:
+            return
+
         for item in self.database:
             if item.cmd == dbitem.cmd and item.label == dbitem.label:
                 self.database.remove(item)
