@@ -23,6 +23,10 @@ class ConsoleUI():
         self.input_history = []
         # Key press event handlers
         self.key_events = {}
+        # Offset for scrolling through the list
+        self.row_offset = 1
+        # Draw a window border
+        self.draw_border = True
 
     # Set our input line data
     def set_input(self, value):
@@ -66,14 +70,20 @@ class ConsoleUI():
 
     # Term row to array index
     def termrow_to_idx(self, row):
-        return row - self.commands_pos['y']
+        return (row + self.row_offset) - self.commands_pos['y']
 
     # Array index to term row
     def idx_to_termrow(self, idx):
-        return idx + self.commands_pos['y']
+        return idx + self.commands_pos['y'] + self.row_offset
 
     # Update our window output
     def redraw(self):
+
+        # Calculate row offset for scrolling
+        self.row_offset = self.parent.selected_row - (
+            self.win_height - (self.commands_pos['y'] + 2))
+        if self.row_offset < 0:
+            self.row_offset = 0
 
         # Print the input line
         self.print_at(
@@ -113,7 +123,9 @@ class ConsoleUI():
         if curx < self.win_width:
             self.win.move(self.prompt_pos['y'], curx)
 
-        self.win.box()
+        if self.draw_border:
+            self.win.box()
+
         self.win.refresh()
 
     # Get input
