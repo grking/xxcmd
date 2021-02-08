@@ -289,10 +289,16 @@ class CmdManager():
         self.win.refresh()
 
     # Get input
-    def get_input(self):
+    def get_input(self, key=None):
+
+        # Bail out if testing
+        if self.search == '#AUTOEXIT#':
+            raise Exception("End Test")
 
         try:
-            key = self.win.getkey()
+            # Get a key press if we weren't passed one
+            if not key:
+                key = self.win.getkey()
         except KeyboardInterrupt:
             exit(0)
 
