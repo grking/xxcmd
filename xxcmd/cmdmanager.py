@@ -4,6 +4,7 @@ import subprocess
 import urllib.request
 from .dbitem import DBItem
 from .consoleui import ConsoleUI
+from .config import Config
 
 
 # Where do we store our database of commands?
@@ -44,6 +45,8 @@ class CmdManager():
         return self._mode
 
     def __init__(self):
+        # Default config
+        self.config = Config()
         # Our cmd database
         self.database = []
         # Our UI
@@ -52,17 +55,10 @@ class CmdManager():
         self.results = []
         # Our current selection row
         self._selected_row = 0
-        # Auto run command if only one search result
-        self.autorun = False
-        # Display options
-        self.align = True  # Align commands after labels
-        self.show_labels = True  # Show labels?
         # Our default data filename
         self.filename = DEFAULT_DATABASE_FILE
         # The shell we'll use to execute commands
         self.shell = DEFAULT_SHELL
-        # Disable command echoing prior to execution
-        self.no_echo = False
         # Default mode
         self._mode = ''
         self.search_mode()
@@ -149,7 +145,10 @@ class CmdManager():
     # Print all commands
     def print_commands(self):
         for item in self.database:
-            print("[{0}] {1}".format(item.label, item.cmd))
+            if self.config.show_labels:
+                print("[{0}] {1}".format(item.label, item.cmd))
+            else:
+                print("{0}".format(item.cmd))
 
     # Add an item to our DB
     def add_database_entry(self, entry, disable_save=False):
@@ -257,7 +256,7 @@ class CmdManager():
         # We support not replacing the current process just for testing
         params = [os.path.basename(self.shell), '-c'] + [dbitem.cmd]
         if replace_process:
-            if not self.no_echo:
+            if self.config.echo_commands:
                 print(dbitem.cmd)
             os.execv(self.shell, params)
         else:

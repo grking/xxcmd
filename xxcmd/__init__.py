@@ -61,8 +61,10 @@ def main():
 
     # Create our SSH Manager
     manager = CmdManager()
-    manager.show_labels = not args.no_labels
-    manager.no_echo = args.no_echo
+    # Parse switches
+    manager.config.show_labels = not args.no_labels
+    manager.config.echo_commands = not args.no_echo
+    # Load db
     manager.load_database()
 
     if args.import_url:

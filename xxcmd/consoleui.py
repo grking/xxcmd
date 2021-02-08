@@ -17,7 +17,7 @@ class ConsoleUI():
         self.prompt_pos = {'x': 1, 'y': 1}
         self.commands_pos = {'x': 1, 'y': 2}
         # Input line prefix
-        self.input_prefix = 'Search: '
+        self.input_prefix = ''
         # Input line value
         self.input = ''
         self.input_history = []
@@ -25,8 +25,6 @@ class ConsoleUI():
         self.key_events = {}
         # Offset for scrolling through the list
         self.row_offset = 1
-        # Draw a window border
-        self.draw_border = True
 
     # Set our input line data
     def set_input(self, value):
@@ -92,7 +90,7 @@ class ConsoleUI():
 
         # Determine max label length for indenting
         indent = 0
-        if self.parent.align:
+        if self.parent.config.align_commands:
             for item in self.parent.results:
                 if len(item.label) > indent:
                     indent = len(item.label)
@@ -110,7 +108,7 @@ class ConsoleUI():
             # Print search results for as long as we have then
             if idx < len(self.parent.results):
                 item = self.parent.results[idx]
-                item = item.pretty(indent, self.parent.show_labels)
+                item = item.pretty(indent, self.parent.config.show_labels)
                 self.print_at(y, self.commands_pos['x'], item, attrib)
             else:
                 # Fill the rest of the space with blank lines
@@ -123,7 +121,7 @@ class ConsoleUI():
         if curx < self.win_width:
             self.win.move(self.prompt_pos['y'], curx)
 
-        if self.draw_border:
+        if self.parent.config.draw_window_border:
             self.win.box()
 
         self.win.refresh()
