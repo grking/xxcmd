@@ -108,8 +108,8 @@ positional arguments:
 
 optional arguments:
   -h, --help            Show this help message and exit.
-  -a ..., --add ...     Add the given command to the database. 
-  						Command may begin with a label enclosed in
+  -a ..., --add ...     Add the given command to the database.
+                        Command may begin with a label enclosed in
                         square brackets [label] <cmd>.
   -b, --no-border       Don't display a window border.
   -i URL, --import-url URL
@@ -123,3 +123,20 @@ optional arguments:
   -t, --no-labels       Don't display command labels.
   -v, --version         Display program version.
 ```
+
+# Configuration
+
+In addition to the command line switches a configuration file can be used. The file named `.xxcmdrc` in the current users home directory is loaded if present.
+
+An example file:
+
+```text
+[xxcmd]
+echo-commands = no
+show-labels = yes
+align-commands = yes
+draw-window-border = yes
+label-padding = 6
+```
+
+Command line switches take precedence over configuration file options.

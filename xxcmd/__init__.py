@@ -35,7 +35,7 @@ def main():
         help="Print all commands in the database")
 
     parser.add_argument(
-        '-n', '--no-echo', action='store_true',
+        '-n', '--no-echo', action='store_const', const=True,
         help="Don't echo the command to the terminal prior to execution.")
 
     parser.add_argument(
@@ -43,11 +43,11 @@ def main():
         help="Add extra padding between labels and commands.")
 
     parser.add_argument(
-        '-t', '--no-labels', action='store_true',
+        '-t', '--no-labels', action='store_const', const=True,
         help="Don't display command labels.")
 
     parser.add_argument(
-        '-b', '--no-border', action='store_true',
+        '-b', '--no-border', action='store_const', const=True,
         help="Don't display a window border.")
 
     parser.add_argument(
@@ -69,12 +69,17 @@ def main():
 
     # Create our SSH Manager
     manager = CmdManager()
+
     # Parse switches
-    manager.config.show_labels = not args.no_labels
-    manager.config.echo_commands = not args.no_echo
-    manager.config.draw_window_border = not args.no_border
+    if args.no_labels:
+        manager.config.show_labels = not args.no_labels
+    if args.no_echo:
+        manager.config.echo_commands = not args.no_echo
+    if args.no_border:
+        manager.config.draw_window_border = not args.no_border
     if args.label_padding:
         manager.config.label_padding = args.label_padding
+        
     # Load db
     manager.load_database()
 

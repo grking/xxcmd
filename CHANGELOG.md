@@ -5,6 +5,7 @@
 - Added visual border around the window.
 - Added option to not show the window border.
 - Added option to increase padding between labels and commands.
+- Added support for a config file in ~/.xxcmdrc
 
 ## [0.4.0] - 2021-02-08
 - Added option to not echo commands when executed (-n, --no-echo)

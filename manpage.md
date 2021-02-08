@@ -83,7 +83,11 @@ FILES
 
 `~/.xxcmd`
 
-: This is the file used to store commands.
+: This is the file used to store the database of commands.
+
+`~/.xxcmdrc`
+
+: An optional configuration file.
 
 BUGS
 ====
