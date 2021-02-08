@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.5.0] - Unreleased
+## [0.5.0] - 2021-02-08
 - Added support for scrolling through long command lists.
 - Added visual border around the window.
 - Added option to not show the window border.
