@@ -4,7 +4,7 @@
 
 # Installation
 
-Requires Python 3. Easy install through `pip`.
+Requires Python 3. Installation is simple using `pip`.
 
 On Ubuntu:
 
@@ -17,6 +17,8 @@ On Arch:
 ```bash
 sudo pip install xxcmd
 ```
+
+Or remove `sudo` if you want to install just for the current user and you have pip's local bin on your PATH.
 
 # Basic Usage Examples
 
