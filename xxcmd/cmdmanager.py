@@ -1,7 +1,6 @@
 # cmdmanager.py
 import os
 import curses
-import _curses
 import subprocess
 import urllib.request
 from .dbitem import DBItem

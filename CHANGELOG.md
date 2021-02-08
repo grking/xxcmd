@@ -3,6 +3,7 @@
 ## [0.4.0] - Unreleased
 - Added option to not echo commands when executed (-n, --no-echo)
 - Changed output of --list to a format which can be imported.
+- Fixed crash with very small terminal sizes.
 
 ## [0.3.2] - 2021-02-07
 - Fixed problem with backspace in vscode terminal.
