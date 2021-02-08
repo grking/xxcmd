@@ -274,7 +274,7 @@ class CmdManager():
     # Run
     def run(self, cmd=''):
 
-        if not self.database and cmd != '#UNITTESTING#':
+        if not self.database and cmd != '#AUTOEXIT#':
             print("No database. Add commands with: xx -a [label] <command>")
             exit(1)
 
