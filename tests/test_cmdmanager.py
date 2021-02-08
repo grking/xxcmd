@@ -132,5 +132,5 @@ class CmdManagerTests(unittest.TestCase):
     def test_execute(self):
         xx = self.get_xx()
         xx.initialise_display()
-        result = xx.execute_command(DBItem('echo "foo"'), False)
+        result = xx.execute_command(DBItem('echo foo'), False)
         self.assertEqual(result, 'foo')

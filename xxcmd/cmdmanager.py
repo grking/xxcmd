@@ -348,7 +348,7 @@ class CmdManager():
                 print(dbitem.cmd)
             os.execv(self.shell, params)
         else:
-            result = subprocess.check_output(['echo', 'foo'])
+            result = subprocess.check_output(dbitem.cmd.split())
             return result.decode('utf-8').strip()
 
     # Check and execute auto run
