@@ -1,5 +1,7 @@
 # xxcmd
 
+![Python Build](https://github.com/grking/xxcmd/workflows/Python%20Build/badge.svg)
+
 `xx` is a Linux shell command. `xx` remembers other shell commands, so you don't have to.
 
 # Installation
