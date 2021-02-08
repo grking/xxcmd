@@ -23,6 +23,10 @@ OPTIONS
 : Add the given command to the database. Command may begin
 with a label enclosed in square brackets [label] <cmd>
 
+`-b, --no-border`
+
+: Don't display a window border.
+
 `-h, --help`
 
 : Show this help message and exit

@@ -112,6 +112,7 @@ optional arguments:
                         database. Command may begin
                         with a label enclosed in square
                         brackets [label] <cmd>
+  -b, --no-border       Don't display a window border.
   -i URL, --import-url URL
                         Import a command database from
                         the given URL. Merge into existing

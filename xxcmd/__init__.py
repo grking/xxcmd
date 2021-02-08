@@ -43,6 +43,10 @@ def main():
         help="Don't display command labels.")
 
     parser.add_argument(
+        '-b', '--no-border', action='store_true',
+        help="Don't display a window border.")
+
+    parser.add_argument(
         '-v', '--version', action='store_true',
         help="Display program version.")
 
@@ -64,6 +68,7 @@ def main():
     # Parse switches
     manager.config.show_labels = not args.no_labels
     manager.config.echo_commands = not args.no_echo
+    manager.config.draw_window_border = not args.no_border
     # Load db
     manager.load_database()
 
