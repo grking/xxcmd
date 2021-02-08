@@ -1,7 +1,0 @@
-{
-    "files.exclude": {
-        "dist": true
-    },
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true
-}
