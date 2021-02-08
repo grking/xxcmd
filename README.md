@@ -103,23 +103,21 @@ Keys:
 usage: xx [-h] [-a ...] [-i URL] [-l] [-t] [-v] [cmd]
 
 positional arguments:
-  cmd                   Search for a matching command
-                        and run it immediately.
+  cmd                   Search for a matching command and run it
+  						immediately.
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -a ..., --add ...     Add the given command to the
-                        database. Command may begin
-                        with a label enclosed in square
-                        brackets [label] <cmd>
+  -h, --help            Show this help message and exit.
+  -a ..., --add ...     Add the given command to the database. 
+  						Command may begin with a label enclosed in
+                        square brackets [label] <cmd>.
   -b, --no-border       Don't display a window border.
   -i URL, --import-url URL
-                        Import a command database from
-                        the given URL. Merge into existing
-                        database.
-  -l, --list            Print all commands in the database
-  -n, --no-echo         Don't echo the command to the terminal
-                        prior to execution.
+                        Import a command database from the given URL.
+                        Merge into existing database.
+  -l, --list            Print all commands in the database.
+  -n, --no-echo         Don't echo the command to the terminal prior
+  						to execution.
   -p PADDING, --label-padding PADDING
                         Add extra padding between labels and commands.
   -t, --no-labels       Don't display command labels.
