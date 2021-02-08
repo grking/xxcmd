@@ -22,6 +22,9 @@ class CmdManager():
     MODE_NORMAL = 1
     MODE_EDIT_LABEL = 2
 
+    # Unit testing flag
+    UNITTESTING = '#AUTOEXIT#'
+
     # selected_row - row index of highlight item
     @property
     def selected_row(self):
@@ -292,7 +295,7 @@ class CmdManager():
     def get_input(self, key=None):
 
         # Bail out if testing
-        if self.search == '#AUTOEXIT#':
+        if self.search == CmdManager.UNITTESTING:
             raise Exception("End Test")
 
         try:
@@ -372,7 +375,7 @@ class CmdManager():
             self.search = cmd
             self.autorun = True
 
-        if not self.database:
+        if not self.database and cmd != CmdManager.UNITTESTING:
             print("No database. Add commands with: xx -a [label] <command>")
             exit(1)
 
