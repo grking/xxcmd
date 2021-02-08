@@ -43,6 +43,10 @@ with a label enclosed in square brackets [label] <cmd>
 
 : Don't echo the command to the terminal prior to execution.
 
+`-p PADDING, --label-padding PADDING`
+
+: Add extra padding between labels and commands.
+
 `-t, --no-labels`
 
 : Don't display command labels.

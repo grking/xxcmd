@@ -120,6 +120,8 @@ optional arguments:
   -l, --list            Print all commands in the database
   -n, --no-echo         Don't echo the command to the terminal
                         prior to execution.
+  -p PADDING, --label-padding PADDING
+                        Add extra padding between labels and commands.
   -t, --no-labels       Don't display command labels.
   -v, --version         Display program version.
 ```

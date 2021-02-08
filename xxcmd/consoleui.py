@@ -94,7 +94,7 @@ class ConsoleUI():
             for item in self.parent.results:
                 if len(item.label) > indent:
                     indent = len(item.label)
-            indent += 2
+            indent += self.parent.config.label_padding
 
         # Display current search results
         y = self.commands_pos['y']

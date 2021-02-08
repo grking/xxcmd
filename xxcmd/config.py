@@ -10,7 +10,8 @@ class Config():
             'echo-commands': True,
             'show-labels': True,
             'align-commands': True,
-            'draw-window-border': True
+            'draw-window-border': True,
+            'label-padding': 2
         }
 
     # Provide an access helper
