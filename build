@@ -7,5 +7,6 @@ rm -rf dist
 coverage run --source=. -m unittest discover
 python -m coverage report
 #python -m coverage html
+pandoc --standalone --to man manpage.md -o xx.1
 
 flit build
