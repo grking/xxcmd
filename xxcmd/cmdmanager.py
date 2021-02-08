@@ -235,6 +235,12 @@ class CmdManager():
         # Refresh selection
         self.selected_row = self.selected_row
 
+    # Print some text
+    def print_at(self, y, x, text, attrib=curses.A_NORMAL):
+        text = text[:self.win_width - (x+1)]
+        self.win.addstr(y, x, text, attrib)
+        self.win.clrtoeol()
+
     # Update our window output
     def redraw(self):
 
@@ -247,8 +253,7 @@ class CmdManager():
         elif self.mode == CmdManager.MODE_EDIT_LABEL:
             topline = self.edit
 
-        self.win.addstr(0, 0, "{0}{1}".format(self.prefix, topline))
-        self.win.clrtoeol()
+        self.print_at(0, 0, "{0}{1}".format(self.prefix, topline))
 
         # Determine max label length for indenting
         indent = 0
@@ -259,31 +264,28 @@ class CmdManager():
             indent += 2
 
         # Search results
-        for i in range(1, self.win_height):
+        y = 1
+        while y < self.win_height-1:
+
             # Get the latest window size
             self.win_height, self.win_width = self.win.getmaxyx()
-            # Don't draw off the bottom of the terminal
-            if i >= self.win_height:
-                break
 
             attrib = curses.A_NORMAL
-            if i == self.selected_row:
+            if y == self.selected_row:
                 attrib = curses.A_REVERSE
-            if i > len(self.results):
-                self.win.addstr(i, 0, "", attrib)
-                self.win.clrtoeol()
+            if y > len(self.results):
+                self.print_at(y, 0, "", attrib)
             else:
-                item = self.results[i-1]
+                item = self.results[y-1]
                 item = item.pretty(indent, self.show_labels)
-                try:
-                    self.win.addstr(i, 0, item, attrib)
-                except _curses.error:
-                    # Likely terminal too small or resized
-                    pass
-                self.win.clrtoeol()
+                self.print_at(y, 0, item, attrib)
+
+            y += 1
 
         # Move cursor
-        self.win.move(0, len(topline) + len(self.prefix))
+        curx = len(topline) + len(self.prefix)
+        if curx < self.win_width:
+            self.win.move(0, curx)
 
         self.win.refresh()
 
