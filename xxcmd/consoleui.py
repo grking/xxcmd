@@ -77,8 +77,8 @@ class ConsoleUI():
 
         # Print the input line
         self.print_at(
-            *self.prompt_pos.values(), "{0}{1}".format(
-                self.input_prefix, self.input))
+            self.prompt_pos['y'], self.prompt_pos['x'],
+            "{0}{1}".format(self.input_prefix, self.input))
 
         # Determine max label length for indenting
         indent = 0
