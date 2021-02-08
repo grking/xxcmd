@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.6.0] - Unreleased
+- Added bold label display option.
+- Added bracketed label display option.
+- Added whole line selection highlight option.
+
 ## [0.5.0] - 2021-02-08
 - Added support for scrolling through long command lists.
 - Added visual border around the window.

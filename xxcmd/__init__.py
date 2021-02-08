@@ -7,7 +7,7 @@ from .dbitem import DBItem
 __all__ = ('DBItem', 'CmdManager')
 
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 
 def main():
@@ -79,7 +79,7 @@ def main():
         manager.config.draw_window_border = not args.no_border
     if args.label_padding:
         manager.config.label_padding = args.label_padding
-        
+
     # Load db
     manager.load_database()
 

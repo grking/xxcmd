@@ -58,8 +58,11 @@ class ConsoleUI():
     def print_at(self, y, x, text, attrib=curses.A_NORMAL):
         # Get the latest window size
         self.win_height, self.win_width = self.win.getmaxyx()
-        # Give us a break...
+        # Really, really small term?
         if self.win_width <= 2 or self.win_height <= 2:
+            return
+        # Text out of the term totally?
+        if y < 0 or y >= self.win_height-1 or x < 0 or x >= self.win_width-1:
             return
         # Plot the text
         text = text[:self.win_width - (x+2)]
@@ -95,6 +98,8 @@ class ConsoleUI():
                 if len(item.label) > indent:
                     indent = len(item.label)
             indent += self.parent.config.label_padding
+            if self.parent.config.bracket_labels:
+                indent += 1
 
         # Display current search results
         y = self.commands_pos['y']
@@ -102,14 +107,45 @@ class ConsoleUI():
 
             idx = self.termrow_to_idx(y)
             attrib = curses.A_NORMAL
+
             # Highlight selected row
             if idx == self.parent.selected_row:
                 attrib = curses.A_REVERSE
+
             # Print search results for as long as we have then
             if idx < len(self.parent.results):
                 item = self.parent.results[idx]
-                item = item.pretty(indent, self.parent.config.show_labels)
-                self.print_at(y, self.commands_pos['x'], item, attrib)
+                label = ''
+
+                # Showing labels?
+                if self.parent.config.show_labels:
+                    label = item.label
+                    # Adding square bracket to labels?
+                    if self.parent.config.bracket_labels:
+                        label = "[{0}]".format(label)
+                    # Bold labels?
+                    if self.parent.config.bold_labels:
+                        if attrib == curses.A_NORMAL:
+                            attrib = curses.A_BOLD
+                    # Print label
+                    self.print_at(
+                        y, self.commands_pos['x'], label.ljust(indent), attrib)
+                    # Reset text attributes
+                    if attrib == curses.A_BOLD:
+                        attrib = curses.A_NORMAL
+
+                # not showing labels...
+                else:
+                    indent = 0
+
+                # Print command
+                cmd = item.cmd
+                if self.parent.config.whole_line_selection:
+                    cmd = cmd.ljust(
+                        self.win_width - indent - self.commands_pos['x'])
+                self.print_at(
+                    y, self.commands_pos['x'] + indent, cmd, attrib)
+
             else:
                 # Fill the rest of the space with blank lines
                 self.print_at(y, self.commands_pos['x'], "", attrib)

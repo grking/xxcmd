@@ -37,6 +37,7 @@ class curses:
 
     A_NORMAL = 0
     A_REVERSE = 1
+    A_BOLD = 2
 
     @classmethod
     def initscr(cls):

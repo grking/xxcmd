@@ -13,18 +13,6 @@ class DbItemTests(unittest.TestCase):
         item = DBItem('[My Label] Some Command')
         self.assertEqual(item.search_key(), 'my label some command')
 
-    def test_pretty(self):
-        item = DBItem('[My Label] Some Command')
-
-        # No ident
-        self.assertEqual(item.pretty(0), 'My Label Some Command')
-
-        # Indent
-        self.assertEqual(item.pretty(10), 'My Label   Some Command')
-
-        # No label
-        self.assertEqual(item.pretty(10, False), 'Some Command')
-
     def test_parsing(self):
 
         # No label

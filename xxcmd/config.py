@@ -15,7 +15,10 @@ class Config():
             'show-labels': True,
             'align-commands': True,
             'draw-window-border': True,
-            'label-padding': 2
+            'label-padding': 2,
+            'bracket-labels': False,
+            'bold-labels': True,
+            'whole-line-selection': True
         }
 
         # If there is a config file merge that in too

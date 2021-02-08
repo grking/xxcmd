@@ -128,7 +128,9 @@ optional arguments:
 
 In addition to the command line switches a configuration file can be used. The file named `.xxcmdrc` in the current users home directory is loaded if present.
 
-An example file:
+Some options are only configurable through the config file.
+
+An example file demonstrating all possible options.
 
 ```text
 [xxcmd]
@@ -136,7 +138,10 @@ echo-commands = no
 show-labels = yes
 align-commands = yes
 draw-window-border = yes
-label-padding = 6
+label-padding = 2
+bracket-labels = no
+bold-labels = yes
+whole-line-selection = yes
 ```
 
 Command line switches take precedence over configuration file options.
