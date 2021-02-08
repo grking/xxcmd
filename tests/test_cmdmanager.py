@@ -6,6 +6,10 @@ from contextlib import contextmanager
 import io
 from xxcmd import CmdManager, DBItem, main
 
+# Try to fix up headless unittesting
+if 'TERM' not in os.environ or os.environ['TERM'] == 'unknown':
+    os.environ['TERM'] = 'dumb'
+
 
 @contextmanager
 def captured_output():
@@ -118,7 +122,6 @@ class CmdManagerTests(unittest.TestCase):
 
         # Remove nothing
         xx.delete_database_entry(None, True)
-
 
         # Remove entry
         xx.delete_database_entry(xx.database[len(xx.database)-1], True)
