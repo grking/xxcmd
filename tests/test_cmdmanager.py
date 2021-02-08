@@ -8,9 +8,8 @@ from .mockcurses import curses
 import xxcmd
 from xxcmd import CmdManager, DBItem, main
 
-# Try to fix up headless unittesting
-if 'TERM' not in os.environ or os.environ['TERM'] == 'unknown':
-    xxcmd.cmdmanager.curses = curses
+# Mock curses during unit testing
+xxcmd.cmdmanager.curses = curses
 
 
 @contextmanager
