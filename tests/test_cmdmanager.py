@@ -9,7 +9,7 @@ import xxcmd
 from xxcmd import CmdManager, DBItem, main
 
 # Mock curses during unit testing
-xxcmd.cmdmanager.curses = curses
+xxcmd.consoleui.curses = curses
 
 
 @contextmanager
@@ -134,8 +134,8 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_curses_start_stop(self):
         xx = self.get_xx()
-        xx.initialise_display()
-        xx.finalise_display()
+        xx.ui.initialise_display()
+        xx.ui.finalise_display()
 
     def test_search(self):
         xx = self.get_xx()
@@ -143,10 +143,10 @@ class CmdManagerTests(unittest.TestCase):
             "one [My Label]",
             "[Your Label] two",
             "three"])
-        xx.search = 'one'
+        xx.ui.input = 'one'
         xx.update_search()
         self.assertEqual(1, len(xx.results))
-        xx.search = 'label'
+        xx.ui.input = 'label'
         xx.update_search()
         self.assertEqual(2, len(xx.results))
         self.assertEqual(xx.results[1].label, 'Your Label')
@@ -155,15 +155,13 @@ class CmdManagerTests(unittest.TestCase):
         xx = self.get_xx()
         xx.load_database()
         xx.update_search()
-        xx.initialise_display()
-        xx.redraw()
-        xx.mode = CmdManager.MODE_EDIT_LABEL
-        xx.redraw()
-        xx.finalise_display()
+        xx.ui.initialise_display()
+        xx.ui.redraw()
+        xx.ui.finalise_display()
 
     def test_execute(self):
         xx = self.get_xx()
-        xx.initialise_display()
+        xx.ui.initialise_display()
         # Execute nothing
         result = xx.execute_command(None, False)
         self.assertIsNone(result)
@@ -177,22 +175,18 @@ class CmdManagerTests(unittest.TestCase):
         xx.update_search()
         items = len(xx.database)
         self.assertEqual(items, 2)
-        xx.selected_row = -1
+        xx.selection_up()
+        self.assertEqual(xx.selected_row, 0)
+        for i in range(5):
+            xx.selection_down()
         self.assertEqual(xx.selected_row, 1)
-        xx.selected_row = 100
-        self.assertEqual(xx.selected_row, 2)
         self.assertEqual(xx.selected_item.cmd, "du --max-depth-1 -h .")
 
     def test_mode_changing(self):
         xx = self.get_xx()
         xx.load_database()
-        xx.mode = CmdManager.MODE_EDIT_LABEL
-        xx.update_search()
-
-        xx.mode = CmdManager.MODE_EDIT_LABEL
-        xx.selected_row = 1
-        xx.mode = CmdManager.MODE_EDIT_LABEL
-        xx.mode = CmdManager.MODE_NORMAL
+        xx.search_mode()
+        xx.edit_mode()
 
     def test_import_from_remote_url(self):
         xx = self.get_xx()
@@ -236,46 +230,46 @@ class CmdManagerTests(unittest.TestCase):
         xx.update_search()
 
         # Test letter
-        xx.get_input('a')
-        self.assertEqual(xx.search, "a")
+        xx.ui.get_input('a')
+        self.assertEqual(xx.ui.input, "a")
 
         # Test backspace
-        xx.get_input('\x08')
-        self.assertEqual(xx.search, "")
+        xx.ui.get_input('\x08')
+        self.assertEqual(xx.ui.input, "")
         # Test down
-        xx.get_input('KEY_DOWN')
-        self.assertEqual(xx.selected_row, 2)
+        xx.ui.get_input('KEY_DOWN')
+        self.assertEqual(xx.selected_row, 1)
         # Test delete
-        xx.get_input('KEY_DC')
+        xx.ui.get_input('KEY_DC')
         xx.update_search()
-        self.assertEqual(xx.selected_row, 1)
+        self.assertEqual(xx.selected_row, 0)
         # Test up
-        xx.get_input('KEY_UP')
-        self.assertEqual(xx.selected_row, 1)
+        xx.ui.get_input('KEY_UP')
+        self.assertEqual(xx.selected_row, 0)
         # Test ignore
-        xx.get_input('ignore me')
+        xx.ui.get_input('ignore me')
 
         # Test edit label
-        xx.get_input('KEY_F(1)')
-        self.assertEqual(xx.mode, CmdManager.MODE_EDIT_LABEL)
+        xx.ui.get_input('KEY_F(1)')
+        self.assertTrue('Edit' in xx.ui.input_prefix)
 
         # Test letter
-        xx.get_input('a')
-        self.assertEqual(xx.edit, "SSH Homea")
+        xx.ui.get_input('a')
+        self.assertEqual(xx.ui.input, "SSH Homea")
         # Test backspace
-        xx.get_input('\x08')
-        self.assertEqual(xx.edit, "SSH Home")
+        xx.ui.get_input('\x08')
+        self.assertEqual(xx.ui.input, "SSH Home")
         # Test ignore
-        xx.get_input('ignore me')
+        xx.ui.get_input('ignore me')
         # Test return (save)
-        xx.get_input('\n')
-        self.assertEqual(xx.mode, CmdManager.MODE_NORMAL)
+        xx.ui.get_input('\n')
+        self.assertEqual(xx.mode, 'search')
         # Test edit label
-        xx.get_input('KEY_F(1)')
-        self.assertEqual(xx.mode, CmdManager.MODE_EDIT_LABEL)
+        xx.ui.get_input('KEY_F(1)')
+        self.assertEqual(xx.mode, 'edit')
         # Test escape
-        xx.get_input('\x1b')
-        self.assertEqual(xx.mode, CmdManager.MODE_NORMAL)
+        xx.ui.get_input('\x1b')
+        self.assertEqual(xx.mode, 'search')
 
         os.unlink(xx.filename)
 

@@ -28,6 +28,10 @@ class stdscr:
     def refresh(cls):
         pass
 
+    @classmethod
+    def box(cls):
+        pass
+
 
 class curses:
 

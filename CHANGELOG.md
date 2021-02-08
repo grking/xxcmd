@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.5.0] - Unreleased
+- Added visual border around the window.
+
 ## [0.4.0] - 2021-02-08
 - Added option to not echo commands when executed (-n, --no-echo)
 - Changed output of --list to a format which can be imported.

@@ -1,9 +1,9 @@
 # cmdmanager.py
 import os
-import curses
 import subprocess
 import urllib.request
 from .dbitem import DBItem
+from .consoleui import ConsoleUI
 
 
 # Where do we store our database of commands?
@@ -18,13 +18,6 @@ else:
 
 class CmdManager():
 
-    # Possible modes
-    MODE_NORMAL = 1
-    MODE_EDIT_LABEL = 2
-
-    # Unit testing flag
-    UNITTESTING = '#AUTOEXIT#'
-
     # selected_row - row index of highlight item
     @property
     def selected_row(self):
@@ -33,53 +26,32 @@ class CmdManager():
     @selected_row.setter
     def selected_row(self, value):
         self._selected_row = value
-        if self._selected_row < 1:
-            self._selected_row = 1
-        if self._selected_row > len(self.results):
-            self._selected_row = len(self.results)
+        if self._selected_row < 0:
+            self._selected_row = 0
+        if self._selected_row >= len(self.results):
+            self._selected_row = len(self.results)-1
 
     # selected_item - dbitem instance at selected row
     @property
     def selected_item(self):
-        idx = self.selected_row - 1
+        idx = self.selected_row
         if self.results and idx >= 0 and idx < len(self.results):
             return self.results[idx]
 
-    # mode - control application mode
+    # Mode
     @property
     def mode(self):
         return self._mode
 
-    @mode.setter
-    def mode(self, value):
-        # Sanity
-        if value == self._mode:
-            return
-        # Do stuff, depending on which mode we are entering
-        if value == CmdManager.MODE_EDIT_LABEL:
-            if not self.selected_item:
-                return
-            self.prefix = 'Edit Label: '
-            self.edit = self.selected_item.label
-        elif value == CmdManager.MODE_NORMAL:
-            self.prefix = 'Search: '
-
-        self._mode = value
-
     def __init__(self):
         # Our cmd database
         self.database = []
-        # Our curses window
-        self.win = None
-        # And dimensions of it
-        self.win_width = 0
-        self.win_height = 0
-        # Our current search string
-        self.search = ''
+        # Our UI
+        self.ui = ConsoleUI(self)
         # Our current search results
         self.results = []
         # Our current selection row
-        self._selected_row = 1
+        self._selected_row = 0
         # Auto run command if only one search result
         self.autorun = False
         # Display options
@@ -89,14 +61,11 @@ class CmdManager():
         self.filename = DEFAULT_DATABASE_FILE
         # The shell we'll use to execute commands
         self.shell = DEFAULT_SHELL
-        # Current application mode
-        self._mode = CmdManager.MODE_NORMAL
-        # Current edit value
-        self.edit = ''
-        # Our edit line prefix
-        self.prefix = 'Search: '
         # Disable command echoing prior to execution
         self.no_echo = False
+        # Default mode
+        self._mode = ''
+        self.search_mode()
 
     # Get contents of file, return a list of lines
     def get_file_contents(self, filename):
@@ -195,8 +164,12 @@ class CmdManager():
                 return False
 
         self.database.append(newitem)
+        # We can't be editing stuff now, default to search mode
+        self.search_mode()
+
         if not disable_save:
             self.save_database()
+
         return True
 
     # Delete a database entry
@@ -212,143 +185,74 @@ class CmdManager():
         if not disable_save:
             self.save_database()
 
-    # Initialise our display
-    def initialise_display(self):
-        self.win = curses.initscr()
-        curses.noecho()
-        self.win.keypad(True)
-        curses.cbreak()
-        self.win_height, self.win_width = self.win.getmaxyx()
-
-    # Finalise our display
-    def finalise_display(self):
-        curses.nocbreak()
-        curses.echo()
-        self.win.keypad(False)
-        curses.endwin()
-        self.win = None
+    # Delete the selected database entry
+    def delete_selected_database_entry(self):
+        self.delete_database_entry(self.selected_item)
 
     # Calculate search results
     def update_search(self):
         self.results.clear()
         for item in self.database:
-            if self.search.lower() in item.search_key():
+            if self.ui.input.lower() in item.search_key():
                 self.results.append(item)
         # Refresh selection
         self.selected_row = self.selected_row
 
-    # Print some text
-    def print_at(self, y, x, text, attrib=curses.A_NORMAL):
-        text = text[:self.win_width - (x+1)]
-        self.win.addstr(y, x, text, attrib)
-        self.win.clrtoeol()
+    # Move the selected row down
+    def selection_down(self):
+        self.selected_row += 1
 
-    # Update our window output
-    def redraw(self):
+    # Move the selected row up
+    def selection_up(self):
+        self.selected_row -= 1
 
-        # Get the latest window size
-        self.win_height, self.win_width = self.win.getmaxyx()
+    # Enter edit label mode
+    def edit_mode(self):
+        if not self.selected_item:
+            return
+        self.ui.input_prefix = 'Edit Label: '
+        self.ui.set_input(self.selected_item.label)
+        self.ui.key_events = {
+            '\x1b': self.search_mode,
+            "\n": self.update_selected_label
+        }
+        self._mode = 'edit'
 
-        # Top line
-        if self.mode == CmdManager.MODE_NORMAL:
-            topline = self.search
-        elif self.mode == CmdManager.MODE_EDIT_LABEL:
-            topline = self.edit
+    # Enter search mode
+    def search_mode(self):
+        self.ui.input_prefix = 'Search: '
+        self.ui.pop_input()
+        self.ui.key_events = {
+            'KEY_DOWN': self.selection_down,
+            'KEY_UP': self.selection_up,
+            '\x1b': exit,
+            'KEY_F(1)': self.edit_mode,
+            '\x05': self.edit_mode,
+            'KEY_DC': self.delete_selected_database_entry,
+            "\n": self.execute_selected_command,
+            'ALWAYS': self.update_search
+        }
+        self._mode = 'search'
+        self.update_search()
 
-        self.print_at(0, 0, "{0}{1}".format(self.prefix, topline))
+    # Update the selected items label
+    def update_selected_label(self):
+        self.selected_item.label = self.ui.input
+        self.save_database()
+        self.search_mode()
 
-        # Determine max label length for indenting
-        indent = 0
-        if self.align:
-            for item in self.results:
-                if len(item.label) > indent:
-                    indent = len(item.label)
-            indent += 2
-
-        # Search results
-        y = 1
-        while y < self.win_height-1:
-
-            # Get the latest window size
-            self.win_height, self.win_width = self.win.getmaxyx()
-
-            attrib = curses.A_NORMAL
-            if y == self.selected_row:
-                attrib = curses.A_REVERSE
-            if y > len(self.results):
-                self.print_at(y, 0, "", attrib)
-            else:
-                item = self.results[y-1]
-                item = item.pretty(indent, self.show_labels)
-                self.print_at(y, 0, item, attrib)
-
-            y += 1
-
-        # Move cursor
-        curx = len(topline) + len(self.prefix)
-        if curx < self.win_width:
-            self.win.move(0, curx)
-
-        self.win.refresh()
-
-    # Get input
-    def get_input(self, key=None):
-
-        # Bail out if testing
-        if self.search == CmdManager.UNITTESTING:
-            raise Exception("End Test")
-
-        try:
-            # Get a key press if we weren't passed one
-            if not key:
-                key = self.win.getkey()
-        except KeyboardInterrupt:
-            exit(0)
-
-        # Key response depends on application mode
-
-        if self.mode == CmdManager.MODE_NORMAL:
-
-            if key == '\x08' or key == 'KEY_BACKSPACE' or key == '\x7f':
-                self.search = self.search[:-1]
-            elif key == 'KEY_DOWN':
-                self.selected_row += 1
-            elif key == 'KEY_UP':
-                self.selected_row -= 1
-            elif key == '\x1b':
-                exit(0)
-            elif key == 'KEY_F(1)' or key == '\x05':
-                self.mode = CmdManager.MODE_EDIT_LABEL
-            elif key == 'KEY_DC':
-                self.delete_database_entry(self.selected_item)
-            elif key == "\n":
-                self.execute_command(self.selected_item)
-            elif len(key) > 1:
-                pass
-            else:
-                self.search += key
-
-        elif self.mode == CmdManager.MODE_EDIT_LABEL:
-
-            if key == '\x08' or key == 'KEY_BACKSPACE':
-                self.edit = self.edit[:-1]
-            elif key == '\x1b':
-                self.mode = CmdManager.MODE_NORMAL
-            elif key == "\n":
-                self.selected_item.label = self.edit
-                self.mode = CmdManager.MODE_NORMAL
-                self.save_database()
-            elif len(key) > 1:
-                pass
-            else:
-                self.edit += key
+    # Execute the selected command
+    def execute_selected_command(self):
+        self.execute_command(self.selected_item)
 
     # Shell execute a command
     def execute_command(self, dbitem, replace_process=True):
         if not dbitem or not dbitem.cmd:
             return
 
-        self.finalise_display()
+        # Our process is about to be replaced, normal orderly
+        # shutdown won't happen
+        self.ui.finalise_display()
 
         # We support not replacing the current process just for testing
         params = [os.path.basename(self.shell), '-c'] + [dbitem.cmd]
@@ -363,29 +267,27 @@ class CmdManager():
     # Check and execute auto run
     def do_autorun(self):
         # Auto run?
-        if self.autorun and len(self.results) == 1:
-            self.execute_command(self.selected_item)
-        # Only one try at this
-        self.autorun = False
+        self.update_search()
+        if len(self.results) == 1:
+            self.execute_selected_command()
 
     # Run
     def run(self, cmd=''):
 
-        if cmd:
-            self.search = cmd
-            self.autorun = True
-
-        if not self.database and cmd != CmdManager.UNITTESTING:
+        if not self.database and cmd != '#UNITTESTING#':
             print("No database. Add commands with: xx -a [label] <command>")
             exit(1)
 
-        self.initialise_display()
+        self.ui.initialise_display()
+
+        # If passed a search term, try to auto run it
+        if cmd:
+            self.ui.set_input(cmd)
+            self.do_autorun()
 
         try:
             while True:
-                self.update_search()
-                self.do_autorun()
-                self.redraw()
-                self.get_input()
+                self.ui.redraw()
+                self.ui.get_input()
         finally:
-            self.finalise_display()
+            self.ui.finalise_display()
