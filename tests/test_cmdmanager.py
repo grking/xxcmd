@@ -4,11 +4,13 @@ import tempfile
 import sys
 from contextlib import contextmanager
 import io
+from .mockcurses import curses
+import xxcmd
 from xxcmd import CmdManager, DBItem, main
 
 # Try to fix up headless unittesting
 if 'TERM' not in os.environ or os.environ['TERM'] == 'unknown':
-    os.environ['TERM'] = 'dumb'
+    xxcmd.cmdmanager.curses = curses
 
 
 @contextmanager
