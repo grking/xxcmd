@@ -37,12 +37,35 @@ class Config():
     def __setattr__(self, attr, value):
         if attr != 'config':
             if type(value) is str:
-                if value.lower() in ['no', 'false']:
+                if value.lower() in ['no', 'false', 'off']:
                     value = False
-                elif value.lower() in ['yes', 'true']:
+                elif value.lower() in ['yes', 'true', 'on']:
                     value = True
                 elif value.isdigit():
                     value = int(value)
             self.config[attr.replace('_', '-')] = value
         else:
             super().__setattr__(attr, value)
+
+    def save(self, overwrite=False):
+
+        # Sanity check the file
+        filename = os.path.expanduser(Config.DEFAULT_CONFIG_FILE)
+        if os.path.isfile(filename) and not overwrite:
+            return False
+
+        # Make it prettier
+        config = {'xxcmd': {}}
+        for key, value in self.config.items():
+            if value is True:
+                value = 'yes'
+            elif value is False:
+                value = 'no'
+            config['xxcmd'][key] = value
+
+        # Write out our config
+        parser = configparser.ConfigParser()
+        parser.read_dict(config)
+        with open(filename, 'w') as outfile:
+            parser.write(outfile)
+        return filename

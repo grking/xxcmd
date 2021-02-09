@@ -112,6 +112,8 @@ optional arguments:
                         Command may begin with a label enclosed in
                         square brackets [label] <cmd>.
   -b, --no-border       Don't display a window border.
+  -c, --create-config   Create a config file in the users home
+                        directory if one doesn't already exist.
   -i URL, --import-url URL
                         Import a command database from the given URL.
                         Merge into existing database.

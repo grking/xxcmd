@@ -27,6 +27,10 @@ with a label enclosed in square brackets [label] <cmd>
 
 : Don't display a window border.
 
+`-c, --create-config`
+
+: Create a config file in the users home directory if one doesn't already exist.
+
 `-h, --help`
 
 : Show this help message and exit

@@ -31,6 +31,11 @@ def main():
         "into existing database.")
 
     parser.add_argument(
+        '-c', '--create-config', action='store_true',
+        help="Create a config file in the users home directory if one "
+        "doesn't already exist.")
+
+    parser.add_argument(
         '-l', '--list', action='store_true',
         help="Print all commands in the database")
 
@@ -82,6 +87,15 @@ def main():
 
     # Load db
     manager.load_database()
+
+    if args.create_config:
+        outfile = manager.config.save()
+        if outfile:
+            print("Config file created: {0}".format(outfile))
+            exit(0)
+        else:
+            print("Config file already exists")
+            exit(1)
 
     if args.import_url:
         if manager.import_database(args.import_url[0]):
