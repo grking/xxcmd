@@ -4,6 +4,7 @@
 - Added bold label display option.
 - Added bracketed label display option.
 - Added whole line selection highlight option.
+- Fixed unused blank column on right margin.
 
 ## [0.5.0] - 2021-02-08
 - Added support for scrolling through long command lists.

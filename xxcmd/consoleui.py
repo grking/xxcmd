@@ -65,7 +65,7 @@ class ConsoleUI():
         if y < 0 or y >= self.win_height-1 or x < 0 or x >= self.win_width-1:
             return
         # Plot the text
-        text = text[:self.win_width - (x+2)]
+        text = text[:self.win_width - (x+1)]
         self.win.addstr(y, x, text, attrib)
         self.win.clrtoeol()
 
