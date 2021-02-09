@@ -126,8 +126,8 @@ if __name__ == '__main__':
         outfile = open("CHANGELOG.md", "wt", encoding='utf-8')
         outfile.writelines(lines)
         outfile.close()
-        # Git commit those doc changes
-        run('git add README.md CHANGELOG.md')
+        # Git commit those doc changes, and any other possible ones
+        run('git add README.md CHANGELOG.md docs/man.src.md xx.1')
         run('git commit -m Release v{0}'.format(VERSION))
         run('git push')
         # Git tag
