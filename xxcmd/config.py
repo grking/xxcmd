@@ -19,7 +19,8 @@ class Config():
             'label-padding': 2,
             'bracket-labels': False,
             'bold-labels': True,
-            'whole-line-selection': True
+            'whole-line-selection': True,
+            'search-labels-only': False
         }
 
         # If there is a config file merge that in too

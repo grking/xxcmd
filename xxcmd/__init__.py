@@ -52,6 +52,10 @@ def main():
         help="Add extra padding between labels and commands.")
 
     parser.add_argument(
+        '-s', '--search-labels', action='store_const', const=True,
+        help="Search only labels not the shell commands themselves.")
+
+    parser.add_argument(
         '-t', '--no-labels', action='store_const', const=True,
         help="Don't display command labels.")
 
@@ -90,6 +94,8 @@ def main():
         manager.config.label_padding = args.label_padding
     if args.no_commands:
         manager.config.show_commands = not args.no_commands
+    if args.search_labels:
+        manager.config.search_labels_only = args.search_labels
 
     # Load db
     manager.load_database()

@@ -55,6 +55,10 @@ with a label enclosed in square brackets [label] <cmd>
 
 : Add extra padding between labels and commands.
 
+`-s, --search-labels`
+
+: Search only labels not the shell commands themselves.
+
 `-t, --no-labels`
 
 : Don't display command labels.

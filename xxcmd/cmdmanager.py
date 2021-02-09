@@ -192,7 +192,12 @@ class CmdManager():
     def update_search(self):
         self.results.clear()
         for item in self.database:
-            if self.ui.input.lower() in item.search_key():
+            matched = False
+            if self.config.search_labels_only:
+                matched = self.ui.input.lower() in item.label.lower()
+            else:
+                matched = self.ui.input.lower() in item.search_key()
+            if matched:
                 self.results.append(item)
         # Refresh selection
         self.selected_row = self.selected_row

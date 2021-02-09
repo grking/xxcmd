@@ -124,6 +124,8 @@ optional arguments:
   -p PADDING, --label-padding PADDING
                         Add extra padding between labels and commands.
   -t, --no-labels       Don't display command labels.
+  -s, --search-labels   Search only labels not the shell commands
+                        themselves.
   -v, --version         Display program version.
 ```
 
@@ -133,7 +135,7 @@ In addition to the command line switches a configuration file can be used. The f
 
 Some options are only configurable through the config file.
 
-An example file demonstrating all possible options.
+An example file demonstrating all possible options (and the system defaults):
 
 ```text
 [xxcmd]
@@ -146,6 +148,7 @@ label-padding = 2
 bracket-labels = no
 bold-labels = yes
 whole-line-selection = yes
+search-labels-only = no
 ```
 
 Command line switches take precedence over configuration file options.
