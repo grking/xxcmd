@@ -48,8 +48,10 @@ execution.
 \fB\-p\fR PADDING, \fB\-\-label\-padding\fR PADDING
 Add extra padding between labels and commands.
 .TP
-\fB\-s\fR, \fB\-\-search\-labels\fR
-Search only labels not the shell commands themselves.
+\fB\-s\fR, \fB\-\-search\-all\fR
+Search both labels and commands. Default is to search
+only labels first, and only search in commands if
+searching for labels resulted in no search results.
 .TP
 \fB\-t\fR, \fB\-\-no\-labels\fR
 Don't display command labels.

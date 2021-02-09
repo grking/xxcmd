@@ -128,7 +128,9 @@ optional arguments:
                         execution.
   -p PADDING, --label-padding PADDING
                         Add extra padding between labels and commands.
-  -s, --search-labels   Search only labels not the shell commands themselves.
+  -s, --search-all      Search both labels and commands. Default is to search
+                        only labels first, and only search in commands if
+                        searching for labels resulted in no search results.
   -t, --no-labels       Don't display command labels.
   -b, --no-border       Don't display a window border.
   -v, --version         Display program version.
@@ -154,6 +156,7 @@ bracket-labels = no
 bold-labels = yes
 whole-line-selection = yes
 search-labels-only = no
+search-labels-first = yes
 ```
 
 Command line switches take precedence over configuration file options.

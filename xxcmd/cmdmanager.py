@@ -188,17 +188,36 @@ class CmdManager():
     def delete_selected_database_entry(self):
         self.delete_database_entry(self.selected_item)
 
+    # Search for something
+    def _search(self, searchterm, labels=False, commands=False):
+        for item in self.database:
+            matched = False
+            if labels and item.label:
+                matched = searchterm in item.label.lower()
+            if commands and not matched:
+                matched = searchterm in item.cmd.lower()
+            if matched:
+                self.results.append(item)
+
     # Calculate search results
     def update_search(self):
         self.results.clear()
-        for item in self.database:
-            matched = False
-            if self.config.search_labels_only and item.label:
-                matched = self.ui.input.lower() in item.label.lower()
-            else:
-                matched = self.ui.input.lower() in item.search_key()
-            if matched:
-                self.results.append(item)
+
+        # Special case of no search term
+        if not self.ui.input:
+            self.results = self.database[:]
+        # Search labels, then commands if no labels found
+        elif self.config.search_labels_first:
+            self._search(self.ui.input.lower(), True, False)
+            if not len(self.results):
+                self._search(self.ui.input.lower(), False, True)
+        # Search labels only
+        elif self.config.search_labels_only:
+            self._search(self.ui.input.lower(), True, False)
+        # Search both labels and command
+        else:
+            self._search(self.ui.input.lower(), True, True)
+
         # Refresh selection
         self.selected_row = self.selected_row
 

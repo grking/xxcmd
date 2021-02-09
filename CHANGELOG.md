@@ -1,8 +1,10 @@
 # Changelog
 
 ## [0.7.0] - Unreleased
+- Changed default search to search only labels, if no matches try searching commands.
 - Added option to not show shell commands in the interactive view.
 - Added option to search only labels.
+- Added option to search both labels and commands simultaneously.
 
 ## [0.6.0] - 2021-02-09
 - Added bold label display option.

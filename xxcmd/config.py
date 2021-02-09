@@ -20,7 +20,8 @@ class Config():
             'bracket-labels': False,
             'bold-labels': True,
             'whole-line-selection': True,
-            'search-labels-only': False
+            'search-labels-only': False,
+            'search-labels-first': True
         }
 
         # If there is a config file merge that in too
