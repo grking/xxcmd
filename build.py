@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # build.py
 # A build helper for xxcmd.
+# This script is not required, it just speeds up a few routine
+# developer tasks.
 #
 # This script:
 #   1. Updates the latest command line options into the README
