@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # build.py
 # A build helper for xxcmd.
 #
