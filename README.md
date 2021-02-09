@@ -8,19 +8,13 @@
 
 Requires Python 3. Installation is simple using `pip`.
 
-On Ubuntu:
-
 ```bash
-sudo pip3 install xxcmd
+pip install xxcmd
 ```
 
-On Arch:
+Or `pip3` on Ubuntu or Debian based distros.
 
-```bash
-sudo pip install xxcmd
-```
-
-Or remove `sudo` if you want to install just for the current user and you have pip's local bin on your PATH.
+If typing `xx` at a command prompt gives you "Command not found", you likely don't have `~/.local/bin` on your PATH. Either install globally with `sudo pip install xxcmd` or add `~/.local/bin` to your PATH.
 
 # Basic Usage Examples
 
