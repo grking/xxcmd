@@ -4,7 +4,7 @@
 # This script is not required, it just speeds up a few routine
 # developer tasks.
 #
-# This script:
+# This script by default:
 #   1. Updates the latest command line options into the README
 #   2. Updates the latest config options into the README
 #   3. Generates a man page from docs/man.src.md
@@ -12,17 +12,31 @@
 #   5. Runs the unit tests and coverage report
 #   6. Builds a pypi package
 #
+# ./build.py clean
+#   1. Deletes temporary files from the project directory
+#
+# ./build.py publish
+#   1. Updates the version in the README badges
+#   2. Updates the version and date in the CHANGELOG
+#   3. Commits and pushes those two changes
+#   4. Creates a git tag with the version and pushes it
+#   5. Builds a pypi package
+#   6. Publishes the pypi package to pypi.
+#
 # Requires:
 #
 #   OS Packages: help2man, pandoc
 #   Pip packages: flit, pytest, pytest-cov
 #
+import re
 import subprocess
 import tempfile
 import shutil
 import os
+import datetime
 import sys
 from xxcmd.config import Config
+from xxcmd import __version__ as VERSION
 
 
 # Replace some text in a text file
@@ -78,6 +92,46 @@ if __name__ == '__main__':
             'dist', '__pycache__', 'htmlcov', '.coverage', '.pytest_cache'
         ]:
             os.system('rm -rf {0}'.format(wipe))
+        exit(0)
+
+    # Publish
+    if len(sys.argv) == 2 and sys.argv[1] == 'publish':
+
+        # Update the README with our release version number
+        infile = open("README.md", "rt", encoding='utf-8')
+        lines = infile.readlines()
+        infile.close()
+        newline = re.sub('(v\d+\.\d+\.\d+)', 'v'+VERSION, lines[2])
+        if newline == lines[2]:
+            print("Could not update the readme version")
+            exit(1)
+        lines[2] = newline
+        outfile = open("README.md", "wt", encoding='utf-8')
+        outfile.writelines(lines)
+        outfile.close()
+
+        # Update the CHANGELOG with our release date and version
+        infile = open("CHANGELOG.md", "rt", encoding='utf-8')
+        lines = infile.readlines()
+        infile.close()
+        if 'Unreleased' in lines[2].lower():
+            lines[2] = "[{0}] - {1}".format(VERSION, datetime.datetime.strftime('%Y-%m-%d'))
+        else:
+            print("Could not update the changelog")
+            exit(1)
+        outfile = open("CHANGELOG.md", "wt", encoding='utf-8')
+        outfile.writelines(lines)
+        outfile.close()
+        # Git commit those doc changes
+        run('echo git add README.md CHANGELOG.md')
+        run('echo git commit -m Release v{0}'.format(VERSION))
+        run('echo git push')
+        # Git tag
+        run('echo git tag v{0}'.format(VERSION))
+        run('echo git push --tags')
+        # Build pypi package
+        run('echo flit build')
+        run('echo flit publish')
         exit(0)
 
     # Update the README.md file with the latest command line help output
