@@ -82,14 +82,15 @@ if __name__ == '__main__':
     replace('README.md', '[xxcmd]', '```', content)
 
     # Rebuild the man page
-    exitcode = subprocess.call('pandoc --standalone --to man docs/man.src.md -o docs/xx.1'.split())
+    exitcode = subprocess.call(
+        'pandoc --standalone --to man docs/man.src.md -o docs/xx.1'.split())
     if exitcode:
         print("Man page build failed.")
         exit(exitcode)
 
     # Grab the command line options in man page format
     filename = tempfile.mktemp()
-    help2man = f'help2man -N -o {filename}'.split()
+    help2man = 'help2man -N -o {0}'.format(filename).split()
     help2man += ["python -m xxcmd"]
     exitcode = subprocess.call(help2man)
     if exitcode:
@@ -112,7 +113,8 @@ if __name__ == '__main__':
     replace('docs/xx.1', '.SH OPTIONS', '.SH EXAMPLES', content)
 
     # Run tests and coverage report
-    exitcode = subprocess.call('coverage run --source=. -m unittest discover'.split())
+    exitcode = subprocess.call(
+        'coverage run --source=. -m unittest discover'.split())
     if exitcode:
         exit(exitcode)
     exitcode = subprocess.call('python -m coverage report'.split())
