@@ -298,3 +298,4 @@ class CmdManagerTests(unittest.TestCase):
         self.assertRaises(SystemExit, lambda: main())
         sys.argv = ['xx', '-c']
         self.assertRaises(SystemExit, lambda: main())
+        os.unlink(configfile)
