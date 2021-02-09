@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.7.0] - 2021-02-09
 - Changed default search to search only labels, if no matches try searching commands.
 - Added option to not show shell commands in the interactive view.
 - Added option to search only labels.
