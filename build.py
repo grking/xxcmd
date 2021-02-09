@@ -13,7 +13,7 @@
 # Requires:
 #
 #   OS Packages: help2man, pandoc
-#   Pip packages: flit, coverage
+#   Pip packages: flit, pytest, pytest-cov
 #
 import subprocess
 import tempfile
@@ -114,9 +114,6 @@ if __name__ == '__main__':
     replace('docs/xx.1', '.SH OPTIONS', '.SH EXAMPLES', content)
 
     # Run tests
-    run('coverage run --source=. -m unittest discover')
+    run('pytest -q --cov-report term --cov-report html --cov=xxcmd tests/')
     # Build pypi package
     run('flit build')
-    # Coverage reports
-    run('python -m coverage report')
-    run('python -m coverage html')
