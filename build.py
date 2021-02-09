@@ -1,0 +1,88 @@
+# build.py
+# A build helper for xxcmd
+import subprocess
+import tempfile
+import shutil
+import os
+from xxcmd.config import Config
+
+
+# Replace some text in a text file
+def replace(filename, starttag, endtag, content):
+
+    # Open a temporary file
+    outfilename = tempfile.mktemp()
+    outfile = open(outfilename, "wt", encoding='utf-8')
+
+    # Open the target file
+    infile = open(filename, "rt", encoding='utf-8')
+
+    # Iterate lines until our start tag
+    skipline = False
+    while True:
+
+        line = infile.readline()
+        if line == '':
+            break
+
+        if line.strip() == endtag and skipline:
+            skipline = False
+            # Inject new content
+            outfile.write(content)
+
+        if not skipline:
+            outfile.write(line)
+
+        if line.strip() == starttag:
+            skipline = True
+
+    # Clean up
+    outfile.close()
+    infile.close()
+
+    # Copy the temp file
+    shutil.copy(outfilename, filename)
+    os.unlink(outfilename)
+
+
+if __name__ == '__main__':
+
+    # Update the README.md file with the latest command line help output
+    result = subprocess.check_output('python -m xxcmd -h'.split())
+    content = result.decode('utf-8')
+    content = "\n```text\n" + content + "\n```\n"
+    replace('README.md', '# Further Usage', '# Configuration', content)
+
+    # Update README.md file with the latest config options
+    # Generate all default config file values
+    config = Config()
+    filename = tempfile.mktemp()
+    Config.DEFAULT_CONFIG_FILE = filename
+    config.save()
+    infile = open(filename, "rt")
+    content = infile.read().strip()[8:] + "\n"
+    infile.close()
+    # Update the README
+    replace('README.md', '[xxcmd]', '```', content)
+
+    # Rebuild the man page
+    exitcode = subprocess.call('pandoc --standalone --to man docs/manpage.md -o docs/xx.1'.split())
+    if exitcode:
+        print("Man page build failed.")
+        exit(exitcode)
+
+    # Run tests and coverage report
+    exitcode = subprocess.call('coverage run --source=. -m unittest discover'.split())
+    if exitcode:
+        exit(exitcode)
+    exitcode = subprocess.call('python -m coverage report'.split())
+    if exitcode:
+        exit(exitcode)
+    exitcode = subprocess.call('python -m coverage html'.split())
+    if exitcode:
+        exit(exitcode)
+
+    # Build pypi package
+    exitcode = subprocess.call('flit build'.split())
+    if exitcode:
+        exit(exitcode)

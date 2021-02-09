@@ -100,35 +100,40 @@ Keys:
 # Further Usage
 
 ```text
-usage: xx [-h] [-a ...] [-i URL] [-l] [-t] [-v] [cmd]
+usage: xx [-h] [-a ...] [-i URL] [-c] [-l] [-m] [-n] [-p PADDING] [-s] [-t]
+          [-b] [-v]
+          [cmd]
+
+A helper for remembering useful shell commands. Type to interactively search,
+use UP and DOWN arrows to select, RETURN to launch the selected command. Use
+DELETE to remove the currently selected row. F1 or CTRL+E to edit the label of
+the selected item.
 
 positional arguments:
-  cmd                   Search for a matching command and run it
-  						immediately.
+  cmd                   Search for a matching command and run it immediately.
 
 optional arguments:
-  -h, --help            Show this help message and exit.
-  -a ..., --add ...     Add the given command to the database.
-                        Command may begin with a label enclosed in
-                        square brackets [label] <cmd>.
-  -b, --no-border       Don't display a window border.
-  -c, --create-config   Create a config file in the users home
-                        directory if one doesn't already exist.
+  -h, --help            show this help message and exit
+  -a ..., --add ...     Add the given command to the database. Command may
+                        begin with a label enclosed in square brackets [label]
+                        <cmd>
   -i URL, --import-url URL
-                        Import a command database from the given URL.
-                        Merge into existing database.
-  -l, --list            Print all commands in the database.
+                        Import a command database from the given URL. Merge
+                        into existing database.
+  -c, --create-config   Create a config file in the users home directory if
+                        one doesn't already exist.
+  -l, --list            Print all commands in the database
   -m, --no-commands     Don't show commands in interactive view.
-  -n, --no-echo         Don't echo the command to the terminal prior
-  						to execution.
+  -n, --no-echo         Don't echo the command to the terminal prior to
+                        execution.
   -p PADDING, --label-padding PADDING
                         Add extra padding between labels and commands.
+  -s, --search-labels   Search only labels not the shell commands themselves.
   -t, --no-labels       Don't display command labels.
-  -s, --search-labels   Search only labels not the shell commands
-                        themselves. Unless the command has no label.
+  -b, --no-border       Don't display a window border.
   -v, --version         Display program version.
-```
 
+```
 # Configuration
 
 In addition to the command line switches a configuration file can be used. The file named `.xxcmdrc` in the current users home directory is loaded if present.

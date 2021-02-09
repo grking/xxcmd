@@ -3,7 +3,7 @@
 NAME
 ====
 
-xx - A helper for remembering useful shell commands.
+**xx** - A helper for remembering useful shell commands.
 
 SYNOPSIS
 ========
