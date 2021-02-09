@@ -57,7 +57,7 @@ with a label enclosed in square brackets [label] <cmd>
 
 `-s, --search-labels`
 
-: Search only labels not the shell commands themselves.
+: Search only labels not the shell commands themselves. Unless the command has no label.
 
 `-t, --no-labels`
 

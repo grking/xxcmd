@@ -193,7 +193,7 @@ class CmdManager():
         self.results.clear()
         for item in self.database:
             matched = False
-            if self.config.search_labels_only:
+            if self.config.search_labels_only and item.label:
                 matched = self.ui.input.lower() in item.label.lower()
             else:
                 matched = self.ui.input.lower() in item.search_key()

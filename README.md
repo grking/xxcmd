@@ -125,7 +125,7 @@ optional arguments:
                         Add extra padding between labels and commands.
   -t, --no-labels       Don't display command labels.
   -s, --search-labels   Search only labels not the shell commands
-                        themselves.
+                        themselves. Unless the command has no label.
   -v, --version         Display program version.
 ```
 
