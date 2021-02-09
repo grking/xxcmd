@@ -62,14 +62,39 @@ if __name__ == '__main__':
     infile = open(filename, "rt")
     content = infile.read().strip()[8:] + "\n"
     infile.close()
+    os.unlink(filename)
     # Update the README
     replace('README.md', '[xxcmd]', '```', content)
 
     # Rebuild the man page
-    exitcode = subprocess.call('pandoc --standalone --to man docs/manpage.md -o docs/xx.1'.split())
+    exitcode = subprocess.call('pandoc --standalone --to man docs/man.src.md -o docs/xx.1'.split())
     if exitcode:
         print("Man page build failed.")
         exit(exitcode)
+
+    # Grab the command line options in man page format
+    filename = tempfile.mktemp()
+    help2man = f'help2man -N -o {filename}'.split()
+    help2man += ["python -m xxcmd"]
+    exitcode = subprocess.call(help2man)
+    if exitcode:
+        exit(exitcode)
+    # Grab content from our temporary man page
+    infile = open(filename, "rt", encoding='utf-8')
+    content = []
+    while True:
+        line = infile.readline()
+        if line == '':
+            break
+        line = line.strip()
+        if content:
+            content.append(line)
+        if line == '.SS "positional arguments:"':
+            content.append(line)
+    infile.close()
+    os.unlink(filename)
+    content = "\n".join(content)
+    replace('docs/xx.1', '.SH OPTIONS', '.SH EXAMPLES', content)
 
     # Run tests and coverage report
     exitcode = subprocess.call('coverage run --source=. -m unittest discover'.split())

@@ -7,52 +7,58 @@
 \f[B]xx\f[R] - A helper for remembering useful shell commands.
 .SH SYNOPSIS
 .PP
-\f[C]xx [-h] [-a ...] [-t] [-l] [-v] [-i URL] [cmd]\f[R]
+\f[B]xx\f[R]
+\f[C][-h] [-a ...] [-i URL] [-c] [-l] [-m] [-n] [-p PADDING] [-s] [-t] [-b] [-v] [cmd]\f[R]
 .SH DESCRIPTION
 .PP
 \f[B]xx\f[R] remembers shell commands, so you don\[cq]t have to.
 .SH OPTIONS
+.SS "positional arguments:"
 .TP
-\f[B]\f[CB]-a ..., --add ...\f[B]\f[R]
-Add the given command to the database.
-Command may begin with a label enclosed in square brackets [label]
+cmd
+Search for a matching command and run it immediately.
+.SS "optional arguments:"
 .TP
-\f[B]\f[CB]-b, --no-border\f[B]\f[R]
-Don\[cq]t display a window border.
+\fB\-h\fR, \fB\-\-help\fR
+show this help message and exit
 .TP
-\f[B]\f[CB]-c, --create-config\f[B]\f[R]
-Create a config file in the users home directory if one doesn\[cq]t
-already exist.
+\fB\-a\fR ..., \fB\-\-add\fR ...
+Add the given command to the database. Command may
+begin with a label enclosed in square brackets [label]
+<cmd>
 .TP
-\f[B]\f[CB]-h, --help\f[B]\f[R]
-Show this help message and exit
+\fB\-i\fR URL, \fB\-\-import\-url\fR URL
+Import a command database from the given URL. Merge
+into existing database.
 .TP
-\f[B]\f[CB]-i URL, --import-url URL\f[B]\f[R]
-Import a command database from the given URL.
-Merge into existing database.
+\fB\-c\fR, \fB\-\-create\-config\fR
+Create a config file in the users home directory if
+one doesn't already exist.
 .TP
-\f[B]\f[CB]-l, --list\f[B]\f[R]
+\fB\-l\fR, \fB\-\-list\fR
 Print all commands in the database
 .TP
-\f[B]\f[CB]-m, --no-commands\f[B]\f[R]
-Don\[cq]t show commands in interactive view.
+\fB\-m\fR, \fB\-\-no\-commands\fR
+Don't show commands in interactive view.
 .TP
-\f[B]\f[CB]-n, --no-echo\f[B]\f[R]
-Don\[cq]t echo the command to the terminal prior to execution.
+\fB\-n\fR, \fB\-\-no\-echo\fR
+Don't echo the command to the terminal prior to
+execution.
 .TP
-\f[B]\f[CB]-p PADDING, --label-padding PADDING\f[B]\f[R]
+\fB\-p\fR PADDING, \fB\-\-label\-padding\fR PADDING
 Add extra padding between labels and commands.
 .TP
-\f[B]\f[CB]-s, --search-labels\f[B]\f[R]
+\fB\-s\fR, \fB\-\-search\-labels\fR
 Search only labels not the shell commands themselves.
-Unless the command has no label.
 .TP
-\f[B]\f[CB]-t, --no-labels\f[B]\f[R]
-Don\[cq]t display command labels.
+\fB\-t\fR, \fB\-\-no\-labels\fR
+Don't display command labels.
 .TP
-\f[B]\f[CB]-v, --version\f[B]\f[R]
-Display program version.
-.SH EXAMPLES
+\fB\-b\fR, \fB\-\-no\-border\fR
+Don't display a window border.
+.TP
+\fB\-v\fR, \fB\-\-version\fR
+Display program version..SH EXAMPLES
 .TP
 \f[B]\f[CB]xx\f[B]\f[R]
 Launch the interactive interface for searching and launching commands.
@@ -60,7 +66,7 @@ Launch the interactive interface for searching and launching commands.
 \f[B]\f[CB]xx -a ls -al\f[B]\f[R]
 Adds the command \[lq]ls -al\[rq] to the command database.
 .TP
-\f[B]\f[CB]xx -a \[dq][SSH Myhost] ssh -i \[ti]/.ssh/secretkey.pem ubuntu\[at]my-host.com\[dq]\f[B]\f[R]
+\f[B]\f[CB]xx -a [SSH Myhost] ssh -i \[ti]/.ssh/secretkey.pem ubuntu\[at]my-host.com\f[B]\f[R]
 Add the given SSH command with the label \[lq]SSH Myhost\[rq].
 .TP
 \f[B]\f[CB]xx host\f[B]\f[R]
