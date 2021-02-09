@@ -13,6 +13,7 @@ class Config():
         self.config = {
             'echo-commands': True,
             'show-labels': True,
+            'show-commands': True,
             'align-commands': True,
             'draw-window-border': True,
             'label-padding': 2,

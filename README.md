@@ -118,6 +118,7 @@ optional arguments:
                         Import a command database from the given URL.
                         Merge into existing database.
   -l, --list            Print all commands in the database.
+  -m, --no-commands     Don't show commands in interactive view.
   -n, --no-echo         Don't echo the command to the terminal prior
   						to execution.
   -p PADDING, --label-padding PADDING
@@ -136,8 +137,9 @@ An example file demonstrating all possible options.
 
 ```text
 [xxcmd]
-echo-commands = no
+echo-commands = yes
 show-labels = yes
+show-commands = yes
 align-commands = yes
 draw-window-border = yes
 label-padding = 2

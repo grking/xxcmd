@@ -43,6 +43,10 @@ with a label enclosed in square brackets [label] <cmd>
 
 : Print all commands in the database
 
+`-m, --no-commands`
+
+: Don't show commands in interactive view.
+
 `-n, --no-echo`
 
 : Don't echo the command to the terminal prior to execution.

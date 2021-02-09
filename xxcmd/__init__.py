@@ -40,6 +40,10 @@ def main():
         help="Print all commands in the database")
 
     parser.add_argument(
+        '-m', '--no-commands', action='store_const', const=True,
+        help="Don't show commands in interactive view.")
+
+    parser.add_argument(
         '-n', '--no-echo', action='store_const', const=True,
         help="Don't echo the command to the terminal prior to execution.")
 
@@ -84,6 +88,8 @@ def main():
         manager.config.draw_window_border = not args.no_border
     if args.label_padding:
         manager.config.label_padding = args.label_padding
+    if args.no_commands:
+        manager.config.show_commands = not args.no_commands
 
     # Load db
     manager.load_database()

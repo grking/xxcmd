@@ -139,7 +139,10 @@ class ConsoleUI():
                     indent = 0
 
                 # Print command
-                cmd = item.cmd
+                if self.parent.config.show_commands:
+                    cmd = item.cmd
+                else:
+                    cmd = ''
                 if self.parent.config.whole_line_selection:
                     cmd = cmd.ljust(
                         self.win_width - indent - self.commands_pos['x'])
