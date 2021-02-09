@@ -97,6 +97,9 @@ if __name__ == '__main__':
     # Publish
     if len(sys.argv) == 2 and sys.argv[1] == 'publish':
 
+        # Ensure we can do a normal build first
+        run('./build.py')
+
         # Update the README with our release version number
         infile = open("README.md", "rt", encoding='utf-8')
         lines = infile.readlines()
