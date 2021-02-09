@@ -19,6 +19,7 @@ import subprocess
 import tempfile
 import shutil
 import os
+import sys
 from xxcmd.config import Config
 
 
@@ -68,6 +69,14 @@ def run(cmd):
 
 
 if __name__ == '__main__':
+
+    # Clean up
+    if len(sys.argv) == 2 and sys.argv[1] == 'clean':
+        for wipe in [
+            'dist', '__pycache__', 'htmlcov', '.coverage', '.pytest_cache'
+        ]:
+            os.system('rm -rf {0}'.format(wipe))
+        exit(0)
 
     # Update the README.md file with the latest command line help output
     result = subprocess.check_output('python -m xxcmd -h'.split())
