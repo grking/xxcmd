@@ -73,10 +73,6 @@ class ConsoleUI():
     def termrow_to_idx(self, row):
         return (row + self.row_offset) - self.commands_pos['y']
 
-    # Array index to term row
-    def idx_to_termrow(self, idx):
-        return idx + self.commands_pos['y'] + self.row_offset
-
     # Update our window output
     def redraw(self):
 
@@ -180,7 +176,7 @@ class ConsoleUI():
             if not key:
                 key = self.win.getkey()
         except KeyboardInterrupt:
-            key = exit(0)
+            exit(0)
 
         # Support backspace
         if key == '\x08' or key == 'KEY_BACKSPACE' or key == '\x7f':

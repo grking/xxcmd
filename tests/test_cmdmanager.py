@@ -7,6 +7,7 @@ import io
 from .mockcurses import curses
 import xxcmd
 from xxcmd import CmdManager, DBItem, main
+from xxcmd.config import Config
 
 # Mock curses during unit testing
 xxcmd.consoleui.curses = curses
@@ -156,6 +157,11 @@ class CmdManagerTests(unittest.TestCase):
         xx.load_database()
         xx.update_search()
         xx.ui.initialise_display()
+        xx.config.bracket_labels = True
+        xx.ui.redraw()
+        xx.config.show_labels = False
+        xx.ui.redraw()
+        xx.config.show_commands = False
         xx.ui.redraw()
         xx.ui.finalise_display()
 
@@ -279,5 +285,16 @@ class CmdManagerTests(unittest.TestCase):
         self.assertRaises(Exception, lambda: xx.run('#AUTOEXIT#'))
 
     def test_main(self):
+        sys.argv = ['xx', '-v']
+        self.assertRaises(SystemExit, lambda: main())
         sys.argv = ['xx', '#AUTOEXIT#']
         self.assertRaises(Exception, lambda: main())
+        sys.argv = ['xx', '-tmnsbp1', '#AUTOEXIT#']
+        self.assertRaises(Exception, lambda: main())
+
+        configfile = tempfile.mktemp()
+        Config.DEFAULT_CONFIG_FILE = configfile
+        sys.argv = ['xx', '-c']
+        self.assertRaises(SystemExit, lambda: main())
+        sys.argv = ['xx', '-c']
+        self.assertRaises(SystemExit, lambda: main())
