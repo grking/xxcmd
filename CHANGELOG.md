@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.7.0] - Unreleased
+-
+
 ## [0.6.0] - 2021-02-09
 - Added bold label display option.
 - Added bracketed label display option.
