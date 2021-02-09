@@ -1,5 +1,19 @@
 # build.py
-# A build helper for xxcmd
+# A build helper for xxcmd.
+#
+# This script:
+#   1. Updates the latest command line options into the README
+#   2. Updates the latest config options into the README
+#   3. Generates a man page from docs/man.src.md
+#   4. Updates the man page with the latest command line options
+#   5. Runs the unit tests and coverage report
+#   6. Builds a pypi package
+#
+# Requires:
+#
+#   OS Packages: help2man, pandoc
+#   Pip packages: flit, coverage
+#
 import subprocess
 import tempfile
 import shutil
