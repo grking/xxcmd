@@ -1,6 +1,6 @@
 # xxcmd
 
-![Python Build](https://github.com/grking/xxcmd/workflows/Python%20Build/badge.svg)
+![Build](https://img.shields.io/github/workflow/status/grking/xxcmd/Python%20Build) ![PyPI](https://img.shields.io/pypi/v/xxcmd) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/xxcmd)
 
 `xx` is a Linux shell command. `xx` remembers other shell commands, so you don't have to.
 
