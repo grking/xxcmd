@@ -114,8 +114,9 @@ if __name__ == '__main__':
         infile = open("CHANGELOG.md", "rt", encoding='utf-8')
         lines = infile.readlines()
         infile.close()
-        if 'Unreleased' in lines[2].lower():
-            lines[2] = "[{0}] - {1}".format(VERSION, datetime.datetime.strftime('%Y-%m-%d'))
+        if 'unreleased' in lines[2].lower():
+            today = datetime.datetime.now().strftime('%Y-%m-%d')
+            lines[2] = "## [{0}] - {1}\n".format(VERSION, today)
         else:
             print("Could not update the changelog")
             exit(1)
@@ -123,15 +124,15 @@ if __name__ == '__main__':
         outfile.writelines(lines)
         outfile.close()
         # Git commit those doc changes
-        run('echo git add README.md CHANGELOG.md')
-        run('echo git commit -m Release v{0}'.format(VERSION))
-        run('echo git push')
+        run('git add README.md CHANGELOG.md')
+        run('git commit -m Release v{0}'.format(VERSION))
+        run('git push')
         # Git tag
-        run('echo git tag v{0}'.format(VERSION))
-        run('echo git push --tags')
+        run('git tag v{0}'.format(VERSION))
+        run('git push --tags')
         # Build pypi package
-        run('echo flit build')
-        run('echo flit publish')
+        run('flit build')
+        run('flit publish')
         exit(0)
 
     # Update the README.md file with the latest command line help output
