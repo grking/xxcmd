@@ -128,7 +128,7 @@ if __name__ == '__main__':
         outfile.close()
         # Git commit those doc changes, and any other possible ones
         run('git add README.md CHANGELOG.md docs/*')
-        run('git commit -m "Release v{0}"'.format(VERSION))
+        run('git commit -m'.split() + ['"Release v{0}"'.format(VERSION)])
         run('git push')
         # Git tag
         run('git tag v{0}'.format(VERSION))
