@@ -134,7 +134,21 @@ class CmdManager():
             if not line.strip():
                 continue
             self.add_database_entry(line, True)
+
         return True
+
+    # Resort, if required
+    def sort(self):
+        if self.config.sort_by_label:
+            if self.config.sort_case_sensitive:
+                self.results.sort(key=lambda x: x.label, reverse=False)
+            else:
+                self.results.sort(key=lambda x: x.label.lower(), reverse=False)
+        elif self.config.sort_by_command:
+            if self.config.sort_case_sensitive:
+                self.results.sort(key=lambda x: x.cmd, reverse=False)
+            else:
+                self.results.sort(key=lambda x: x.cmd.lower(), reverse=False)
 
     # Save our DB
     def save_database(self):
@@ -222,6 +236,9 @@ class CmdManager():
 
         # Refresh selection
         self.selected_row = self.selected_row
+
+        # Sort the results
+        self.sort()
 
     # Move the selected row down
     def selection_down(self):
