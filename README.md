@@ -101,8 +101,7 @@ usage: xx [-h] [-a ...] [-i URL] [-c] [-l] [-m] [-n] [-p PADDING] [-s] [-t]
 
 A helper for remembering useful shell commands. Type to interactively search,
 use UP and DOWN arrows to select, RETURN to launch the selected command. Use
-DELETE to remove the currently selected row. F1 or CTRL+E to edit the label of
-the selected item.
+DELETE to remove the currently selected row. F1 or CTRL+E to edit the label of the selected item.
 
 positional arguments:
   cmd                   Search for a matching command and run it immediately.

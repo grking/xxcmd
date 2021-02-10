@@ -7,8 +7,8 @@
 # This script by default:
 #   1. Updates the latest command line options into the README
 #   2. Updates the latest config options into the README
-#   3. Generates a man page from docs/man.src.md
-#   4. Updates the man page with the latest command line options
+#   3. Updates the man page src with the latest command line options
+#   4. Builds the man page
 #   5. Runs the unit tests and coverage report
 #   6. Builds a pypi package
 #
@@ -25,7 +25,7 @@
 #
 # Requires:
 #
-#   OS Packages: help2man, pandoc
+#   OS Packages: help2man, txt2man
 #   Pip packages: flit, pytest, pytest-cov
 #
 import re
@@ -157,30 +157,14 @@ if __name__ == '__main__':
     # Update the README
     replace('README.md', '[xxcmd]', '```', content)
 
-    # Rebuild the man page
-    run('pandoc --standalone --to man docs/man.src.md -o docs/xx.1')
+    # Update the man page source file with the latest command line options
+    result = subprocess.check_output('python -m xxcmd -h'.split())
+    content = result.decode('utf-8')
+    content = "\n" + content + "\n"
+    replace('docs/xx.txt', 'OPTIONS', 'EXAMPLES', content)
 
-    # Grab the command line options in man page format
-    filename = tempfile.mktemp()
-    help2man = 'help2man -N -o {0}'.format(filename).split()
-    help2man += ["python -m xxcmd"]
-    run(help2man)
-    # Grab content from our temporary man page
-    infile = open(filename, "rt", encoding='utf-8')
-    content = []
-    while True:
-        line = infile.readline()
-        if line == '':
-            break
-        line = line.strip()
-        if content:
-            content.append(line)
-        if line == '.SS "positional arguments:"':
-            content.append(line)
-    infile.close()
-    os.unlink(filename)
-    content = "\n".join(content)
-    replace('docs/xx.1', '.SH OPTIONS', '.SH EXAMPLES', content)
+    # Rebuild the man page
+    run('txt2man -p docs/xx.txt > docs/xx.1')
 
     # Run tests
     run('pytest -q --cov-report term --cov-report html --cov=xxcmd tests/')
