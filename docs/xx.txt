@@ -17,6 +17,15 @@ of the selected item, F2 or CTRL+I to edit the command.
 
 OPTIONS
 
+usage: xx [-h] [-a ...] [-i URL] [-c] [-l] [-m] [-n] [-p PADDING] [-s] [-t]
+          [-b] [-v]
+          [cmd]
+
+A helper for remembering useful shell commands. Type to interactively search,
+use UP and DOWN arrows to select, RETURN to launch the selected command. Use
+DELETE to remove the currently selected row. F1 or CTRL+E to edit the label of
+the selected item.
+
 positional arguments:
   cmd                   Search for a matching command and run it immediately.
 
@@ -42,7 +51,6 @@ optional arguments:
   -t, --no-labels       Don't display command labels.
   -b, --no-border       Don't display a window border.
   -v, --version         Display program version.
-
 
 EXAMPLES
 

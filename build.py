@@ -164,7 +164,11 @@ if __name__ == '__main__':
     replace('docs/xx.txt', 'OPTIONS', 'EXAMPLES', content)
 
     # Rebuild the man page
-    run('txt2man -p docs/xx.txt > docs/xx.1')
+    result = subprocess.check_output('txt2man -p docs/xx.txt'.split())
+    content = result.decode('utf-8')
+    f = open("docs/xx.1", "w")
+    f.write(content)
+    f.close()
 
     # Run tests
     run('pytest -q --cov-report term --cov-report html --cov=xxcmd tests/')
