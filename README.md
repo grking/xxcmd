@@ -52,7 +52,7 @@ xx -a [SSH Best Host] ssh -i ~/.ssh/mykey.pem me@myhost.com
 
 ## Browse and Search Commands Interactively
 
-Run `xx` with no options to enter the interactive UI.
+Run `xx` with no options to enter the interactive view.
 
 ```bash
 xx
@@ -78,18 +78,18 @@ We could immediately ssh connect with:
 xx best
 ```
 
-# Interactive UI
+# Interactive View
 
-Invoking `xx` without options will open the interactive UI. Presenting a list of all commands with an interactive search.
+Invoking `xx` without options will open the interactive view. This presents a list of all commands with an interactive search.
 
 Keys:
 
-* UP/DOWN arrow keys - navigate the list of commands.
-* DELETE - remove the currently selected command
-* RETURN - execute the currently selected command
-* ESCAPE - exit
-* F1 or CTRL+E - Edit the label of the currently selected item
-* F2 or CTRL+I - Edit the label of the currently selected item
+* <kbd>Up</kbd>/<kbd>Down</kbd> - navigate the list of commands.
+* <kbd>Delete</kbd> - remove the currently selected command
+* <kbd>Return</kbd> - execute the currently selected command
+* <kbd>Escape</kbd> - exit
+* <kbd>F1</kbd> or <kbd>CTRL+E</kbd> - Edit the label of the currently selected item
+* <kbd>F2</kbd> or <kbd>CTRL+I</kbd> - Edit the label of the currently selected item
 * Any other key press is added to the interactive search to filter the command list.
 
 # Further Usage
