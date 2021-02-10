@@ -88,7 +88,8 @@ if __name__ == '__main__':
     # Clean up
     if len(sys.argv) == 2 and sys.argv[1] == 'clean':
         for wipe in [
-            'dist', '__pycache__', 'htmlcov', '.coverage', '.pytest_cache'
+            'dist', '__pycache__', 'htmlcov', '.coverage',
+            '.pytest_cache', 'xxcmd/__pycache__', 'tests/__pycache__'
         ]:
             os.system('rm -rf {0}'.format(wipe))
         exit(0)
