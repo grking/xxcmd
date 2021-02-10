@@ -30,6 +30,8 @@ class LineEdit():
     def set_value(self, value, use_history=True):
         # Remember the current value
         self._history.append(self._linetext)
+        if len(self._history) > 20:
+            self._history = self._history[1:]
         # Set the new value
         self._linetext = value
         # Set cursor
