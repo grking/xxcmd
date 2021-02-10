@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Added support for arrow keys, home, end, CTRL+arrow in line editor.
+
 ## [0.7.0] - 2021-02-09
 - Changed default search to search only labels, if no matches try searching commands.
 - Added option to not show shell commands in the interactive view.

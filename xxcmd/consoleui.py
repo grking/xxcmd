@@ -1,5 +1,6 @@
 # consoleui.py
 import curses
+from .lineedit import LineEdit
 
 
 # Curses UI for our application
@@ -16,27 +17,14 @@ class ConsoleUI():
         # Locations of things
         self.prompt_pos = {'x': 1, 'y': 1}
         self.commands_pos = {'x': 1, 'y': 2}
+        # Input line edit
+        self.input = LineEdit()
         # Input line prefix
         self.input_prefix = ''
-        # Input line value
-        self.input = ''
-        self.input_history = []
         # Key press event handlers
         self.key_events = {}
         # Offset for scrolling through the list
         self.row_offset = 1
-
-    # Set our input line data
-    def set_input(self, value):
-        self.input_history.append(self.input)
-        self.input = value
-
-    # Restore a previous input line
-    def pop_input(self):
-        if self.input_history:
-            self.input = self.input_history.pop()
-        else:
-            self.input = ''
 
     # Initialise our display
     def initialise_display(self):
@@ -85,7 +73,7 @@ class ConsoleUI():
         # Print the input line
         self.print_at(
             self.prompt_pos['y'], self.prompt_pos['x'],
-            "{0}{1}".format(self.input_prefix, self.input))
+            "{0}{1}".format(self.input_prefix, self.input.value))
 
         # Determine max label length for indenting
         indent = 0
@@ -151,8 +139,8 @@ class ConsoleUI():
 
             y += 1
 
-        # Move cursor
-        curx = len(self.input) + len(self.input_prefix) + self.prompt_pos['x']
+        # Move visual cursor
+        curx = self.input.cursor + len(self.input_prefix) + self.prompt_pos['x']
         if curx < self.win_width:
             self.win.move(self.prompt_pos['y'], curx)
 
@@ -165,7 +153,7 @@ class ConsoleUI():
     def get_input(self, key=None):
 
         # Bail out if testing
-        if self.input == '#UNITTESTING#':
+        if self.input.value == '#UNITTESTING#':
             raise Exception("End Test")
 
         # Remember our starting mode
@@ -180,7 +168,20 @@ class ConsoleUI():
 
         # Support backspace
         if key == '\x08' or key == 'KEY_BACKSPACE' or key == '\x7f':
-            self.input = self.input[:-1]
+            self.input.delchar()
+        # Cursor movements
+        elif key == 'KEY_LEFT':
+            self.input.left()
+        elif key == 'KEY_RIGHT':
+            self.input.right()
+        elif key == 'KEY_HOME' or key == 'kHOM5':
+            self.input.left(self.input.LINE)
+        elif key == 'KEY_END' or key == 'kEND5':
+            self.input.right(self.input.LINE)
+        elif key == 'kLFT5':
+            self.input.left(self.input.WORD)
+        elif key == 'kRIT5':
+            self.input.right(self.input.WORD)
         # Check for key press event handler
         elif key in self.key_events.keys():
             self.key_events[key]()
@@ -189,7 +190,7 @@ class ConsoleUI():
             pass
         # Just record the key press
         else:
-            self.input += key
+            self.input.addchar(key)
 
         # Trigger other event handlers
 

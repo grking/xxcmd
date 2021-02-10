@@ -144,10 +144,10 @@ class CmdManagerTests(unittest.TestCase):
             "one [My Label]",
             "[Your Label] two",
             "three"])
-        xx.ui.input = 'one'
+        xx.ui.input.set_input('one')
         xx.update_search()
         self.assertEqual(1, len(xx.results))
-        xx.ui.input = 'label'
+        xx.ui.input.set_input('label')
         xx.update_search()
         self.assertEqual(2, len(xx.results))
         self.assertEqual(xx.results[1].label, 'Your Label')
@@ -237,11 +237,11 @@ class CmdManagerTests(unittest.TestCase):
 
         # Test letter
         xx.ui.get_input('a')
-        self.assertEqual(xx.ui.input, "a")
+        self.assertEqual(xx.ui.input.value, "a")
 
         # Test backspace
         xx.ui.get_input('\x08')
-        self.assertEqual(xx.ui.input, "")
+        self.assertEqual(xx.ui.input.value, "")
         # Test down
         xx.ui.get_input('KEY_DOWN')
         self.assertEqual(xx.selected_row, 1)
@@ -261,10 +261,10 @@ class CmdManagerTests(unittest.TestCase):
 
         # Test letter
         xx.ui.get_input('a')
-        self.assertEqual(xx.ui.input, "SSH Homea")
+        self.assertEqual(xx.ui.input.value, "SSH Homea")
         # Test backspace
         xx.ui.get_input('\x08')
-        self.assertEqual(xx.ui.input, "SSH Home")
+        self.assertEqual(xx.ui.input.value, "SSH Home")
         # Test ignore
         xx.ui.get_input('ignore me')
         # Test return (save)

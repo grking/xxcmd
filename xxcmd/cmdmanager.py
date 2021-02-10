@@ -204,19 +204,19 @@ class CmdManager():
         self.results.clear()
 
         # Special case of no search term
-        if not self.ui.input:
+        if not self.ui.input.value:
             self.results = self.database[:]
         # Search labels, then commands if no labels found
         elif self.config.search_labels_first:
-            self._search(self.ui.input.lower(), True, False)
+            self._search(self.ui.input.value.lower(), True, False)
             if not len(self.results):
-                self._search(self.ui.input.lower(), False, True)
+                self._search(self.ui.input.value.lower(), False, True)
         # Search labels only
         elif self.config.search_labels_only:
-            self._search(self.ui.input.lower(), True, False)
+            self._search(self.ui.input.value.lower(), True, False)
         # Search both labels and command
         else:
-            self._search(self.ui.input.lower(), True, True)
+            self._search(self.ui.input.value.lower(), True, True)
 
         # Refresh selection
         self.selected_row = self.selected_row
@@ -234,7 +234,7 @@ class CmdManager():
         if not self.selected_item:
             return
         self.ui.input_prefix = 'Edit Label: '
-        self.ui.set_input(self.selected_item.label)
+        self.ui.input.set_input(self.selected_item.label)
         self.ui.key_events = {
             '\x1b': self.search_mode,
             "\n": self.update_selected_label
@@ -244,7 +244,7 @@ class CmdManager():
     # Enter search mode
     def search_mode(self):
         self.ui.input_prefix = 'Search: '
-        self.ui.pop_input()
+        self.ui.input.pop_input()
         self.ui.key_events = {
             'KEY_DOWN': self.selection_down,
             'KEY_UP': self.selection_up,
@@ -260,7 +260,7 @@ class CmdManager():
 
     # Update the selected items label
     def update_selected_label(self):
-        self.selected_item.label = self.ui.input
+        self.selected_item.label = self.ui.input.value
         self.save_database()
         self.search_mode()
 
@@ -305,7 +305,7 @@ class CmdManager():
 
         # If passed a search term, try to auto run it
         if cmd:
-            self.ui.set_input(cmd)
+            self.ui.input.set_input(cmd)
             self.do_autorun()
 
         try:
