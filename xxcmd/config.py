@@ -22,7 +22,7 @@ class Config():
             'whole-line-selection': True,
             'search-labels-only': False,
             'search-labels-first': True,
-            'shell': 'DEFAULT',
+            'shell': 'default',
             'sort-by-label': True,
             'sort-by-command': False,
             'sort-case-sensitive': True
