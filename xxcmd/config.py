@@ -21,7 +21,8 @@ class Config():
             'bold-labels': True,
             'whole-line-selection': True,
             'search-labels-only': False,
-            'search-labels-first': True
+            'search-labels-first': True,
+            'shell': 'DEFAULT'
         }
 
         # If there is a config file merge that in too

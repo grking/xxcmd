@@ -3,6 +3,7 @@
 ## Unreleased
 - Added feature to edit existing commands with F2 or CTRL+I.
 - Added support for arrow keys, home, end, CTRL+arrow in line editor.
+- Added config file option to change shell used to execute commands.
 
 ## [0.7.0] - 2021-02-09
 - Changed default search to search only labels, if no matches try searching commands.

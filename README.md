@@ -152,6 +152,9 @@ bold-labels = yes
 whole-line-selection = yes
 search-labels-only = no
 search-labels-first = yes
+shell = default
 ```
 
 Command line switches take precedence over configuration file options.
+
+`shell` can be set to the full path of the shell to be used to execute commands, such as `/bin/sh`. If set to `default` the environmental variable `SHELL` is inspected to use the default OS shell.

@@ -59,6 +59,8 @@ class CmdManager():
         self.filename = DEFAULT_DATABASE_FILE
         # The shell we'll use to execute commands
         self.shell = DEFAULT_SHELL
+        if self.config.shell.lower() != 'default':
+            self.shell = self.config.shell
         # Default mode
         self._mode = ''
         self.search_mode()
