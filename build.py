@@ -7,10 +7,9 @@
 # This script by default:
 #   1. Updates the latest command line options into the README
 #   2. Updates the latest config options into the README
-#   3. Updates the man page src with the latest command line options
-#   4. Builds the man page
-#   5. Runs the unit tests and coverage report
-#   6. Builds a pypi package
+#   3. Rebuilds the man page
+#   4. Runs the unit tests and coverage report
+#   5. Builds a pypi package
 #
 # ./build.py clean
 #   1. Deletes temporary files from the project directory
@@ -25,7 +24,7 @@
 #
 # Requires:
 #
-#   OS Packages: help2man, txt2man
+#   OS Packages: help2man
 #   Pip packages: flit, pytest, pytest-cov
 #
 import re
@@ -157,18 +156,9 @@ if __name__ == '__main__':
     # Update the README
     replace('README.md', '[xxcmd]', '```', content)
 
-    # Update the man page source file with the latest command line options
-    result = subprocess.check_output('python -m xxcmd -h'.split())
-    content = result.decode('utf-8')
-    content = "\n" + content + "\n"
-    replace('docs/xx.txt', 'OPTIONS', 'EXAMPLES', content)
-
     # Rebuild the man page
-    result = subprocess.check_output('txt2man -p docs/xx.txt'.split())
-    content = result.decode('utf-8')
-    f = open("docs/xx.1", "w")
-    f.write(content)
-    f.close()
+    run(['help2man', '-i', 'docs/xx.h2m', '-n', "remembers other shell commands, "
+        "so you don't have to.", '-o', 'docs/xx.1', '-N', "python -m xxcmd"])
 
     # Run tests
     run('pytest -q --cov-report term --cov-report html --cov=xxcmd tests/')

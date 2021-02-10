@@ -1,0 +1,43 @@
+[EXAMPLES]
+
+Launch the interactive interface for searching and launching commands:
+
+\fBxx\fP
+
+Adds the command "ls -al" to the command database:
+
+\fBxx -a ls -al\fP
+
+Add the given SSH command with the label "SSH Myhost":
+
+\fBxx -a [SSH Myhost] ssh -i ~/.ssh/secretkey.pem ubuntu@my-host.com\fP
+
+Search for commands matching "host", if only one match is found, launch that command immediately:
+
+\fBxx host\fP
+
+Download and import the list of commands from the given URL:
+
+\fBxx -i https://myhost.com/command-list.txt\fP
+
+[FILES]
+
+\fB~/.xxcmd\fP
+
+This is the file used to store the database of commands.
+
+\fB~/.xxcmdrc\fP
+
+An optional configuration file.
+
+[BUGS]
+
+Please report bugs at https://github.com/grking/xxcmd/issues
+
+[AUTHOR]
+
+Written by Graham R King <grking.email@gmail.com>
+
+[SEE ALSO]
+
+appropos(1), history(1), man(1)
