@@ -230,14 +230,26 @@ class CmdManager():
         self.selected_row -= 1
 
     # Enter edit label mode
-    def edit_mode(self):
+    def edit_label_mode(self):
         if not self.selected_item:
             return
         self.ui.input_prefix = 'Edit Label: '
         self.ui.input.set_input(self.selected_item.label)
         self.ui.key_events = {
-            '\x1b': self.search_mode,
-            "\n": self.update_selected_label
+            '\x1b': self.search_mode,  # escape - exit mode
+            "\n": self.update_selected_label  # Return
+        }
+        self._mode = 'edit'
+
+    # Enter edit command mode
+    def edit_command_mode(self):
+        if not self.selected_item:
+            return
+        self.ui.input_prefix = 'Edit Cmd: '
+        self.ui.input.set_input(self.selected_item.cmd)
+        self.ui.key_events = {
+            '\x1b': self.search_mode,  # escape - exit mode
+            "\n": self.update_selected_command  # Return
         }
         self._mode = 'edit'
 
@@ -246,13 +258,15 @@ class CmdManager():
         self.ui.input_prefix = 'Search: '
         self.ui.input.pop_input()
         self.ui.key_events = {
-            'KEY_DOWN': self.selection_down,
-            'KEY_UP': self.selection_up,
-            '\x1b': exit,
-            'KEY_F(1)': self.edit_mode,
-            '\x05': self.edit_mode,
-            'KEY_DC': self.delete_selected_database_entry,
-            "\n": self.execute_selected_command,
+            'KEY_DOWN': self.selection_down,  # Down arrow
+            'KEY_UP': self.selection_up,  # Up arrow
+            '\x1b': exit,  # escape
+            'KEY_F(1)': self.edit_label_mode,  # F1
+            'KEY_F(2)': self.edit_command_mode,  #F2
+            '\x09': self.edit_command_mode,  # Ctrl+I
+            '\x05': self.edit_label_mode,  # Ctrl+E
+            'KEY_DC': self.delete_selected_database_entry,  # Delete
+            "\n": self.execute_selected_command, # Return
             'ALWAYS': self.update_search
         }
         self._mode = 'search'
@@ -261,6 +275,12 @@ class CmdManager():
     # Update the selected items label
     def update_selected_label(self):
         self.selected_item.label = self.ui.input.value
+        self.save_database()
+        self.search_mode()
+
+    # Update the selected items command
+    def update_selected_command(self):
+        self.selected_item.cmd = self.ui.input.value
         self.save_database()
         self.search_mode()
 

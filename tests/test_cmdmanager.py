@@ -192,7 +192,7 @@ class CmdManagerTests(unittest.TestCase):
         xx = self.get_xx()
         xx.load_database()
         xx.search_mode()
-        xx.edit_mode()
+        xx.edit_label_mode()
 
     def test_import_from_remote_url(self):
         xx = self.get_xx()
