@@ -277,6 +277,23 @@ class CmdManagerTests(unittest.TestCase):
         xx.ui.get_input('\x1b')
         self.assertEqual(xx.mode, 'search')
 
+        # Test left arrow
+        xx.ui.input.set_input("hello and welcome")
+        xx.ui.get_input('KEY_LEFT')
+        self.assertEqual(xx.ui.input.cursor, 16)
+        xx.ui.get_input('KEY_RIGHT')
+        self.assertEqual(xx.ui.input.cursor, 17)
+        xx.ui.get_input('KEY_HOME')
+        self.assertEqual(xx.ui.input.cursor, 0)
+        xx.ui.get_input('KEY_END')
+        self.assertEqual(xx.ui.input.cursor, 17)
+        xx.ui.get_input('kLFT5')
+        self.assertEqual(xx.ui.input.cursor, 10)
+        xx.ui.get_input('KEY_HOME')
+        xx.ui.get_input('kRIT5')
+        self.assertEqual(xx.ui.input.cursor, 6)
+
+
         os.unlink(xx.filename)
 
     def test_autorun(self):

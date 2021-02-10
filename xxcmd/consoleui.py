@@ -153,7 +153,7 @@ class ConsoleUI():
     def get_input(self, key=None):
 
         # Bail out if testing
-        if self.input.value == '#UNITTESTING#':
+        if self.input.value == '#AUTOEXIT#':
             raise Exception("End Test")
 
         # Remember our starting mode
