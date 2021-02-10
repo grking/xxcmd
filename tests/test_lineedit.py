@@ -10,7 +10,7 @@ class LineEditTests(unittest.TestCase):
 
     def test_set_text(self):
         edit = LineEdit()
-        edit.set_input('hello')
+        edit.set_value('hello')
         self.assertEqual(edit.value, 'hello')
 
     def test_add_remove(self):
@@ -33,7 +33,7 @@ class LineEditTests(unittest.TestCase):
     def test_cursor_editing(self):
         edit = LineEdit()
         self.assertEqual(edit.cursor, 0)
-        edit.set_input('test')
+        edit.set_value('test')
         edit.left()
         edit.left()
         edit.left()
@@ -59,13 +59,13 @@ class LineEditTests(unittest.TestCase):
 
     def test_cursor_steps(self):
         edit = LineEdit()
-        edit.set_input('hello')
+        edit.set_value('hello')
         edit.left(LineEdit.LINE)
         self.assertEqual(edit.cursor, 0)
         edit.right(LineEdit.LINE)
         self.assertEqual(edit.cursor, 5)
 
-        edit.set_input('one two three    four five    ')
+        edit.set_value('one two three    four five    ')
         edit.left(LineEdit.WORD)
         edit.left(LineEdit.WORD)
         edit.left(LineEdit.WORD)

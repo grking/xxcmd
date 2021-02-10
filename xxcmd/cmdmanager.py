@@ -253,7 +253,7 @@ class CmdManager():
         if not self.selected_item:
             return
         self.ui.input_prefix = 'Edit Label: '
-        self.ui.input.set_input(self.selected_item.label)
+        self.ui.input.set_value(self.selected_item.label)
         self.ui.key_events = {
             '\x1b': self.search_mode,  # escape - exit mode
             "\n": self.update_selected_label  # Return
@@ -265,7 +265,7 @@ class CmdManager():
         if not self.selected_item:
             return
         self.ui.input_prefix = 'Edit Cmd: '
-        self.ui.input.set_input(self.selected_item.cmd)
+        self.ui.input.set_value(self.selected_item.cmd)
         self.ui.key_events = {
             '\x1b': self.search_mode,  # escape - exit mode
             "\n": self.update_selected_command  # Return
@@ -275,7 +275,7 @@ class CmdManager():
     # Enter search mode
     def search_mode(self):
         self.ui.input_prefix = 'Search: '
-        self.ui.input.pop_input()
+        self.ui.input.pop_value()
         self.ui.key_events = {
             'KEY_DOWN': self.selection_down,  # Down arrow
             'KEY_UP': self.selection_up,  # Up arrow
@@ -344,7 +344,7 @@ class CmdManager():
 
         # If passed a search term, try to auto run it
         if cmd:
-            self.ui.input.set_input(cmd)
+            self.ui.input.set_value(cmd)
             self.do_autorun()
 
         try:

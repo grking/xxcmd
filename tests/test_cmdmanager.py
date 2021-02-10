@@ -150,17 +150,17 @@ class CmdManagerTests(unittest.TestCase):
             "one [My Label]",
             "[Your Label] two",
             "three"])
-        xx.ui.input.set_input('one')
+        xx.ui.input.set_value('one')
         xx.update_search()
         self.assertEqual(1, len(xx.results))
-        xx.ui.input.set_input('label')
+        xx.ui.input.set_value('label')
         xx.update_search()
         self.assertEqual(2, len(xx.results))
         self.assertEqual(xx.results[1].label, 'Your Label')
         # Test search of labels only
         xx.config.search_labels_first = False
         xx.config.search_labels_only = True
-        xx.ui.input.set_input('three')
+        xx.ui.input.set_value('three')
         xx.update_search()
         self.assertEqual(len(xx.results), 0)
 
@@ -209,7 +209,7 @@ class CmdManagerTests(unittest.TestCase):
         xx.edit_command_mode()
         xx.search_mode()
         # Mode changes with no search results
-        xx.ui.input.set_input('abcdef98sdfsfHFHHHFh')
+        xx.ui.input.set_value('abcdef98sdfsfHFHHHFh')
         xx.update_search()
         xx.edit_label_mode()
         xx.edit_command_mode()
@@ -308,7 +308,7 @@ class CmdManagerTests(unittest.TestCase):
         self.assertEqual(xx.mode, 'search')
 
         # Test left arrow
-        xx.ui.input.set_input("hello and welcome")
+        xx.ui.input.set_value("hello and welcome")
         xx.ui.get_input('KEY_LEFT')
         self.assertEqual(xx.ui.input.cursor, 16)
         xx.ui.get_input('KEY_RIGHT')
@@ -404,11 +404,11 @@ class CmdManagerTests(unittest.TestCase):
         xx.filename = tempfile.mktemp()
         xx.update_search()
         # Label edit
-        xx.ui.input.set_input('New Label')
+        xx.ui.input.set_value('New Label')
         xx.update_selected_label()
         self.assertEqual(xx.database[0].label, 'New Label')
         # Command edit
-        xx.ui.input.set_input('New Command')
+        xx.ui.input.set_value('New Command')
         xx.update_selected_command()
         self.assertEqual(xx.database[0].cmd, 'New Command')
 

@@ -27,7 +27,7 @@ class LineEdit():
         self._cursor_default()
 
     # Set our entire line text as a string
-    def set_input(self, value, use_history=True):
+    def set_value(self, value, use_history=True):
         # Remember the current value
         self._history.append(self._linetext)
         # Set the new value
@@ -36,9 +36,9 @@ class LineEdit():
         self._cursor_default()
 
     # Restore a previous input line
-    def pop_input(self):
+    def pop_value(self):
         if self._history:
-            self.set_input(self._history.pop(), False)
+            self.set_value(self._history.pop(), False)
         else:
             self.clear()
 
