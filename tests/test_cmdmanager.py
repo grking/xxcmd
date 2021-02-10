@@ -345,7 +345,20 @@ class CmdManagerTests(unittest.TestCase):
         self.assertRaises(SystemExit, lambda: main())
         sys.argv = ['xx', '-c']
         self.assertRaises(SystemExit, lambda: main())
+        sys.argv = ['xx', '-l']
+        self.assertRaises(SystemExit, lambda: main())
         os.unlink(configfile)
+
+        dbfile = tempfile.mktemp()
+        sys.argv = ['xx', '-f', dbfile, '-i', 'https://pastebin.com/raw/zVxMGmRJ']
+        self.assertRaises(SystemExit, lambda: main())
+        sys.argv = ['xx', '-f', dbfile, '-i', 'https://invalid']
+        self.assertRaises(SystemExit, lambda: main())
+        sys.argv = ['xx', '-f', dbfile, '-a', '[New] command']
+        self.assertRaises(SystemExit, lambda: main())
+        sys.argv = ['xx', '-f', dbfile, '-a', '[New] command']
+        self.assertRaises(SystemExit, lambda: main())
+        os.unlink(dbfile)
 
     def test_sorting(self):
         xx = self.get_xx()

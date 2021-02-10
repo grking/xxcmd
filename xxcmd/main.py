@@ -33,6 +33,11 @@ def main():
         "doesn't already exist.")
 
     parser.add_argument(
+        '-f', '--db-file', nargs=1, metavar='FILE',
+        help="Use the command database file specified rather than "
+        "the default.")
+
+    parser.add_argument(
         '-l', '--list', action='store_true',
         help="Print all commands in the database")
 
@@ -81,6 +86,10 @@ def main():
 
     # Create our SSH Manager
     manager = CmdManager()
+
+    # Switch database file?
+    if args.db_file:
+        manager.filename = args.db_file[0]
 
     # Parse switches
     if args.no_labels:

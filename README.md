@@ -95,8 +95,8 @@ Keys:
 # Further Usage
 
 ```text
-usage: xx [-h] [-a ...] [-i URL] [-c] [-l] [-m] [-n] [-p PADDING] [-s] [-t]
-          [-b] [-v]
+usage: xx [-h] [-a ...] [-i URL] [-c] [-f FILE] [-l] [-m] [-n] [-p PADDING]
+          [-s] [-t] [-b] [-v]
           [cmd]
 
 A helper for remembering useful shell commands. Type to interactively search,
@@ -117,6 +117,9 @@ optional arguments:
                         into existing database.
   -c, --create-config   Create a config file in the users home directory if
                         one doesn't already exist.
+  -f FILE, --db-file FILE
+                        Use the command database file specified rather than
+                        the default.
   -l, --list            Print all commands in the database
   -m, --no-commands     Don't show commands in interactive view.
   -n, --no-echo         Don't echo the command to the terminal prior to

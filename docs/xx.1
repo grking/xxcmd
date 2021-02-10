@@ -8,7 +8,9 @@
 .nf
 .fam C
 
-\fBxx\fP [\fB-h\fP] [\fB-a\fP \.\.\.] [\fB-i\fP \fIURL\fP] [\fB-c\fP] [\fB-l\fP] [\fB-m\fP] [\fB-n\fP] [\fB-p\fP \fIPADDING\fP] [\fB-s\fP] [\fB-t\fP] [\fB-b\fP] [\fB-v\fP] [\fIcmd\fP]
+\fBxx\fP [\fB-h\fP] [\fB-a\fP \.\.\.] [\fB-i\fP \fIURL\fP] [\fB-c\fP] [\fB-f\fP \fIFILE\fP] [\fB-l\fP] [\fB-m\fP] [\fB-n\fP] [\fB-p\fP \fIPADDING\fP]
+        [\fB-s\fP] [\fB-t\fP] [\fB-b\fP] [\fB-v\fP]
+        [cmd]
 
 .fam T
 .fi
@@ -24,9 +26,9 @@ DELETE to remove the currently selected row. F1 or CTRL+E to edit the label
 of the selected item, F2 or CTRL+I to edit the command.
 .SH OPTIONS
 
-usage: \fBxx\fP [\fB-h\fP] [\fB-a\fP \.\.\.] [\fB-i\fP \fIURL\fP] [\fB-c\fP] [\fB-l\fP] [\fB-m\fP] [\fB-n\fP] [\fB-p\fP \fIPADDING\fP] [\fB-s\fP] [\fB-t\fP]
-[\fB-b\fP] [\fB-v\fP]
-[\fIcmd\fP]
+usage: \fBxx\fP [\fB-h\fP] [\fB-a\fP \.\.\.] [\fB-i\fP \fIURL\fP] [\fB-c\fP] [\fB-f\fP \fIFILE\fP] [\fB-l\fP] [\fB-m\fP] [\fB-n\fP] [\fB-p\fP \fIPADDING\fP]
+[\fB-s\fP] [\fB-t\fP] [\fB-b\fP] [\fB-v\fP]
+[cmd]
 .PP
 A helper for remembering useful shell commands. Type to interactively search,
 use UP and DOWN arrows to select, RETURN to launch the selected command. Use
@@ -37,7 +39,7 @@ positional arguments:
 .RS
 .TP
 .B
-\fIcmd\fP
+cmd
 Search for a matching command and run it immediately.
 .RE
 .PP
@@ -52,7 +54,7 @@ show this help message and exit
 \fB-a\fP \.\.\., \fB--add\fP \.\.\.
 Add the given command to the database. Command may
 begin with a label enclosed in square brackets [label]
-<\fIcmd\fP>
+<cmd>
 \fB-i\fP \fIURL\fP, \fB--import-url\fP \fIURL\fP
 Import a command database from the given \fIURL\fP. Merge
 into existing database.
@@ -61,6 +63,9 @@ into existing database.
 \fB-c\fP, \fB--create-config\fP
 Create a config file in the users home directory if
 one doesn't already exist.
+\fB-f\fP \fIFILE\fP, \fB--db-file\fP \fIFILE\fP
+Use the command database file specified rather than
+the default.
 .TP
 .B
 \fB-l\fP, \fB--list\fP
