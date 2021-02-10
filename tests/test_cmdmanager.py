@@ -118,6 +118,10 @@ class CmdManagerTests(unittest.TestCase):
         self.assertEqual(len(xx.database), items + 1)
         self.assertEqual(xx.database[len(xx.database)-1].cmd, 'ps')
 
+        # Test dupe reject
+        ok = xx.add_database_entry('[New Entry] ps', True)
+        self.assertFalse(ok)
+
         # Add new entry as dbitem with no save
         newitem = DBItem('[Another Entry] ps aux')
         xx.add_database_entry(newitem, True)
@@ -153,6 +157,12 @@ class CmdManagerTests(unittest.TestCase):
         xx.update_search()
         self.assertEqual(2, len(xx.results))
         self.assertEqual(xx.results[1].label, 'Your Label')
+        # Test search of labels only
+        xx.config.search_labels_first = False
+        xx.config.search_labels_only = True
+        xx.ui.input.set_input('three')
+        xx.update_search()
+        self.assertEqual(len(xx.results), 0)
 
     def test_curses_redraw(self):
         xx = self.get_xx()
@@ -195,6 +205,14 @@ class CmdManagerTests(unittest.TestCase):
         xx.load_database()
         xx.search_mode()
         xx.edit_label_mode()
+        xx.search_mode()
+        xx.edit_command_mode()
+        xx.search_mode()
+        # Mode changes with no search results
+        xx.ui.input.set_input('abcdef98sdfsfHFHHHFh')
+        xx.update_search()
+        xx.edit_label_mode()
+        xx.edit_command_mode()
 
     def test_import_from_remote_url(self):
         xx = self.get_xx()
@@ -230,6 +248,16 @@ class CmdManagerTests(unittest.TestCase):
         for i, line in enumerate(out.read().strip().split(os.linesep)):
             newitem = DBItem(line)
             self.assertEqual(newitem.cmd, xx.database[i].cmd)
+
+        # with no labels
+        xx.config.show_labels = False
+        with captured_output() as (out, err):
+            xx.print_commands()
+        out.seek(0)
+        for i, line in enumerate(out.read().strip().split(os.linesep)):
+            newitem = DBItem(line)
+            self.assertEqual(newitem.cmd, xx.database[i].cmd)
+
 
     def test_keys(self):
         xx = self.get_xx()
@@ -318,3 +346,57 @@ class CmdManagerTests(unittest.TestCase):
         sys.argv = ['xx', '-c']
         self.assertRaises(SystemExit, lambda: main())
         os.unlink(configfile)
+
+    def test_sorting(self):
+        xx = self.get_xx()
+        xx.load_database(False, [
+            "One [My Label]",
+            "[Your Label] Two",
+            "[Op] Bash",
+            "[Op2] apple",
+            "[Alpha] Four",
+            "[adam] nine",
+            "three"])
+        # Default natural sort
+        xx.update_search()
+        self.assertEqual(xx.results[0].cmd, 'One')
+        # Label sort
+        xx.config.sort_by_label = True
+        xx.update_search()
+        self.assertEqual(xx.results[1].label, 'Alpha')
+        # Command sort
+        xx.config.sort_by_label = False
+        xx.config.sort_by_command = True
+        xx.update_search()
+        self.assertEqual(xx.results[0].cmd, 'Bash')
+        # Label sort - case insensitive
+        xx.config.sort_by_label = True
+        xx.config.sort_by_command = False
+        xx.config.sort_case_sensitive = False
+        xx.update_search()
+        self.assertEqual(xx.results[1].label, 'adam')
+        # Command sort - case insensitive
+        xx.config.sort_by_label = False
+        xx.config.sort_by_command = True
+        xx.config.sort_case_sensitive = False
+        xx.update_search()
+        self.assertEqual(xx.results[0].cmd, 'apple')
+
+    def test_editing(self):
+        xx = self.get_xx()
+        xx.load_database(False, [
+            '[My Label] My command',
+            '[Another Label] Another command'
+        ])
+        xx.filename = tempfile.mktemp()
+        xx.update_search()
+        # Label edit
+        xx.ui.input.set_input('New Label')
+        xx.update_selected_label()
+        self.assertEqual(xx.database[0].label, 'New Label')
+        # Command edit
+        xx.ui.input.set_input('New Command')
+        xx.update_selected_command()
+        self.assertEqual(xx.database[0].cmd, 'New Command')
+
+        os.unlink(xx.filename)
