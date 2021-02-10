@@ -153,6 +153,9 @@ whole-line-selection = yes
 search-labels-only = no
 search-labels-first = yes
 shell = default
+sort-by-label = yes
+sort-by-command = no
+sort-case-sensitive = yes
 ```
 
 Command line switches take precedence over configuration file options.

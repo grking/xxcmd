@@ -26,6 +26,13 @@ def captured_output():
 
 class CmdManagerTests(unittest.TestCase):
 
+    def get_xx(self):
+        xx = CmdManager()
+        xx.filename = self.testfile()
+        xx.config.sort_by_label = False
+        xx.config.sort_by_command = False
+        return xx
+
     def test_basic(self):
         xx = CmdManager()
         self.assertIsInstance(xx, CmdManager)
@@ -33,11 +40,6 @@ class CmdManagerTests(unittest.TestCase):
     def testfile(self):
         return os.path.join(
             os.path.dirname(os.path.realpath(__file__)), 'testdb')
-
-    def get_xx(self):
-        xx = CmdManager()
-        xx.filename = self.testfile()
-        return xx
 
     def test_load_file(self):
         xx = self.get_xx()
