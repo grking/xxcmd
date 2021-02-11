@@ -95,8 +95,8 @@ Keys:
 # Further Usage
 
 ```text
-usage: xx [-h] [-a ...] [-i URL] [-c] [-f FILE] [-l] [-m] [-n] [-p PADDING]
-          [-s] [-t] [-b] [-v]
+usage: xx [-h] [-a ...] [-b] [-i URL] [-c] [-f FILE] [-l] [-m] [-n]
+          [-p PADDING] [-s] [-t] [-v]
           [cmd]
 
 A helper for remembering useful shell commands. Type to interactively search,
@@ -112,6 +112,7 @@ optional arguments:
   -a ..., --add ...     Add the given command to the database. Command may
                         begin with a label enclosed in square brackets [label]
                         <cmd>
+  -b, --no-border       Don't display a window border.
   -i URL, --import-url URL
                         Import a command database from the given URL. Merge
                         into existing database.
@@ -130,7 +131,6 @@ optional arguments:
                         only labels first, and only search in commands if
                         searching for labels resulted in no search results.
   -t, --no-labels       Don't display command labels.
-  -b, --no-border       Don't display a window border.
   -v, --version         Display program version.
 
 ```

@@ -32,12 +32,23 @@ class stdscr:
     def box(cls):
         pass
 
+    @classmethod
+    def hline(cls, y, x, ch, w):
+        pass
+
+    @classmethod
+    def addch(cls, y, x, ch):
+        pass
+
 
 class curses:
 
     A_NORMAL = 0
     A_REVERSE = 1
     A_BOLD = 2
+    ACS_HLINE = 3
+    ACS_LTEE = 4
+    ACS_RTEE = 5
 
     @classmethod
     def initscr(cls):
