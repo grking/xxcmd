@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.8.0] - 2021-02-11
 - Added feature to edit existing commands with F2 or CTRL+I.
 - Added support for arrow keys, home, end, CTRL+arrow in line editor.
 - Added config file option to change shell used to execute commands.
