@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+- Added additional window decoration.
+- Fixed wasted space when not displaying window decoration.
+
 ## [0.8.0] - 2021-02-11
 - Added feature to edit existing commands with F2 or CTRL+I.
 - Added support for arrow keys, home, end, CTRL+arrow in line editor.

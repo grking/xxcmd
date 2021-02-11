@@ -15,9 +15,9 @@ class ConsoleUI():
         # And dimensions of it
         self.win_width = 0
         self.win_height = 0
-        # Locations of things
+        # Default locations of things
         self.prompt_pos = {'x': 1, 'y': 1}
-        self.commands_pos = {'x': 1, 'y': 2}
+        self.commands_pos = {'x': 1, 'y': 3}
         # Input line edit
         self.input = LineEdit()
         # Input line prefix
@@ -31,6 +31,10 @@ class ConsoleUI():
 
     # Initialise our display
     def initialise_display(self):
+        # Update some options from our latest runtime config
+        if not self.parent.config.draw_window_border:
+            self.prompt_pos = {'x': 0, 'y': 0}
+            self.commands_pos = {'x': 0, 'y': 1}
         self.win = curses.initscr()
         curses.noecho()
         self.win.keypad(True)
@@ -60,6 +64,17 @@ class ConsoleUI():
         text = text[:self.win_width - (x+1)]
         self.win.addstr(y, x, text, attrib)
         self.win.clrtoeol()
+
+    # Draw a horizontal line
+    def hline(self, y):
+        # Get the latest window size
+        self.win_height, self.win_width = self.win.getmaxyx()
+        # Really, really small term?
+        if self.win_width <= 2 or self.win_height <= 3:
+            return
+        self.win.hline(2, 1, curses.ACS_HLINE, self.win_width-2)
+        self.win.addch(2, 0, curses.ACS_LTEE)
+        self.win.addch(2, self.win_width-1, curses.ACS_RTEE)
 
     # Term row to array index
     def termrow_to_idx(self, row):
@@ -151,14 +166,16 @@ class ConsoleUI():
 
             y += 1
 
+        # Draw lines for boxes
+        if self.parent.config.draw_window_border:
+            self.win.box()
+            self.hline(2)
+
         # Move visual cursor
         curx = len(self.input_prefix) + (
             (self.input.cursor + self.prompt_pos['x']) - self.col_offset)
         if curx < self.win_width:
             self.win.move(self.prompt_pos['y'], curx)
-
-        if self.parent.config.draw_window_border:
-            self.win.box()
 
         self.win.refresh()
 

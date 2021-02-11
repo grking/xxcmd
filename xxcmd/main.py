@@ -4,7 +4,7 @@ import os
 from .cmdmanager import CmdManager
 
 
-__version__ = "0.8.0"
+__version__ = "0.9.0"
 
 
 def main():
@@ -21,6 +21,10 @@ def main():
         '-a', '--add', nargs=argparse.REMAINDER,
         help='Add the given command to the database. Command may begin '
         'with a label enclosed in square brackets [label] <cmd>')
+
+    parser.add_argument(
+        '-b', '--no-border', action='store_const', const=True,
+        help="Don't display a window border.")
 
     parser.add_argument(
         '-i', '--import-url', nargs=1, metavar='URL',
@@ -66,10 +70,6 @@ def main():
     parser.add_argument(
         '-t', '--no-labels', action='store_const', const=True,
         help="Don't display command labels.")
-
-    parser.add_argument(
-        '-b', '--no-border', action='store_const', const=True,
-        help="Don't display a window border.")
 
     parser.add_argument(
         '-v', '--version', action='store_true',
