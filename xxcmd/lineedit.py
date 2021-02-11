@@ -67,7 +67,8 @@ class LineEdit():
         # We can't delete from nothing
         if not self._linetext:
             return
-        self._linetext = self._linetext[:self._cursor_pos-1] + self._linetext[self._cursor_pos:]
+        self._linetext = self._linetext[:self._cursor_pos -
+                                        1] + self._linetext[self._cursor_pos:]
         self._cursor_pos -= 1
 
     # Move cursor left

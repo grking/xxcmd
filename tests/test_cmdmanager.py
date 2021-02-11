@@ -258,7 +258,6 @@ class CmdManagerTests(unittest.TestCase):
             newitem = DBItem(line)
             self.assertEqual(newitem.cmd, xx.database[i].cmd)
 
-
     def test_keys(self):
         xx = self.get_xx()
         xx.load_database()
@@ -323,7 +322,6 @@ class CmdManagerTests(unittest.TestCase):
         xx.ui.get_input('kRIT5')
         self.assertEqual(xx.ui.input.cursor, 6)
 
-
         os.unlink(xx.filename)
 
     def test_autorun(self):
@@ -350,7 +348,8 @@ class CmdManagerTests(unittest.TestCase):
         os.unlink(configfile)
 
         dbfile = tempfile.mktemp()
-        sys.argv = ['xx', '-f', dbfile, '-i', 'https://pastebin.com/raw/zVxMGmRJ']
+        sys.argv = ['xx', '-f', dbfile, '-i',
+                    'https://pastebin.com/raw/zVxMGmRJ']
         self.assertRaises(SystemExit, lambda: main())
         sys.argv = ['xx', '-f', dbfile, '-i', 'https://invalid']
         self.assertRaises(SystemExit, lambda: main())

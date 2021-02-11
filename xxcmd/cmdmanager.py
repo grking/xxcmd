@@ -281,11 +281,11 @@ class CmdManager():
             'KEY_UP': self.selection_up,  # Up arrow
             '\x1b': exit,  # escape
             'KEY_F(1)': self.edit_label_mode,  # F1
-            'KEY_F(2)': self.edit_command_mode,  #F2
+            'KEY_F(2)': self.edit_command_mode,  # F2
             '\x09': self.edit_command_mode,  # Ctrl+I
             '\x05': self.edit_label_mode,  # Ctrl+E
             'KEY_DC': self.delete_selected_database_entry,  # Delete
-            "\n": self.execute_selected_command, # Return
+            "\n": self.execute_selected_command,  # Return
             'ALWAYS': self.update_search
         }
         self._mode = 'search'

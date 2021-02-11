@@ -159,7 +159,7 @@ if __name__ == '__main__':
 
     # Rebuild the man page
     run(['help2man', '-i', 'docs/xx.h2m', '-n', "remembers other shell commands, "
-        "so you don't have to.", '-o', 'docs/xx.1', '-N', "python -m xxcmd"])
+         "so you don't have to.", '-o', 'docs/xx.1', '-N', "python -m xxcmd"])
 
     # Run tests
     run('pytest -q --cov-report term --cov-report html --cov=xxcmd tests/')
