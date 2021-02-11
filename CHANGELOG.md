@@ -3,6 +3,7 @@
 ## Unreleased
 - Added additional window decoration.
 - Fixed wasted space when not displaying window decoration.
+- Fixed auto run when search term has spaces.
 
 ## [0.8.0] - 2021-02-11
 - Added feature to edit existing commands with F2 or CTRL+I.

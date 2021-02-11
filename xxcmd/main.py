@@ -76,7 +76,7 @@ def main():
         help="Display program version.")
 
     parser.add_argument(
-        'cmd', nargs='?',
+        'cmd', nargs=argparse.REMAINDER,
         help="Search for a matching command and run it immediately.")
 
     # Parse and print the results
@@ -147,4 +147,6 @@ def main():
         exit(0)
 
     # Run the command manager UI
+    if type(args.cmd) is list:
+        args.cmd = ' '.join(args.cmd)
     manager.run(args.cmd)

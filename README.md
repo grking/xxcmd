@@ -97,7 +97,7 @@ Keys:
 ```text
 usage: xx [-h] [-a ...] [-b] [-i URL] [-c] [-f FILE] [-l] [-m] [-n]
           [-p PADDING] [-s] [-t] [-v]
-          [cmd]
+          ...
 
 A helper for remembering useful shell commands. Type to interactively search,
 use UP and DOWN arrows to select, RETURN to launch the selected command. Use
