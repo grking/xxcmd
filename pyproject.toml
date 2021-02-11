@@ -6,7 +6,7 @@ build-backend = "flit_core.buildapi"
 module = "xxcmd"
 author = "Graham R King"
 author-email = "grking.email@gmail.com"
-requires-python = ">=3.1"
+requires-python = ">=3.2"
 home-page = "https://github.com/grking/xxcmd"
 license = "MIT License"
 classifiers=[

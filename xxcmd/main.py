@@ -111,7 +111,7 @@ def main():
         manager.config.search_labels_first = False
 
     # Key test?
-    if args.key_test:
+    if args.key_test:  # pragma: no cover
         manager.ui.run_key_test()
         exit(0)
 

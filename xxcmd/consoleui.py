@@ -163,9 +163,9 @@ class ConsoleUI():
 
         try:
             # Get a key press if we weren't passed one
-            if not key:
+            if not key:    # pragma: no cover
                 key = self.win.getkey()
-        except KeyboardInterrupt:
+        except KeyboardInterrupt:    # pragma: no cover
             exit(0)
 
         # Support backspace
@@ -204,7 +204,7 @@ class ConsoleUI():
 
     # Display what curses sees when keys are pressed
     # Useful only for debugging terminal key press data
-    def run_key_test(self):
+    def run_key_test(self):  # pragma: no cover
         try:
             self.initialise_display()
             y = 1
@@ -212,7 +212,7 @@ class ConsoleUI():
             while True:
 
                 key = self.win.getkey()
-                info = f"'{key}' (0x{key.encode().hex()})"
+                info = "'{0}' (0x{1})".format(key, key.encode().hex())
                 self.win.addstr(y, 0, info)
                 y += 1
 
