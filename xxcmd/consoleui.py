@@ -26,6 +26,8 @@ class ConsoleUI():
         self.key_events = {}
         # Offset for scrolling through the list
         self.row_offset = 1
+        # Offset for editing long lines
+        self.col_offset = 1
 
     # Initialise our display
     def initialise_display(self):
@@ -72,10 +74,18 @@ class ConsoleUI():
         if self.row_offset < 0:
             self.row_offset = 0
 
+        # Calculate column offset for scrolling
+        self.col_offset = self.input.cursor - (
+            self.win_width - (self.commands_pos['x'] + 2 + len(self.input_prefix)))
+        if self.col_offset < 0:
+            self.col_offset = 0
+
         # Print the input line
+        line = self.input.value
+        line = line[self.col_offset:]
         self.print_at(
             self.prompt_pos['y'], self.prompt_pos['x'],
-            "{0}{1}".format(self.input_prefix, self.input.value))
+            "{0}{1}".format(self.input_prefix, line))
 
         # Determine max label length for indenting
         indent = 0
@@ -142,7 +152,8 @@ class ConsoleUI():
             y += 1
 
         # Move visual cursor
-        curx = self.input.cursor + len(self.input_prefix) + self.prompt_pos['x']
+        curx = len(self.input_prefix) + (
+            (self.input.cursor + self.prompt_pos['x']) - self.col_offset)
         if curx < self.win_width:
             self.win.move(self.prompt_pos['y'], curx)
 
