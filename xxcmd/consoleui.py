@@ -32,6 +32,7 @@ class ConsoleUI():
         curses.noecho()
         self.win.keypad(True)
         curses.cbreak()
+        curses.curs_set(1)
         self.win_height, self.win_width = self.win.getmaxyx()
 
     # Finalise our display

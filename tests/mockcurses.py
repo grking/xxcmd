@@ -62,3 +62,7 @@ class curses:
     @classmethod
     def endwin(cls):
         pass
+
+    @classmethod
+    def curs_set(cls, value):
+        pass
