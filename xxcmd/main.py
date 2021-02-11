@@ -37,6 +37,10 @@ def main():
         help="Use the command database file specified rather than "
         "the default.")
 
+    # Hidden curses key test debug mode
+    parser.add_argument(
+        '--key-test', action='store_true', help=argparse.SUPPRESS)
+
     parser.add_argument(
         '-l', '--list', action='store_true',
         help="Print all commands in the database")
@@ -105,6 +109,11 @@ def main():
     if args.search_all:
         manager.config.search_labels_only = False
         manager.config.search_labels_first = False
+
+    # Key test?
+    if args.key_test:
+        manager.ui.run_key_test()
+        exit(0)
 
     # Load db
     manager.load_database()

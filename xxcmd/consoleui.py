@@ -1,4 +1,5 @@
 # consoleui.py
+import os
 import curses
 from .lineedit import LineEdit
 
@@ -200,3 +201,24 @@ class ConsoleUI():
             self.key_events['ALWAYS']()
 
         return key
+
+    # Display what curses sees when keys are pressed
+    # Useful only for debugging terminal key press data
+    def run_key_test(self):
+        try:
+            self.initialise_display()
+            y = 1
+            self.win.addstr(0, 0, "Terminal type: " + os.environ['TERM'])
+            while True:
+
+                key = self.win.getkey()
+                info = f"'{key}' (0x{key.encode().hex()})"
+                self.win.addstr(y, 0, info)
+                y += 1
+
+                if y >= self.win_height-1:
+                    self.win.clear()
+                    y = 0
+
+        finally:
+            self.finalise_display()
