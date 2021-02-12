@@ -6,6 +6,8 @@
 
 # Installation
 
+## pip
+
 Requires Python 3. Installation is simple using `pip`.
 
 ```bash
@@ -15,6 +17,10 @@ pip install xxcmd
 Or `pip3` on Ubuntu or Debian based distros.
 
 If typing `xx` at a command prompt gives you "Command not found", you likely don't have `~/.local/bin` on your PATH. Either install globally with `sudo pip install xxcmd` or add `~/.local/bin` to your PATH.
+
+## Arch Linux
+
+The `xxcmd` package in availabe in the AUR.
 
 # Basic Usage Examples
 
