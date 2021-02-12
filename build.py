@@ -87,13 +87,13 @@ def replace(filename, starttag, endtag, content):
 
 
 # Replace a version number in a line of a file
-def replace_version(self, filename, linenum):
+def replace_version(filename, linenum):
 
     infile = open(filename, "rt", encoding='utf-8')
     lines = infile.readlines()
     infile.close()
     newline = re.sub('(v\d+\.\d+\.\d+)', 'v'+VERSION, lines[linenum])
-    if not newline:
+    if newline == lines[linenum]:
         newline = re.sub('(\d+\.\d+\.\d+)', VERSION, lines[linenum])
     if newline == lines[linenum]:
         print("Could not update the version in file {0}".format(filename))
@@ -161,6 +161,8 @@ if __name__ == '__main__':
 
         # Build Arch package
         run('makepkg')
+
+        exit(0)
 
     # Update the README.md file with the latest command line help output
     result = subprocess.check_output('python -m xxcmd -h'.split())
