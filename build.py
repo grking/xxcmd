@@ -86,6 +86,24 @@ def replace(filename, starttag, endtag, content):
     os.unlink(outfilename)
 
 
+# Replace a version number in a line of a file
+def replace_version(self, filename, linenum):
+
+    infile = open(filename, "rt", encoding='utf-8')
+    lines = infile.readlines()
+    infile.close()
+    newline = re.sub('(v\d+\.\d+\.\d+)', 'v'+VERSION, lines[linenum])
+    if not newline:
+        newline = re.sub('(\d+\.\d+\.\d+)', VERSION, lines[linenum])
+    if newline == lines[linenum]:
+        print("Could not update the version in file {0}".format(filename))
+        exit(1)
+    lines[linenum] = newline
+    outfile = open(filename, "wt", encoding='utf-8')
+    outfile.writelines(lines)
+    outfile.close()
+
+
 # Run a shell command
 def run(cmd):
     exitcode = subprocess.call(cmd.split() if type(cmd) is str else cmd)
@@ -112,31 +130,11 @@ if __name__ == '__main__':
         run('./build.py')
 
         # Update the README with our release version number
-        infile = open("README.md", "rt", encoding='utf-8')
-        lines = infile.readlines()
-        infile.close()
-        newline = re.sub('(v\d+\.\d+\.\d+)', 'v'+VERSION, lines[2])
-        if newline == lines[2]:
-            print("Could not update the readme version")
-            exit(1)
-        lines[2] = newline
-        outfile = open("README.md", "wt", encoding='utf-8')
-        outfile.writelines(lines)
-        outfile.close()
+        replace_version('README.md', 2)
 
         # Update the CHANGELOG with our release date and version
-        infile = open("CHANGELOG.md", "rt", encoding='utf-8')
-        lines = infile.readlines()
-        infile.close()
-        if 'unreleased' in lines[2].lower():
-            today = datetime.datetime.now().strftime('%Y-%m-%d')
-            lines[2] = "## [{0}] - {1}\n".format(VERSION, today)
-        else:
-            print("Could not update the changelog")
-            exit(1)
-        outfile = open("CHANGELOG.md", "wt", encoding='utf-8')
-        outfile.writelines(lines)
-        outfile.close()
+        replace_version('CHANGELOG.md', 2)
+
         # Git commit those doc changes, and any other possible ones
         run('git add README.md CHANGELOG.md docs/*')
         run('git commit -m'.split() + ['"Release v{0}"'.format(VERSION)])
@@ -153,17 +151,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 2 and sys.argv[1] == 'publish-arch':
 
         # Update Arch PKGBUILD with our release version
-        infile = open("PKGBUILD", "rt", encoding='utf-8')
-        lines = infile.readlines()
-        infile.close()
-        newline = re.sub('(\d+\.\d+\.\d+)', VERSION, lines[2])
-        if newline == lines[2]:
-            print("Could not update the PKGBUILD version")
-            exit(1)
-        lines[2] = newline
-        outfile = open("PKGBUILD", "wt", encoding='utf-8')
-        outfile.writelines(lines)
-        outfile.close()
+        replace_version('PKGBUILD', 2)
 
         # Update hashes in PKGBUILD
         run('updpkgsums')
@@ -173,7 +161,6 @@ if __name__ == '__main__':
 
         # Build Arch package
         run('makepkg')
-
 
     # Update the README.md file with the latest command line help output
     result = subprocess.check_output('python -m xxcmd -h'.split())
