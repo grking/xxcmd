@@ -6,4 +6,8 @@ htmlcov
 build.install
 .vscode
 build
-
+pkg
+src
+*.zst
+*.tar.gz
+.SRCINFO

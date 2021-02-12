@@ -14,7 +14,7 @@
 # ./build.py clean
 #   1. Deletes temporary files from the project directory
 #
-# ./build.py publish
+# ./build.py publish-pypi
 #   1. Updates the version in the README badges
 #   2. Updates the version and date in the CHANGELOG
 #   3. Commits and pushes those two changes
@@ -22,10 +22,20 @@
 #   5. Builds a pypi package
 #   6. Publishes the pypi package to pypi.
 #
+# ./build.py publish-arch
+#   1. Updates the version number in the PKGBUILD
+#   2. Updates the source hashes in the PKGBUILD
+#   3. Update .SRCINFO
+#   4. Builds the Arch package
+#
 # Requires:
 #
 #   OS Packages: help2man
 #   Pip packages: flit, pytest, pytest-cov
+#
+# Arch Package Publishing Requires:
+#
+#   OS Packages: pacman-contrib
 #
 import re
 import subprocess
@@ -94,8 +104,8 @@ if __name__ == '__main__':
             os.system('rm -rf {0}'.format(wipe))
         exit(0)
 
-    # Publish
-    if len(sys.argv) == 2 and sys.argv[1] == 'publish':
+    # PyPi Publish
+    if len(sys.argv) == 2 and sys.argv[1] == 'publish-pypi':
 
         # Ensure we can do a normal build first
         run('./build.py')
@@ -137,6 +147,32 @@ if __name__ == '__main__':
         run('flit build')
         run('flit publish')
         exit(0)
+
+    # Arch Publish
+    if len(sys.argv) == 2 and sys.argv[1] == 'publish-arch':
+
+        # Update Arch PKGBUILD with our release version
+        infile = open("PKGBUILD", "rt", encoding='utf-8')
+        lines = infile.readlines()
+        infile.close()
+        newline = re.sub('(\d+\.\d+\.\d+)', VERSION, lines[2])
+        if newline == lines[2]:
+            print("Could not update the PKGBUILD version")
+            exit(1)
+        lines[2] = newline
+        outfile = open("PKGBUILD", "wt", encoding='utf-8')
+        outfile.writelines(lines)
+        outfile.close()
+
+        # Update hashes in PKGBUILD
+        run('updpkgsums')
+
+        # Update SRCINFO
+        run('makepkg --printsrcinfo > .SRCINFO')
+
+        # Build Arch package
+        run('makepkg')
+
 
     # Update the README.md file with the latest command line help output
     result = subprocess.check_output('python -m xxcmd -h'.split())
