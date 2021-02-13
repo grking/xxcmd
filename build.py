@@ -42,7 +42,6 @@ import subprocess
 import tempfile
 import shutil
 import os
-import datetime
 import sys
 from xxcmd.config import Config
 from xxcmd import __version__ as VERSION
@@ -92,9 +91,9 @@ def replace_version(filename, linenum):
     infile = open(filename, "rt", encoding='utf-8')
     lines = infile.readlines()
     infile.close()
-    newline = re.sub('(v\d+\.\d+\.\d+)', 'v'+VERSION, lines[linenum])
+    newline = re.sub(r'(v\d+\.\d+\.\d+)', 'v'+VERSION, lines[linenum])
     if newline == lines[linenum]:
-        newline = re.sub('(\d+\.\d+\.\d+)', VERSION, lines[linenum])
+        newline = re.sub(r'(\d+\.\d+\.\d+)', VERSION, lines[linenum])
     if newline == lines[linenum]:
         print("Could not update the version in file {0}".format(filename))
         exit(1)
