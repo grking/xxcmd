@@ -17,7 +17,6 @@ class ConsoleUI():
         self.win_height = 0
         # Default locations of things
         self.prompt_pos = {'x': 1, 'y': 1}
-        self.commands_pos = {'x': 1, 'y': 3}
         # Input line edit
         self.input = LineEdit()
         # Input line prefix
@@ -28,19 +27,25 @@ class ConsoleUI():
         self.row_offset = 1
         # Offset for editing long lines
         self.col_offset = 1
+        # Result window region
+        self.cmd_region = {
+            'minx': 0,
+            'miny': 0,
+            'maxx': self.win_width-1,
+            'maxy': self.win_height-1
+        }
 
     # Initialise our display
     def initialise_display(self):
         # Update some options from our latest runtime config
         if not self.parent.config.draw_window_border:
             self.prompt_pos = {'x': 0, 'y': 0}
-            self.commands_pos = {'x': 0, 'y': 1}
         self.win = curses.initscr()
         curses.noecho()
         self.win.keypad(True)
         curses.cbreak()
         curses.curs_set(1)
-        self.win_height, self.win_width = self.win.getmaxyx()
+        self.resize()
 
     # Finalise our display
     def finalise_display(self):
@@ -50,15 +55,36 @@ class ConsoleUI():
         curses.endwin()
         self.win = None
 
+    # Recalculate window regions
+    def resize(self):
+        # Get the latest window size
+        self.win_height, self.win_width = self.win.getmaxyx()
+        # Default the entire screen
+        self.cmd_region = {
+            'minx': 0,
+            'miny': 1,
+            'maxx': self.win_width-1,
+            'maxy': self.win_height-1,
+        }
+        # Adjust if window border
+        if self.parent.config.draw_window_border:
+            self.cmd_region['minx'] += 1
+            self.cmd_region['miny'] += 2
+            self.cmd_region['maxx'] -= 1
+            self.cmd_region['maxy'] -= 1
+        # Adjust if help footer
+        if self.parent.config.display_help_footer:
+            self.cmd_region['maxy'] -= 1
+
     # Print some text
     def print_at(self, y, x, text, attrib=curses.A_NORMAL):
         # Get the latest window size
-        self.win_height, self.win_width = self.win.getmaxyx()
+        self.resize()
         # Really, really small term?
         if self.win_width <= 2 or self.win_height <= 2:
             return
         # Text out of the term totally?
-        if y < 0 or y >= self.win_height-1 or x < 0 or x >= self.win_width-1:
+        if y < 0 or y >= self.win_height or x < 0 or x >= self.win_width-1:
             return
         # Plot the text
         text = text[:self.win_width - (x+1)]
@@ -72,7 +98,7 @@ class ConsoleUI():
     # Draw a horizontal line
     def hline(self, y):
         # Get the latest window size
-        self.win_height, self.win_width = self.win.getmaxyx()
+        self.resize()
         # Really, really small term?
         if self.win_width <= 2 or self.win_height <= 3:
             return
@@ -82,22 +108,20 @@ class ConsoleUI():
 
     # Term row to array index
     def termrow_to_idx(self, row):
-        return (row + self.row_offset) - self.commands_pos['y']
+        return (row + self.row_offset) - self.cmd_region['miny']
 
     # Update our window output
     def redraw(self):
 
         # Calculate row offset for scrolling
         self.row_offset = self.parent.selected_row - (
-            self.win_height - (self.commands_pos['y'] + 2))
-        if self.parent.config.display_help_footer:
-            self.row_offset += 1
+            self.cmd_region['maxy'] - self.cmd_region['miny'])
         if self.row_offset < 0:
             self.row_offset = 0
 
         # Calculate column offset for scrolling
         self.col_offset = self.input.cursor - (
-            self.win_width - (self.commands_pos['x'] + 2 + len(self.input_prefix)))
+            self.win_width - (self.cmd_region['minx'] + 2 + len(self.input_prefix)))
         if self.col_offset < 0:
             self.col_offset = 0
 
@@ -119,11 +143,9 @@ class ConsoleUI():
                 indent += 1
 
         # Display current search results
-        y = self.commands_pos['y']
-        last_row = self.win_height-1
-        if self.parent.config.display_help_footer:
-            last_row -= 1
-        while y < self.win_height-1:
+        y = self.cmd_region['miny']
+        last_row = self.cmd_region['maxy']
+        while y <= last_row:
 
             idx = self.termrow_to_idx(y)
             attrib = curses.A_NORMAL
@@ -133,8 +155,7 @@ class ConsoleUI():
                 attrib = curses.A_REVERSE
 
             # Print search results for as long as we have them
-            # or until we run out of screen space
-            if y < last_row and idx < len(self.parent.results):
+            if idx < len(self.parent.results):
                 item = self.parent.results[idx]
                 label = ''
 
@@ -150,7 +171,7 @@ class ConsoleUI():
                             attrib = curses.A_BOLD
                     # Print label
                     self.print_line_at(
-                        y, self.commands_pos['x'], label.ljust(indent), attrib)
+                        y, self.cmd_region['minx'], label.ljust(indent), attrib)
                     # Reset text attributes
                     if attrib == curses.A_BOLD:
                         attrib = curses.A_NORMAL
@@ -166,26 +187,28 @@ class ConsoleUI():
                     cmd = ''
                 if self.parent.config.whole_line_selection:
                     cmd = cmd.ljust(
-                        self.win_width - indent - self.commands_pos['x'])
+                        self.win_width - indent - self.cmd_region['minx'])
                 self.print_line_at(
-                    y, self.commands_pos['x'] + indent, cmd, attrib)
+                    y, self.cmd_region['minx'] + indent, cmd, attrib)
 
             else:
                 # Fill the rest of the space with blank lines
-                self.print_line_at(y, self.commands_pos['x'], "", attrib)
+                self.print_line_at(y, self.cmd_region['minx'], "", attrib)
 
             y += 1
+
+        # Display help footer
+        if self.parent.config.display_help_footer:
+            footer = "Return:Run Command  F1:Edit Label  F2:Edit Command  Del:Delete Row"
+            helprow = self.cmd_region['maxy'] + 1
+            footer = footer.rjust(self.cmd_region['maxx'] - self.cmd_region['minx'])
+            self.print_line_at(
+                helprow, self.cmd_region['minx'], footer)
 
         # Draw lines for boxes
         if self.parent.config.draw_window_border:
             self.win.box()
             self.hline(2)
-
-        # Display help footer
-        if self.parent.config.display_help_footer:
-            footer = "Return:Run Command  F1:Edit Label  F2:Edit Command  Del:Delete Row"
-            self.print_at(
-                self.win_height-2, self.win_width-(len(footer)+2), footer)
 
         # Move visual cursor
         curx = len(self.input_prefix) + (
