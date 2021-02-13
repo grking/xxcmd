@@ -8,6 +8,7 @@ from .mockcurses import curses
 import xxcmd
 from xxcmd import CmdManager, DBItem, main
 from xxcmd.config import Config
+from xxcmd.cmdmanager import UnitTestException
 
 # Mock curses during unit testing
 xxcmd.consoleui.curses = curses
@@ -327,7 +328,7 @@ class CmdManagerTests(unittest.TestCase):
     def test_autorun(self):
         xx = self.get_xx()
         xx.load_database()
-        self.assertRaises(Exception, lambda: xx.run('#AUTOEXIT#'))
+        self.assertRaises(UnitTestException, lambda: xx.run('#AUTOEXIT#'))
 
     def test_main(self):
         sys.argv = ['xx', '-v']

@@ -16,6 +16,17 @@ if 'SHELL' in os.environ:
 else:
     DEFAULT_SHELL = '/bin/sh'
 
+# A few default database commands if there is no database after
+# first install
+DEFAULT_COMMANDS = [
+    '[File Sizes] du --max-depth=1 -h .',
+    '''[Show CPUs] cat /proc/cpuinfo | grep "model name" | awk -F: '{print $2}' | uniq -c'''
+]
+
+
+class UnitTestException(Exception):
+    pass
+
 
 class CmdManager():
 
@@ -49,6 +60,8 @@ class CmdManager():
         self.config = Config()
         # Our cmd database
         self.database = []
+        # Flag for if the file even exists
+        self.database_exists = True
         # Our UI
         self.ui = ConsoleUI(self)
         # Our current search results
@@ -125,6 +138,8 @@ class CmdManager():
         # If we aren't passed any data, load our default file
         if not data:
             data = self.get_file_contents(self.filename)
+            if data is False:
+                self.database_exists = False
             if not data:
                 return False
 
@@ -336,7 +351,15 @@ class CmdManager():
     # Run
     def run(self, cmd=''):
 
-        if not self.database and cmd != '#AUTOEXIT#':
+        if cmd == '#AUTOEXIT#':
+            raise UnitTestException()
+
+        if not self.database and not self.database_exists:
+            # No database at all, add the default one
+            for command in DEFAULT_COMMANDS:
+                self.add_database_entry(command)
+        elif not self.database:
+            # Empty database
             print("No database. Add commands with: xx -a [label] <command>")
             exit(1)
 
