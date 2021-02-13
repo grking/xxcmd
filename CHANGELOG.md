@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Fixed bug preventing adding new items from the UI when database is empty.
+
 ## [0.9.0] - 2021-02-13
 - Added support for optional system-wide database. (/etc/xxcmd)
 - Added additional window decoration.

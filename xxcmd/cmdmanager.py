@@ -318,8 +318,6 @@ class CmdManager():
 
     # Enter edit new command
     def edit_newcmd_mode(self):
-        if not self.selected_item:
-            return
         self.ui.input_prefix = 'New Cmd: '
         self.ui.input.set_value('')
         self.ui.key_events = {
