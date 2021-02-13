@@ -143,6 +143,19 @@ class CmdManagerTests(unittest.TestCase):
             xx.database[len(xx.database)-1].cmd,
             'du --max-depth-1 -h .')
 
+        # Delete global
+        xx.add_database_entry('[Global Tst] gtest', ['global'])
+        xx.selected_row = len(xx.database)
+        xx.delete_selected_database_entry()
+        self.assertEqual(xx.database[len(xx.database)-1].cmd, 'gtest')
+        # Update global
+        xx.ui.input.set_value('glabel')
+        xx.update_selected_label()
+        self.assertEqual(xx.database[len(xx.database)-1].label, 'Global Tst')
+        xx.ui.input.set_value('gcmd')
+        xx.update_selected_command()
+        self.assertEqual(xx.database[len(xx.database)-1].cmd, 'gtest')
+
     def test_curses_start_stop(self):
         xx = self.get_xx()
         xx.ui.initialise_display()
@@ -335,6 +348,21 @@ class CmdManagerTests(unittest.TestCase):
         xx.load_databases()
         self.assertRaises(UnitTestException, lambda: xx.run('#AUTOEXIT#'))
 
+    def test_tags(self):
+        xx = self.get_xx()
+        xx.load_databases()
+        xx.save_disabled = True
+        xx.add_database_entry('[TagTest] ls tag', ['tsttag'])
+        self.assertEqual(xx.database[len(xx.database)-1].tags[0], 'tsttag')
+
+    def test_newcmd(self):
+        xx = self.get_xx()
+        xx.load_databases()
+        xx.save_disabled = True
+        xx.ui.input.set_value('tst')
+        xx.add_new_command()
+        self.assertEqual(xx.database[len(xx.database)-1].cmd, 'tst')
+
     def test_no_database(self):
         xx = self.get_xx()
         xx.filename = '/tmp/nodatabase'
@@ -347,7 +375,7 @@ class CmdManagerTests(unittest.TestCase):
         self.assertRaises(SystemExit, lambda: main())
         sys.argv = ['xx', '#AUTOEXIT#']
         self.assertRaises(Exception, lambda: main())
-        sys.argv = ['xx', '-tmnsbp1', '#AUTOEXIT#']
+        sys.argv = ['xx', '-tmnsbgep1', '#AUTOEXIT#']
         self.assertRaises(Exception, lambda: main())
 
         configfile = tempfile.mktemp()

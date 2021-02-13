@@ -116,6 +116,8 @@ class ConsoleUI():
 
     # Flash a brief message
     def flash(self, message):
+        if not self.win:
+            return
         self.print_line_at(self.prompt_pos['y'], self.prompt_pos['x'], message)
         self.win.refresh()
         time.sleep(1)
