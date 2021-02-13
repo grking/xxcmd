@@ -1,7 +1,6 @@
 # consoleui.py
 import os
 import curses
-from curses.ascii import isprint
 import time
 from .lineedit import LineEdit
 
@@ -261,8 +260,8 @@ class ConsoleUI():
         # Check for key press event handler
         elif key in self.key_events.keys():
             self.key_events[key]()
-        # Add printable ascii characters to our input
-        elif len(key) == 1 and isprint(key):
+        # Add other characters to our input
+        elif len(key) == 1:
             self.input.addchar(key)
 
         # Trigger other event handlers

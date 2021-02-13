@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Fixed previous restriction of ASCII printable characters in line editor.
+
 ## [0.9.1] - 2021-02-13
 - Fixed bug preventing adding new items from the UI when database is empty.
 - Fixed bug causing default db commands to keep coming back if db is empty.
