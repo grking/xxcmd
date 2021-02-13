@@ -41,6 +41,7 @@ import re
 import subprocess
 import tempfile
 import shutil
+import datetime
 import os
 import sys
 from xxcmd.config import Config
@@ -95,6 +96,10 @@ def replace_version(filename, linenum):
     if newline == lines[linenum]:
         newline = re.sub(r'(\d+\.\d+\.\d+)', VERSION, lines[linenum])
     if newline == lines[linenum]:
+        ver = "[{0}] - {1}".format(
+            VERSION, datetime.datetime.now().strftime('%Y-%m-%d'))
+        newline = re.sub(r'Unreleased', ver, lines[linenum])
+    if newline == lines[linenum]:
         print("Could not update the version in file {0}".format(filename))
         exit(1)
     lines[linenum] = newline
@@ -143,7 +148,7 @@ if __name__ == '__main__':
         run('git push --tags')
         # Build pypi package
         run('flit build')
-        run('flit publish')
+        #run('flit publish')
         exit(0)
 
     # Arch Publish
