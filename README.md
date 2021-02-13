@@ -64,6 +64,13 @@ Add the last command you executed with a descriptive label:
 xx -a [My Cool Label] !!
 ```
 
+If adding commands containing characters that are interpreted by your shell, such as `|` or `&&` enclose the command in quotes. You can also use double quotes with bash's last command operator:
+
+```bash
+xx -a [Command with Pipes] "!!"
+```
+
+
 ## Browse and Search Commands Interactively
 
 Run `xx` with no options to enter the interactive view.
