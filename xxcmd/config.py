@@ -25,7 +25,8 @@ class Config():
             'shell': 'default',
             'sort-by-label': True,
             'sort-by-command': False,
-            'sort-case-sensitive': True
+            'sort-case-sensitive': True,
+            'display-help-footer': True,
         }
 
         # If there is a config file merge that in too

@@ -63,6 +63,10 @@ class ConsoleUI():
         # Plot the text
         text = text[:self.win_width - (x+1)]
         self.win.addstr(y, x, text, attrib)
+
+    # Print a line of text
+    def print_line_at(self, y, x, text, attrib=curses.A_NORMAL):
+        self.print_at(y, x, text, attrib)
         self.win.clrtoeol()
 
     # Draw a horizontal line
@@ -86,6 +90,8 @@ class ConsoleUI():
         # Calculate row offset for scrolling
         self.row_offset = self.parent.selected_row - (
             self.win_height - (self.commands_pos['y'] + 2))
+        if self.parent.config.display_help_footer:
+            self.row_offset += 1
         if self.row_offset < 0:
             self.row_offset = 0
 
@@ -98,7 +104,7 @@ class ConsoleUI():
         # Print the input line
         line = self.input.value
         line = line[self.col_offset:]
-        self.print_at(
+        self.print_line_at(
             self.prompt_pos['y'], self.prompt_pos['x'],
             "{0}{1}".format(self.input_prefix, line))
 
@@ -114,6 +120,9 @@ class ConsoleUI():
 
         # Display current search results
         y = self.commands_pos['y']
+        last_row = self.win_height-1
+        if self.parent.config.display_help_footer:
+            last_row -= 1
         while y < self.win_height-1:
 
             idx = self.termrow_to_idx(y)
@@ -123,8 +132,9 @@ class ConsoleUI():
             if idx == self.parent.selected_row:
                 attrib = curses.A_REVERSE
 
-            # Print search results for as long as we have then
-            if idx < len(self.parent.results):
+            # Print search results for as long as we have them
+            # or until we run out of screen space
+            if y < last_row and idx < len(self.parent.results):
                 item = self.parent.results[idx]
                 label = ''
 
@@ -139,7 +149,7 @@ class ConsoleUI():
                         if attrib == curses.A_NORMAL:
                             attrib = curses.A_BOLD
                     # Print label
-                    self.print_at(
+                    self.print_line_at(
                         y, self.commands_pos['x'], label.ljust(indent), attrib)
                     # Reset text attributes
                     if attrib == curses.A_BOLD:
@@ -157,12 +167,12 @@ class ConsoleUI():
                 if self.parent.config.whole_line_selection:
                     cmd = cmd.ljust(
                         self.win_width - indent - self.commands_pos['x'])
-                self.print_at(
+                self.print_line_at(
                     y, self.commands_pos['x'] + indent, cmd, attrib)
 
             else:
                 # Fill the rest of the space with blank lines
-                self.print_at(y, self.commands_pos['x'], "", attrib)
+                self.print_line_at(y, self.commands_pos['x'], "", attrib)
 
             y += 1
 
@@ -170,6 +180,12 @@ class ConsoleUI():
         if self.parent.config.draw_window_border:
             self.win.box()
             self.hline(2)
+
+        # Display help footer
+        if self.parent.config.display_help_footer:
+            footer = "Return:Run Command  F1:Edit Label  F2:Edit Command  Del:Delete Row"
+            self.print_at(
+                self.win_height-2, self.win_width-(len(footer)+2), footer)
 
         # Move visual cursor
         curx = len(self.input_prefix) + (

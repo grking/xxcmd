@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Added additional window decoration.
+- Added footer help mentioning keyboard shortcuts.
 - Fixed wasted space when not displaying window decoration.
 - Fixed auto run when search term has spaces.
 

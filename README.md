@@ -101,7 +101,7 @@ Keys:
 # Further Usage
 
 ```text
-usage: xx [-h] [-a ...] [-b] [-i URL] [-c] [-f FILE] [-l] [-m] [-n]
+usage: xx [-h] [-a ...] [-b] [-e] [-i URL] [-c] [-f FILE] [-l] [-m] [-n]
           [-p PADDING] [-s] [-t] [-v]
           [SEARCH ...]
 
@@ -119,6 +119,7 @@ optional arguments:
                         begin with a label enclosed in square brackets [label]
                         <cmd>
   -b, --no-border       Don't display a window border.
+  -e, --no-help         Don't display the shortcut key help footer.
   -i URL, --import-url URL
                         Import a command database from the given URL. Merge
                         into existing database.
@@ -165,6 +166,7 @@ shell = default
 sort-by-label = yes
 sort-by-command = no
 sort-case-sensitive = yes
+display-help-footer = yes
 ```
 
 Command line switches take precedence over configuration file options.

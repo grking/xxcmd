@@ -3,7 +3,7 @@
 .SH NAME
 xx \- remembers other shell commands, so you don't have to.
 .SH DESCRIPTION
-usage: xx [\-h] [\-a ...] [\-b] [\-i URL] [\-c] [\-f FILE] [\-l] [\-m] [\-n]
+usage: xx [\-h] [\-a ...] [\-b] [\-e] [\-i URL] [\-c] [\-f FILE] [\-l] [\-m] [\-n]
 .IP
 [\-p PADDING] [\-s] [\-t] [\-v]
 [SEARCH ...]
@@ -28,6 +28,9 @@ begin with a label enclosed in square brackets [label]
 .TP
 \fB\-b\fR, \fB\-\-no\-border\fR
 Don't display a window border.
+.TP
+\fB\-e\fR, \fB\-\-no\-help\fR
+Don't display the shortcut key help footer.
 .TP
 \fB\-i\fR URL, \fB\-\-import\-url\fR URL
 Import a command database from the given URL. Merge

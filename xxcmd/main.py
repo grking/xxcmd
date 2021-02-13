@@ -11,11 +11,8 @@ def main():
 
     # Create the parser and add arguments
     parser = argparse.ArgumentParser(
-        prog='xx', description="A helper for remembering useful shell "
-        "commands. Type to interactively search, use UP and DOWN "
-        "arrows to select, RETURN to launch the selected command. "
-        "Use DELETE to remove the currently selected row. F1 or "
-        "CTRL+E to edit the label of the selected item.")
+        prog='xx', description="Remembers other shell commands, "
+        "so you don't have to.")
 
     parser.add_argument(
         '-a', '--add', nargs=argparse.REMAINDER,
@@ -25,6 +22,10 @@ def main():
     parser.add_argument(
         '-b', '--no-border', action='store_const', const=True,
         help="Don't display a window border.")
+
+    parser.add_argument(
+        '-e', '--no-help', action='store_const', const=True,
+        help="Don't display the shortcut key help footer.")
 
     parser.add_argument(
         '-i', '--import-url', nargs=1, metavar='URL',
@@ -102,6 +103,8 @@ def main():
         manager.config.echo_commands = not args.no_echo
     if args.no_border:
         manager.config.draw_window_border = not args.no_border
+    if args.no_help:
+        manager.config.display_help_footer = not args.no_help
     if args.label_padding:
         manager.config.label_padding = args.label_padding
     if args.no_commands:
