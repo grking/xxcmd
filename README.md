@@ -24,15 +24,11 @@ The `xxcmd` package in availabe in the AUR.
 
 # Basic Usage Examples
 
-Using `xx` is pretty simple. You build up a database of useful commands, and search and execute them whenever you like.
+Using `xx` you build up a database of useful commands and search and execute them whenever you like.
 
-## Adding Commands
+## Adding Command Examples
 
-Commands are added to the database with:
-
-`xx -a [label] <command>`
-
-Add a very simple command `top`. Not very useful as the command is already short and easy to remember.
+Most basic example, adding the `top` command.
 
 ```bash
 xx -a top
@@ -47,13 +43,25 @@ xx -a du --max-depth=1 -h .
 Add the same command but with a friendly (searchable) label:
 
 ```bash
-xx -a [File Size] du --max-depth=1 -h .
+xx -a [File Sizes] du --max-depth=1 -h .
 ```
 
 Adding our favourite ssh command:
 
 ```bash
 xx -a [SSH Best Host] ssh -i ~/.ssh/mykey.pem me@myhost.com
+```
+
+Add the last command you executed:
+
+```bash
+xx -a !!
+```
+
+Add the last command you executed with a descriptive label:
+
+```bash
+xx -a [My Cool Label] !!
 ```
 
 ## Browse and Search Commands Interactively
@@ -64,25 +72,27 @@ Run `xx` with no options to enter the interactive view.
 xx
 ```
 
-## Fast search and execute
+## Quick Search and Execute
 
-`xx` can search for matching commands and if only one match is found it will be immediately executed. To run the command we just added we could search for "du":
+`xx` can search for matching commands and if only one match is found it will be immediately executed.
 
-```bash
-xx du
-```
+The search looks in labels and commands.
 
-Or to run it by searching for a partial match of the label we added:
+So one way to execute the `du` command we added above is:
 
 ```bash
-xx size
+xx sizes
 ```
+
+Which finds a match on our label "File Sizes" and runs the associated command.
 
 We could immediately ssh connect with:
 
 ```bash
 xx best
 ```
+
+Which would match our label "SSH Best Host".
 
 # Interactive View
 
@@ -105,10 +115,7 @@ usage: xx [-h] [-a ...] [-b] [-e] [-i URL] [-c] [-f FILE] [-l] [-m] [-n]
           [-p PADDING] [-s] [-t] [-v]
           [SEARCH ...]
 
-A helper for remembering useful shell commands. Type to interactively search,
-use UP and DOWN arrows to select, RETURN to launch the selected command. Use
-DELETE to remove the currently selected row. F1 or CTRL+E to edit the label of
-the selected item.
+Remembers other shell commands, so you don't have to.
 
 positional arguments:
   SEARCH                Search for a matching command and run it immediately.
