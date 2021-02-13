@@ -1,5 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import  # pragma: no coverage
+from . import main  # pragma: no coverage
 
-from . import main
-
-main()
+main()  # pragma: no coverage
