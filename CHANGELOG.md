@@ -8,6 +8,7 @@
 - Added feature to add new commands from the interactive view.
 - Fixed wasted space when not displaying window decoration.
 - Fixed auto run when search term has spaces.
+- Fixed line edit allowing non-printable characters.
 
 ## [0.8.0] - 2021-02-11
 - Added feature to edit existing commands with F2 or CTRL+I.
