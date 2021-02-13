@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.9.0] - 2021-02-13
 - Added support for optional system-wide database. (/etc/xxcmd)
 - Added additional window decoration.
 - Added footer help mentioning keyboard shortcuts.
