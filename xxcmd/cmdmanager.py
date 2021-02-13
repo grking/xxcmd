@@ -375,7 +375,7 @@ class CmdManager():
 
     # Check if an item is a global config item
     def is_global(self, item):
-        return 'global' in item.tags
+        return item and 'global' in item.tags
 
     # Update the selected items label
     def update_selected_label(self):
