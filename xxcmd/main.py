@@ -42,6 +42,10 @@ def main():
         help="Use the command database file specified rather than "
         "the default.")
 
+    parser.add_argument(
+        '-g', '--no-global-database', action='store_const', const=True,
+        help="Don't load the global system database.")
+
     # Hidden curses key test debug mode
     parser.add_argument(
         '--key-test', action='store_true', help=argparse.SUPPRESS)
@@ -105,6 +109,8 @@ def main():
         manager.config.draw_window_border = not args.no_border
     if args.no_help:
         manager.config.display_help_footer = not args.no_help
+    if args.no_global_database:
+        manager.config.load_global_database = not args.no_global_database
     if args.label_padding:
         manager.config.label_padding = args.label_padding
     if args.no_commands:
@@ -119,7 +125,7 @@ def main():
         exit(0)
 
     # Load db
-    manager.load_database()
+    manager.load_databases()
 
     if args.create_config:
         outfile = manager.config.save()
@@ -131,7 +137,7 @@ def main():
             exit(1)
 
     if args.import_url:
-        if manager.import_database(args.import_url[0]):
+        if manager.import_database_url(args.import_url[0]):
             print("Loaded data from URL")
             exit(0)
         else:

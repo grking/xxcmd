@@ -7,6 +7,9 @@ from .consoleui import ConsoleUI
 from .config import Config
 
 
+# Where is the system-wide database of commands?
+DEFAULT_SYSTEM_DATABASE_FILE = '/etc/xxcmd'
+
 # Where do we store our database of commands?
 DEFAULT_DATABASE_FILE = "~/.xxcmd"
 
@@ -70,6 +73,8 @@ class CmdManager():
         self._selected_row = 0
         # Our default data filename
         self.filename = DEFAULT_DATABASE_FILE
+        # Our default system data filename
+        self.sysfilename = DEFAULT_SYSTEM_DATABASE_FILE
         # The shell we'll use to execute commands
         self.shell = DEFAULT_SHELL
         if self.config.shell.lower() != 'default':
@@ -77,6 +82,8 @@ class CmdManager():
         # Default mode
         self._mode = ''
         self.search_mode()
+        # Saving disabled?
+        self.save_disabled = False
 
     # Get contents of file, return a list of lines
     def get_file_contents(self, filename):
@@ -119,38 +126,65 @@ class CmdManager():
         lines = [x.strip() for x in lines]
         return lines
 
-    def import_database(self, url):
+    def import_database_url(self, url):
         data = self.get_url_contents(url)
         if not data:
             return False
-        self.load_database(True, data)
+        self.load_data(data, True)
         self.save_database()
         return True
 
     # Load (optionally merge) some data into our database
     # data should be an iterable of lines
-    def load_database(self, merge=False, data=None):
+    def load_data(self, data, merge=False, tags=None):
 
         # Start from scratch
         if not merge:
             self.database.clear()
 
-        # If we aren't passed any data, load our default file
+        # If we aren't passed any data, bail out
         if not data:
-            data = self.get_file_contents(self.filename)
-            if data is False:
-                self.database_exists = False
-            if not data:
-                return False
+            return
 
         # Load each line
         for line in data:
             # Skip empty
             if not line.strip():
                 continue
-            self.add_database_entry(line, True)
+            self.save_disabled = True
+            try:
+                self.add_database_entry(line, tags)
+            except Exception as ex:
+                raise ex
+            finally:
+                self.save_disabled = False
 
         return True
+
+    # Load a command database from a file
+    def load_file(self, filename, merge=False, tags=None):
+
+        data = self.get_file_contents(filename)
+        if not data:
+            return False
+
+        return self.load_data(data, merge, tags)
+
+    # Load default databases
+    def load_databases(self):
+        merge = False
+        globalfile = False
+        # Try the system global database
+        if self.config.load_global_database:
+            globalfile = self.load_file(self.sysfilename, merge, ['global'])
+            merge = True
+
+        # Try the local user database
+        localfile = self.load_file(self.filename, merge)
+        if localfile is False:
+            self.database_exists = False
+        # Return if we loaded anything at all
+        return globalfile or localfile
 
     # Resort, if required
     def sort(self):
@@ -167,10 +201,16 @@ class CmdManager():
 
     # Save our DB
     def save_database(self):
+        # Don't bother if disabled
+        if self.save_disabled:
+            return
+        # Save to our user dir
         dbname = os.path.expanduser(self.filename)
         f = open(dbname, "wt")
         for item in self.database:
-            f.write("{0} [{1}]\n".format(item.cmd, item.label))
+            # Don't save items from the system global database
+            if not self.is_global(item):
+                f.write("{0} [{1}]\n".format(item.cmd, item.label))
         f.close()
 
     # Print all commands
@@ -182,12 +222,18 @@ class CmdManager():
                 print("{0}".format(item.cmd))
 
     # Add an item to our DB
-    def add_database_entry(self, entry, disable_save=False):
+    def add_database_entry(self, entry, tags=None):
 
         if type(entry) is DBItem:
             newitem = entry
         else:
             newitem = DBItem(entry)
+
+        # Add item tags
+        if tags:
+            for tag in tags:
+                if tag not in newitem.tags:
+                    newitem.tags.append(tag)
 
         for item in self.database:
             if item.cmd == newitem.cmd and item.label == newitem.label:
@@ -197,13 +243,12 @@ class CmdManager():
         # We can't be editing stuff now, default to search mode
         self.search_mode()
 
-        if not disable_save:
-            self.save_database()
+        self.save_database()
 
         return True
 
     # Delete a database entry
-    def delete_database_entry(self, dbitem, disable_save=False):
+    def delete_database_entry(self, dbitem):
         # Sanity check
         if not dbitem:
             return
@@ -212,8 +257,7 @@ class CmdManager():
             if item.cmd == dbitem.cmd and item.label == dbitem.label:
                 self.database.remove(item)
                 break
-        if not disable_save:
-            self.save_database()
+        self.save_database()
 
     # Add a new command from the edit line
     def add_new_command(self):
@@ -221,6 +265,11 @@ class CmdManager():
 
     # Delete the selected database entry
     def delete_selected_database_entry(self):
+        if self.is_global(self.selected_item):
+            self.ui.flash(
+                "Can't edit items from the system-wide database ({0})".format(
+                    self.sysfilename))
+            return
         self.delete_database_entry(self.selected_item)
 
     # Search for something
@@ -323,14 +372,30 @@ class CmdManager():
         self._mode = 'search'
         self.update_search()
 
+    # Check if an item is a global config item
+    def is_global(self, item):
+        return 'global' in item.tags
+
     # Update the selected items label
     def update_selected_label(self):
+        if self.is_global(self.selected_item):
+            self.ui.flash(
+                "Can't edit items from the system-wide database ({0})".format(
+                    self.sysfilename))
+            self.search_mode()
+            return
         self.selected_item.label = self.ui.input.value
         self.save_database()
         self.search_mode()
 
     # Update the selected items command
     def update_selected_command(self):
+        if self.is_global(self.selected_item):
+            self.ui.flash(
+                "Can't edit items from the system-wide database ({0})".format(
+                    self.sysfilename))
+            self.search_mode()
+            return
         self.selected_item.cmd = self.ui.input.value
         self.save_database()
         self.search_mode()
@@ -368,9 +433,6 @@ class CmdManager():
     # Run
     def run(self, cmd=''):
 
-        if cmd == '#AUTOEXIT#':
-            raise UnitTestException()
-
         if not self.database and not self.database_exists:
             # No database at all, add the default one
             for command in DEFAULT_COMMANDS:
@@ -388,8 +450,11 @@ class CmdManager():
             self.do_autorun()
 
         try:
-            while True:
+            while True and cmd != '#AUTOEXIT#':
                 self.ui.redraw()
                 self.ui.get_input()
         finally:
             self.ui.finalise_display()
+
+        if cmd == '#AUTOEXIT#':
+            raise UnitTestException()

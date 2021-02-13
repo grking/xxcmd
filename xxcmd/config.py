@@ -27,6 +27,7 @@ class Config():
             'sort-by-command': False,
             'sort-case-sensitive': True,
             'display-help-footer': True,
+            'load-global-database': True,
         }
 
         # If there is a config file merge that in too

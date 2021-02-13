@@ -32,6 +32,8 @@ class CmdManagerTests(unittest.TestCase):
         xx.filename = self.testfile()
         xx.config.sort_by_label = False
         xx.config.sort_by_command = False
+        # Don't load global system database
+        xx.config.load_global_database = False
         return xx
 
     def test_basic(self):
@@ -58,7 +60,7 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_import_from_url(self):
         xx = self.get_xx()
-        xx.import_database('file://' + self.testfile())
+        xx.import_database_url('file://' + self.testfile())
 
         data = xx.database
 
@@ -75,25 +77,25 @@ class CmdManagerTests(unittest.TestCase):
         xx = self.get_xx()
 
         # Check default file load
-        self.assertTrue(xx.load_database())
+        self.assertTrue(xx.load_databases())
         # Should have two lines
         self.assertEqual(len(xx.database), 2)
         self.assertEqual(
             xx.database[0].cmd, 'ssh -i ~/.ssh/key.pem me@myhost.com')
 
         # Test merge
-        xx.filename = self.testfile() + '2'
-        self.assertTrue(xx.load_database(True))
+        filename = self.testfile() + '2'
+        self.assertTrue(xx.load_file(filename, True))
         # Should have four lines
         self.assertEqual(len(xx.database), 4)
         self.assertEqual(xx.database[2].cmd, 'ls -al')
         self.assertEqual(xx.database[2].label, 'My Command')
 
         # Test merge with passed data
-        self.assertTrue(xx.load_database(True, [
+        self.assertTrue(xx.load_data([
             "top [Show Processes]",
             '[CPUs] cat /proc/cpuinfo | grep "model name" | sort | uniq -c'
-        ]))
+        ], True))
         # Should have six lines
         self.assertEqual(len(xx.database), 6)
         self.assertEqual(xx.database[4].cmd, 'top')
@@ -111,30 +113,31 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_add_and_delete(self):
         xx = self.get_xx()
-        xx.load_database()
+        xx.load_databases()
         items = len(xx.database)
 
         # Add new entry with no save
-        xx.add_database_entry('[New Entry] ps', True)
+        xx.save_disabled = True
+        xx.add_database_entry('[New Entry] ps')
         self.assertEqual(len(xx.database), items + 1)
         self.assertEqual(xx.database[len(xx.database)-1].cmd, 'ps')
 
         # Test dupe reject
-        ok = xx.add_database_entry('[New Entry] ps', True)
+        ok = xx.add_database_entry('[New Entry] ps')
         self.assertFalse(ok)
 
         # Add new entry as dbitem with no save
         newitem = DBItem('[Another Entry] ps aux')
-        xx.add_database_entry(newitem, True)
+        xx.add_database_entry(newitem)
         self.assertEqual(len(xx.database), items + 2)
         self.assertEqual(xx.database[len(xx.database)-1].cmd, 'ps aux')
 
         # Remove nothing
-        xx.delete_database_entry(None, True)
+        xx.delete_database_entry(None)
 
         # Remove entry
-        xx.delete_database_entry(xx.database[len(xx.database)-1], True)
-        xx.delete_database_entry(xx.database[len(xx.database)-1], True)
+        xx.delete_database_entry(xx.database[len(xx.database)-1])
+        xx.delete_database_entry(xx.database[len(xx.database)-1])
         self.assertEqual(len(xx.database), items)
         self.assertEqual(
             xx.database[len(xx.database)-1].cmd,
@@ -147,10 +150,10 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_search(self):
         xx = self.get_xx()
-        xx.load_database(False, [
+        xx.load_data([
             "one [My Label]",
             "[Your Label] two",
-            "three"])
+            "three"], False)
         xx.ui.input.set_value('one')
         xx.update_search()
         self.assertEqual(1, len(xx.results))
@@ -167,7 +170,7 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_curses_redraw(self):
         xx = self.get_xx()
-        xx.load_database()
+        xx.load_databases()
         xx.update_search()
         xx.ui.initialise_display()
         xx.config.bracket_labels = True
@@ -190,7 +193,7 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_selection(self):
         xx = self.get_xx()
-        xx.load_database()
+        xx.load_databases()
         xx.update_search()
         items = len(xx.database)
         self.assertEqual(items, 2)
@@ -203,11 +206,13 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_mode_changing(self):
         xx = self.get_xx()
-        xx.load_database()
+        xx.load_databases()
         xx.search_mode()
         xx.edit_label_mode()
         xx.search_mode()
         xx.edit_command_mode()
+        xx.search_mode()
+        xx.edit_newcmd_mode()
         xx.search_mode()
         # Mode changes with no search results
         xx.ui.input.set_value('abcdef98sdfsfHFHHHFh')
@@ -218,7 +223,7 @@ class CmdManagerTests(unittest.TestCase):
     def test_import_from_remote_url(self):
         xx = self.get_xx()
         xx.filename = tempfile.mktemp()
-        xx.import_database('https://pastebin.com/raw/zVxMGmRJ')
+        xx.import_database_url('https://pastebin.com/raw/zVxMGmRJ')
 
         data = xx.database
 
@@ -237,12 +242,12 @@ class CmdManagerTests(unittest.TestCase):
     def test_import_from_remote_url_fail(self):
         xx = self.get_xx()
         with captured_output() as (out, err):
-            result = xx.import_database('https://bad.domain.invalid')
+            result = xx.import_database_url('https://bad.domain.invalid')
         self.assertFalse(result)
 
     def test_print_all(self):
         xx = self.get_xx()
-        xx.load_database()
+        xx.load_databases()
         with captured_output() as (out, err):
             xx.print_commands()
         out.seek(0)
@@ -261,7 +266,7 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_keys(self):
         xx = self.get_xx()
-        xx.load_database()
+        xx.load_databases()
         xx.filename = tempfile.mktemp()
         xx.update_search()
 
@@ -327,7 +332,14 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_autorun(self):
         xx = self.get_xx()
-        xx.load_database()
+        xx.load_databases()
+        self.assertRaises(UnitTestException, lambda: xx.run('#AUTOEXIT#'))
+
+    def test_no_database(self):
+        xx = self.get_xx()
+        xx.filename = '/tmp/nodatabase'
+        xx.save_disabled = True
+        xx.load_databases()
         self.assertRaises(UnitTestException, lambda: xx.run('#AUTOEXIT#'))
 
     def test_main(self):
@@ -362,14 +374,14 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_sorting(self):
         xx = self.get_xx()
-        xx.load_database(False, [
+        xx.load_data([
             "One [My Label]",
             "[Your Label] Two",
             "[Op] Bash",
             "[Op2] apple",
             "[Alpha] Four",
             "[adam] nine",
-            "three"])
+            "three"], False)
         # Default natural sort
         xx.update_search()
         self.assertEqual(xx.results[0].cmd, 'One')
@@ -397,10 +409,10 @@ class CmdManagerTests(unittest.TestCase):
 
     def test_editing(self):
         xx = self.get_xx()
-        xx.load_database(False, [
+        xx.load_data([
             '[My Label] My command',
             '[Another Label] Another command'
-        ])
+        ], False)
         xx.filename = tempfile.mktemp()
         xx.update_search()
         # Label edit
@@ -413,3 +425,8 @@ class CmdManagerTests(unittest.TestCase):
         self.assertEqual(xx.database[0].cmd, 'New Command')
 
         os.unlink(xx.filename)
+
+    def test_flash(self):
+        xx = self.get_xx()
+        xx.ui.initialise_display()
+        xx.ui.flash("Test")

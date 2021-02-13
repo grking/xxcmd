@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Added support for optional system-wide database. (/etc/xxcmd)
 - Added additional window decoration.
 - Added footer help mentioning keyboard shortcuts.
 - Added a couple of default commands if there is no command database.

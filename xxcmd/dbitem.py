@@ -5,7 +5,7 @@ import re
 class DBItem():
 
     # Auto detect and split labels/cmd
-    def __init__(self, line):
+    def __init__(self, line, tags=None):
         label = ""
         post = re.match(r'.*(\[(.*)\])$', line)
         pre = re.match(r'^(\[(.*)\])(.*)$', line)
@@ -17,6 +17,10 @@ class DBItem():
             line = re.sub(r'^(\[(.*)\])', '', line)
         self.label = label.strip()
         self.cmd = line.strip()
+        if tags:
+            self.tags = tags[:]
+        else:
+            self.tags = []
 
     # Return a string suitable for substring searching
     def search_key(self):

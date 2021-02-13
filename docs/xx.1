@@ -3,7 +3,7 @@
 .SH NAME
 xx \- remembers other shell commands, so you don't have to.
 .SH DESCRIPTION
-usage: xx [\-h] [\-a ...] [\-b] [\-e] [\-i URL] [\-c] [\-f FILE] [\-l] [\-m] [\-n]
+usage: xx [\-h] [\-a ...] [\-b] [\-e] [\-i URL] [\-c] [\-f FILE] [\-g] [\-l] [\-m] [\-n]
 .IP
 [\-p PADDING] [\-s] [\-t] [\-v]
 [SEARCH ...]
@@ -40,6 +40,9 @@ one doesn't already exist.
 \fB\-f\fR FILE, \fB\-\-db\-file\fR FILE
 Use the command database file specified rather than
 the default.
+.TP
+\fB\-g\fR, \fB\-\-no\-global\-database\fR
+Don't load the global system database.
 .TP
 \fB\-l\fR, \fB\-\-list\fR
 Print all commands in the database

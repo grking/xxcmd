@@ -118,7 +118,7 @@ Keys:
 # Further Usage
 
 ```text
-usage: xx [-h] [-a ...] [-b] [-e] [-i URL] [-c] [-f FILE] [-l] [-m] [-n]
+usage: xx [-h] [-a ...] [-b] [-e] [-i URL] [-c] [-f FILE] [-g] [-l] [-m] [-n]
           [-p PADDING] [-s] [-t] [-v]
           [SEARCH ...]
 
@@ -142,6 +142,8 @@ optional arguments:
   -f FILE, --db-file FILE
                         Use the command database file specified rather than
                         the default.
+  -g, --no-global-database
+                        Don't load the global system database.
   -l, --list            Print all commands in the database
   -m, --no-commands     Don't show commands in interactive view.
   -n, --no-echo         Don't echo the command to the terminal prior to
@@ -181,6 +183,7 @@ sort-by-label = yes
 sort-by-command = no
 sort-case-sensitive = yes
 display-help-footer = yes
+load-global-database = yes
 ```
 
 Command line switches take precedence over configuration file options.

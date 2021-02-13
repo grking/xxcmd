@@ -1,6 +1,7 @@
 # consoleui.py
 import os
 import curses
+import time
 from .lineedit import LineEdit
 
 
@@ -113,6 +114,12 @@ class ConsoleUI():
     def termrow_to_idx(self, row):
         return (row + self.row_offset) - self.cmd_region['miny']
 
+    # Flash a brief message
+    def flash(self, message):
+        self.print_line_at(self.prompt_pos['y'], self.prompt_pos['x'], message)
+        self.win.refresh()
+        time.sleep(1)
+
     # Update our window output
     def redraw(self):
 
@@ -223,10 +230,6 @@ class ConsoleUI():
 
     # Get input
     def get_input(self, key=None):
-
-        # Bail out if testing
-        if self.input.value == '#AUTOEXIT#':
-            raise Exception("End Test")
 
         # Remember our starting mode
         mode = self.parent.mode

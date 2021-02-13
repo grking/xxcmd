@@ -44,3 +44,14 @@ class DbItemTests(unittest.TestCase):
         item = DBItem('[Echo It]')
         self.assertEqual(item.label, 'Echo It')
         self.assertEqual(item.cmd, '')
+
+    def test_tags(self):
+
+        item = DBItem('[Foo] bar')
+        self.assertIsInstance(item.tags, list)
+        self.assertTrue(len(item.tags) == 0)
+
+        item = DBItem('[Foo] bar', ['footag', 'bartag'])
+        self.assertIsInstance(item.tags, list)
+        self.assertTrue(len(item.tags) == 2)
+        self.assertTrue('bartag' in item.tags)
