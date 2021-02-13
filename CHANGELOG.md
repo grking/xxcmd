@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Fixed bug preventing adding new items from the UI when database is empty.
+- Fixed bug causing default db commands to keep coming back if db is empty.
 
 ## [0.9.0] - 2021-02-13
 - Added support for optional system-wide database. (/etc/xxcmd)

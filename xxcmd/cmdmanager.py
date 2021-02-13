@@ -166,7 +166,7 @@ class CmdManager():
 
         data = self.get_file_contents(filename)
         if not data:
-            return False
+            return data
 
         return self.load_data(data, merge, tags)
 
