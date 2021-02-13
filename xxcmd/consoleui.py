@@ -34,6 +34,9 @@ class ConsoleUI():
             'maxx': self.win_width-1,
             'maxy': self.win_height-1
         }
+        # Default help footer text
+        self.help_row = ("Return:Run  F1:Edit Label  "
+            "F2:Edit Cmd  F3:Add New  Del:Delete")
 
     # Initialise our display
     def initialise_display(self):
@@ -199,7 +202,7 @@ class ConsoleUI():
 
         # Display help footer
         if self.parent.config.display_help_footer:
-            footer = "Return:Run Command  F1:Edit Label  F2:Edit Command  Del:Delete Row"
+            footer = self.help_row
             helprow = self.cmd_region['maxy'] + 1
             footer = footer.rjust(self.cmd_region['maxx'] - self.cmd_region['minx'])
             self.print_line_at(

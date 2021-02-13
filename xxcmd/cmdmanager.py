@@ -215,6 +215,10 @@ class CmdManager():
         if not disable_save:
             self.save_database()
 
+    # Add a new command from the edit line
+    def add_new_command(self):
+        self.add_database_entry(self.ui.input.value)
+
     # Delete the selected database entry
     def delete_selected_database_entry(self):
         self.delete_database_entry(self.selected_item)
@@ -263,6 +267,18 @@ class CmdManager():
     def selection_up(self):
         self.selected_row -= 1
 
+    # Enter edit new command
+    def edit_newcmd_mode(self):
+        if not self.selected_item:
+            return
+        self.ui.input_prefix = 'New Cmd: '
+        self.ui.input.set_value('')
+        self.ui.key_events = {
+            '\x1b': self.search_mode,  # escape - exit mode
+            "\n": self.add_new_command  # Return
+        }
+        self._mode = 'edit'
+
     # Enter edit label mode
     def edit_label_mode(self):
         if not self.selected_item:
@@ -297,6 +313,7 @@ class CmdManager():
             '\x1b': exit,  # escape
             'KEY_F(1)': self.edit_label_mode,  # F1
             'KEY_F(2)': self.edit_command_mode,  # F2
+            'KEY_F(3)': self.edit_newcmd_mode,  # F3
             '\x09': self.edit_command_mode,  # Ctrl+I
             '\x05': self.edit_label_mode,  # Ctrl+E
             'KEY_DC': self.delete_selected_database_entry,  # Delete

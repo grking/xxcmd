@@ -4,6 +4,7 @@
 - Added additional window decoration.
 - Added footer help mentioning keyboard shortcuts.
 - Added a couple of default commands if there is no command database.
+- Added feature to add new commands from the interactive view.
 - Fixed wasted space when not displaying window decoration.
 - Fixed auto run when search term has spaces.
 
