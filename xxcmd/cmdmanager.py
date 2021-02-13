@@ -365,6 +365,7 @@ class CmdManager():
             'KEY_F(3)': self.edit_newcmd_mode,  # F3
             '\x09': self.edit_command_mode,  # Ctrl+I
             '\x05': self.edit_label_mode,  # Ctrl+E
+            '\x07': self.edit_newcmd_mode,  # Ctrl+G
             'KEY_DC': self.delete_selected_database_entry,  # Delete
             "\n": self.execute_selected_command,  # Return
             'ALWAYS': self.update_search

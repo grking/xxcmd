@@ -113,6 +113,7 @@ Keys:
 * <kbd>Escape</kbd> - exit
 * <kbd>F1</kbd> or <kbd>CTRL+E</kbd> - Edit the label of the currently selected item
 * <kbd>F2</kbd> or <kbd>CTRL+I</kbd> - Edit the label of the currently selected item
+* <kbd>F3</kbd> or <kbd>CTRL+G</kbd> - Add a new command.
 * Any other key press is added to the interactive search to filter the command list.
 
 # Further Usage
