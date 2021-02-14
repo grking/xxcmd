@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-- Added feature to flag command to prompt for confirmation before execution.
+- Added prompt for confirmation before execution of commands. (Labels ending with !)
 - Added improved support for unicode.
 
 ## [0.9.1] - 2021-02-13
