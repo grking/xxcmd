@@ -441,7 +441,7 @@ class CmdManager():
             # No database at all, add the default one
             for command in DEFAULT_COMMANDS:
                 self.add_database_entry(command)
-        elif not self.database:
+        elif not self.database and cmd != '#AUTOEXIT#':
             # Empty database
             print("No database. Add commands with: xx -a [label] <command>")
             exit(1)
