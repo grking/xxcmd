@@ -169,7 +169,8 @@ if __name__ == '__main__':
         exit(0)
 
     # Update the README.md file with the latest command line help output
-    result = subprocess.check_output('python -m xxcmd -h'.split())
+    result = subprocess.check_output(
+        '{0} -m xxcmd -h'.format(sys.executable).split())
     content = result.decode('utf-8')
     content = "\n```text\n" + content + "\n```\n"
     replace('README.md', '# Further Usage', '# Configuration', content)
@@ -190,7 +191,8 @@ if __name__ == '__main__':
     # Rebuild the man page
     run(['help2man', '-i', 'docs/xx.h2m', '-n',
          "remembers other shell commands, so you don't have to.",
-         '-o', 'docs/xx.1', '-N', "python -m xxcmd"])
+         '-o', 'docs/xx.1', '-N',
+         "{0} -m xxcmd".format(sys.executable)])
 
     # Run tests
     run('pytest -q --cov-report term --cov-report html --cov=xxcmd tests/')
