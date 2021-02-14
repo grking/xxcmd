@@ -40,10 +40,6 @@ class stdscr:
     def addch(cls, y, x, ch):
         pass
 
-    @classmethod
-    def box(cls):
-        pass
-
 
 class curses:
 
