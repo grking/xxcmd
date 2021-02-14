@@ -275,7 +275,7 @@ class ConsoleUI():
             key = curses.keyname(key).decode('utf-8')
 
         # Support backspace
-        if key == 'KEY_BACKSPACE':
+        if key == 'KEY_BACKSPACE' or key == '\x7f':
             self.input.delchar()
         # Cursor movements
         elif key == 'KEY_LEFT':
