@@ -4,7 +4,7 @@ import os
 from .cmdmanager import CmdManager
 
 
-__version__ = "0.9.2"
+__version__ = "0.10.0"
 
 
 def main():

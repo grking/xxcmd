@@ -26,10 +26,6 @@ class LineEditTests(unittest.TestCase):
         edit.delchar()
         self.assertEqual(str(edit), '')
 
-    def test_invalid_add(self):
-        edit = LineEdit()
-        self.assertRaises(Exception, lambda: edit.addchar('ab'))
-
     def test_history(self):
         edit = LineEdit()
         edit.set_value('foo')

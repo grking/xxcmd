@@ -55,9 +55,6 @@ class LineEdit():
 
     # Add a character to our line data at current cursor position
     def addchar(self, value):
-        if len(value) > 1:
-            raise Exception(
-                'Expected one character input not "{0}"'.format(value))
         self._linetext = (self._linetext[:self._cursor_pos] +
                           value + self._linetext[self._cursor_pos:])
         self._cursor_pos += 1

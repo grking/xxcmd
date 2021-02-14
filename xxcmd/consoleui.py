@@ -1,6 +1,7 @@
 # consoleui.py
 import os
 import curses
+import locale
 import time
 from .lineedit import LineEdit
 
@@ -38,6 +39,8 @@ class ConsoleUI():
         # Default help footer text
         self.help_row = ("Return:Run  F1:Edit Label  "
             "F2:Edit Cmd  F3:Add New  Del:Delete")
+        # Set locale
+        locale.setlocale(locale.LC_ALL, '')
 
     # Initialise our display
     def initialise_display(self):
@@ -239,12 +242,18 @@ class ConsoleUI():
         try:
             # Get a key press if we weren't passed one
             if not key:    # pragma: no cover
-                key = self.win.getkey()
+                key = self.win.get_wch()
         except KeyboardInterrupt:    # pragma: no cover
             exit(0)
 
+        # Pre-process our key
+        decoded = False
+        if type(key) is int:
+            decoded = True
+            key = curses.keyname(key).decode('utf-8')
+
         # Support backspace
-        if key == '\x08' or key == 'KEY_BACKSPACE' or key == '\x7f':
+        if key == 'KEY_BACKSPACE':
             self.input.delchar()
         # Cursor movements
         elif key == 'KEY_LEFT':
@@ -263,7 +272,7 @@ class ConsoleUI():
         elif key in self.key_events.keys():
             self.key_events[key]()
         # Add other characters to our input
-        elif len(key) == 1:
+        elif not decoded:
             self.input.addchar(key)
 
         # Trigger other event handlers
@@ -283,8 +292,15 @@ class ConsoleUI():
             self.win.addstr(0, 0, "Terminal type: " + os.environ['TERM'])
             while True:
 
-                key = self.win.getkey()
-                info = "'{0}' (0x{1})".format(key, key.encode().hex())
+                key = self.win.get_wch()
+                if type(key) is int:
+                    hexstr = hex(key)
+                    name = curses.keyname(key).decode('utf-8')
+                else:
+                    name = ''
+                    hexstr = key.encode().hex()
+                info = "{0} {1} {2} (0x{3})".format(
+                    repr(key), type(key), name, hexstr)
                 self.win.addstr(y, 0, info)
                 y += 1
 
