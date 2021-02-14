@@ -29,6 +29,8 @@ class ConsoleUI():
         self.row_offset = 1
         # Offset for editing long lines
         self.col_offset = 1
+        # Dev mode display
+        self.dev = ''
         # Result window region
         self.cmd_region = {
             'minx': 0,
@@ -248,6 +250,10 @@ class ConsoleUI():
         if self.parent.config.draw_window_border:
             self.win.box()
             self.hline(2)
+            # In dev mode display version footer
+            if self.dev:
+                self.print_at(
+                    self.win_height-1, self.win_width - (len(self.dev) + 2), self.dev)
 
         # Move visual cursor
         curx = len(self.input_prefix) + (

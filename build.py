@@ -115,6 +115,14 @@ def run(cmd):
         exit(exitcode)
 
 
+# Get git version identifier
+def gitver():
+    result = subprocess.check_output(
+        'git describe --tags'.format(sys.executable).split())
+    content = result.decode('utf-8')
+    print(content)
+
+
 if __name__ == '__main__':
 
     # Clean up
@@ -198,3 +206,5 @@ if __name__ == '__main__':
     run('pytest -q --cov-report term --cov-report html --cov=xxcmd tests/')
     # Build pypi package
     run('flit build')
+
+    gitver()

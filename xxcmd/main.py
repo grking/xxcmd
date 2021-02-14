@@ -2,6 +2,7 @@
 import argparse
 import os
 from .cmdmanager import CmdManager
+import xxcmd
 
 
 __version__ = "0.10.0"
@@ -95,6 +96,7 @@ def main():
 
     # Create our SSH Manager
     manager = CmdManager()
+    manager.ui.dev = xxcmd.__dev_version__
 
     # Switch database file?
     if args.db_file:
