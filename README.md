@@ -70,6 +70,11 @@ If adding commands containing characters that are interpreted by your shell, suc
 xx -a [Command with Pipes] "!!"
 ```
 
+End the label name with an exclamation mark and you will be asked for confirmation before this command is executed.
+
+```bash
+xx -a [Dangerous Command!] echo "boo"
+```
 
 ## Browse and Search Commands Interactively
 

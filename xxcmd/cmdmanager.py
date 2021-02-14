@@ -408,6 +408,11 @@ class CmdManager():
         if not dbitem or not dbitem.cmd:
             return
 
+        # Confirm if label ends with confirm marker
+        if dbitem.label and dbitem.label.endswith('!'):
+            if not self.ui.confirm("Are you sure? (y/n)"):
+                return
+
         # Our process is about to be replaced, normal orderly
         # shutdown won't happen
         self.ui.finalise_display()

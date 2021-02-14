@@ -127,6 +127,26 @@ class ConsoleUI():
         self.win.refresh()
         time.sleep(1)
 
+    # Seek confirmation from the user
+    def confirm(self, message):
+        if not self.win:
+            return
+        width = int(self.win_width * 0.8)
+        height = 3
+        posx = int((self.win_width - width) / 2)
+        posy = int((self.win_height - height) / 2)
+        dialog = curses.newwin(height, width, posy, posx)
+        dialog.box()
+        textx = int((width - len(message)) / 2)
+        texty = 1
+        if len(message) <= width:
+            dialog.addstr(texty, textx, message, curses.A_NORMAL)
+        dialog.refresh()
+        key = dialog.getch()
+        del dialog
+        if key == 121 or key == 89:
+            return True
+
     # Update our window output
     def redraw(self):
 

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Added feature to flag command to prompt for confirmation before execution.
 - Added improved support for unicode.
 
 ## [0.9.1] - 2021-02-13
