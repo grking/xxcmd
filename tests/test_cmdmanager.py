@@ -290,21 +290,21 @@ class CmdManagerTests(unittest.TestCase):
         self.assertEqual(xx.ui.input.value, "a")
 
         # Test backspace
-        xx.ui.get_input(263)  # KEY_BACKSPACE
+        xx.ui.get_input('KEY_BACKSPACE')
         self.assertEqual(xx.ui.input.value, "")
         # Test down
-        xx.ui.get_input(258)  # KEY_DOWN
+        xx.ui.get_input('KEY_DOWN')
         self.assertEqual(xx.selected_row, 1)
         # Test delete
-        xx.ui.get_input(330)  # KEY_DC (delete)
+        xx.ui.get_input('KEY_DC')
         xx.update_search()
         self.assertEqual(xx.selected_row, 0)
         # Test up
-        xx.ui.get_input(259)  # KEY_UP
+        xx.ui.get_input('KEY_UP')
         self.assertEqual(xx.selected_row, 0)
 
         # Test edit label
-        xx.ui.get_input(265)  # F1
+        xx.ui.get_input('KEY_F(1)')
 
         self.assertTrue('Edit' in xx.ui.input_prefix)
 
@@ -312,13 +312,13 @@ class CmdManagerTests(unittest.TestCase):
         xx.ui.get_input('a')
         self.assertEqual(xx.ui.input.value, "SSH Homea")
         # Test backspace
-        xx.ui.get_input(263)  # KEY_BACKSPACE
+        xx.ui.get_input('KEY_BACKSPACE')
         self.assertEqual(xx.ui.input.value, "SSH Home")
         # Test return (save)
         xx.ui.get_input('\n')
         self.assertEqual(xx.mode, 'search')
         # Test edit label
-        xx.ui.get_input(265)  # F1
+        xx.ui.get_input('KEY_F(1)')
         self.assertEqual(xx.mode, 'edit')
         # Test escape
         xx.ui.get_input('\x1b')

@@ -1,6 +1,5 @@
 # mock_curses.py
 # Mock basic curses functions for unit testing
-import _curses
 
 
 class stdscr:
@@ -78,16 +77,3 @@ class curses:
     @classmethod
     def curs_set(cls, value):
         pass
-
-    @classmethod
-    def keyname(cls, key):
-        win = _curses.initscr()
-        curses.noecho()
-        win.keypad(True)
-        curses.cbreak()
-        key = _curses.keyname(key)
-        curses.nocbreak()
-        curses.echo()
-        win.keypad(False)
-        curses.endwin()
-        return key
