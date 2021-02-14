@@ -369,6 +369,12 @@ class CmdManagerTests(unittest.TestCase):
         xx.load_databases()
         self.assertRaises(UnitTestException, lambda: xx.run('#AUTOEXIT#'))
 
+    def test_confirm(self):
+        xx = self.get_xx()
+        xx.ui.win = 1
+        ok = xx.ui.confirm('test', 79)
+        self.assertFalse(ok)
+
     def test_main(self):
         sys.argv = ['xx', '-v']
         self.assertRaises(SystemExit, lambda: main())

@@ -40,6 +40,10 @@ class stdscr:
     def addch(cls, y, x, ch):
         pass
 
+    @classmethod
+    def box(cls):
+        pass
+
 
 class curses:
 
@@ -77,3 +81,7 @@ class curses:
     @classmethod
     def curs_set(cls, value):
         pass
+
+    @classmethod
+    def newwin(cls, y, x, w, h):
+        return stdscr()
