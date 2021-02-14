@@ -37,8 +37,10 @@ class ConsoleUI():
             'maxy': self.win_height-1
         }
         # Default help footer text
-        self.help_row = ("Return:Run  F1:Edit Label  "
-            "F2:Edit Cmd  F3:Add New  Del:Delete")
+        self.help_row = (
+            "Return:Run  F1:Edit Label  "
+            "F2:Edit Cmd  F3:Add New  Del:Delete"
+        )
         # Set locale
         locale.setlocale(locale.LC_ALL, '')
 

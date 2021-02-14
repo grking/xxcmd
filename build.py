@@ -148,7 +148,7 @@ if __name__ == '__main__':
         run('git push --tags')
         # Build pypi package
         run('flit build')
-        #run('flit publish')
+        # run('flit publish')
         exit(0)
 
     # Arch Publish
@@ -188,8 +188,9 @@ if __name__ == '__main__':
     replace('README.md', '[xxcmd]', '```', content)
 
     # Rebuild the man page
-    run(['help2man', '-i', 'docs/xx.h2m', '-n', "remembers other shell commands, "
-         "so you don't have to.", '-o', 'docs/xx.1', '-N', "python -m xxcmd"])
+    run(['help2man', '-i', 'docs/xx.h2m', '-n',
+         "remembers other shell commands, so you don't have to.",
+         '-o', 'docs/xx.1', '-N', "python -m xxcmd"])
 
     # Run tests
     run('pytest -q --cov-report term --cov-report html --cov=xxcmd tests/')
