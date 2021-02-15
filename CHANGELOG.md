@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.10.0] - 2021-02-15
 - Added prompt for confirmation before execution of commands. (Labels ending with !)
 - Added improved support for unicode.
 
