@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.10.1] - 2021-02-15
 - Fixed backspace detection in some terminals.
 
 ## [0.10.0] - 2021-02-15
